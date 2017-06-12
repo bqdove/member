@@ -10,6 +10,7 @@ namespace Notadd\Member\Entities;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
+use Symfony\Component\Workflow\Transition;
 
 /**
  * Class Member.
@@ -37,7 +38,12 @@ class Member extends Entity
      */
     public function places()
     {
-        return [];
+        return [
+            'register',
+            'registered',
+            'validate',
+            'validated',
+        ];
     }
 
     /**
@@ -45,7 +51,11 @@ class Member extends Entity
      */
     public function transitions()
     {
-        return [];
+        return [
+            new Transition('register', 'register', 'registered'),
+            new Transition('wait_to_validate', 'registered', 'validate'),
+            new Transition('validate', 'validate', 'validated'),
+        ];
     }
 
     /**
