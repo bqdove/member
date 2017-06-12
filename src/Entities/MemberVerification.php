@@ -10,6 +10,7 @@ namespace Notadd\Member\Entities;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
+use Symfony\Component\Workflow\Transition;
 
 /**
  * Class MemberVerification.
@@ -37,7 +38,10 @@ class MemberVerification extends Entity
      */
     public function places()
     {
-        return [];
+        return [
+            'validate',
+            'validated',
+        ];
     }
 
     /**
@@ -45,7 +49,9 @@ class MemberVerification extends Entity
      */
     public function transitions()
     {
-        return [];
+        return [
+            new Transition('validate', 'validate', 'validated'),
+        ];
     }
 
     /**
