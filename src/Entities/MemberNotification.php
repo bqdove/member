@@ -10,6 +10,7 @@ namespace Notadd\Member\Entities;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
+use Symfony\Component\Workflow\Transition;
 
 /**
  * Class MemberNotification.
@@ -37,7 +38,14 @@ class MemberNotification extends Entity
      */
     public function places()
     {
-        return [];
+        return [
+            'launch',
+            'launched',
+            'review',
+            'reviewed',
+            'publish',
+            'published',
+        ];
     }
 
     /**
@@ -45,7 +53,13 @@ class MemberNotification extends Entity
      */
     public function transitions()
     {
-        return [];
+        return [
+            new Transition('launch', 'launch', 'launched'),
+            new Transition('wait_to_review', 'launched', 'review'),
+            new Transition('review', 'review', 'reviewed'),
+            new Transition('wait_to_publish', 'reviewed', 'publish'),
+            new Transition('publish', 'publish', 'published'),
+        ];
     }
 
     /**
