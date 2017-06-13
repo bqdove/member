@@ -27,7 +27,7 @@ class InformationHandler extends Handler
             $this->withCode(500)->withError('参数缺失！');
         } else {
             if (MemberInformation::query()->where('id', $this->request->input('id'))->count()) {
-                $this->success()
+                $this->withCode(200)
                     ->withData(MemberInformation::query()->find($this->request->input('id')))
                     ->withMessage('获取信息项成功！');
             } else {

@@ -26,7 +26,7 @@ class TagHandler extends Handler
         if (!$this->request->has('id')) {
             $this->withCode(500)->withError('参数缺失！');
         } else {
-            $this->success()
+            $this->withCode(200)
                 ->withData(MemberTagRelation::query()->where('member_id', $this->request->input('id'))->get())
                 ->withMessage('');
         }

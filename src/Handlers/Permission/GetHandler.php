@@ -102,6 +102,6 @@ class GetHandler extends Handler
             ]);
         });
         $data->put('types', $types->toArray());
-        $this->success()->withData($data->toArray())->withMessage('');
+        $this->withCode(200)->withData($data->toArray())->withMessage('');
     }
 }

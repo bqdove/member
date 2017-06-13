@@ -74,7 +74,7 @@ class IpHandler extends Handler
         $this->configurations();
         $this->pagination = MemberBanIp::query()->orderBy($this->order, $this->sort)->paginate($this->paginate);
         if ($this->pagination) {
-            $this->success()
+            $this->withCode(200)
                 ->withData($this->pagination->items())
                 ->withMessage('获取 IP 列表成功！')
                 ->withExtra([

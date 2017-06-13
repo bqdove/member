@@ -81,7 +81,7 @@ class ListHandler extends Handler
         $builder = $builder->where('type', '>', 0);
         $this->pagination = $builder->orderBy($this->order, $this->sort)->paginate($this->paginate);
         if ($this->pagination) {
-            $this->success()
+            $this->withCode(200)
                 ->withData($this->pagination->items())
                 ->withMessage('')
                 ->withExtra([

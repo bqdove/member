@@ -92,7 +92,7 @@ class ListHandler extends Handler
                 $data = $this->format($this->pagination->items());
                 break;
         }
-        $this->success()->withData($data)->withMessage('')->withExtra([
+        $this->withCode(200)->withData($data)->withMessage('')->withExtra([
             'pagination' => [
                 'count'    => $this->pagination->total(),
                 'current'  => $this->pagination->currentPage(),

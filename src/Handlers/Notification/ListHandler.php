@@ -81,7 +81,7 @@ class ListHandler extends Handler
         }
         $this->pagination = $builder->orderBy($this->order, $this->sort)->paginate($this->paginate);
         if ($this->pagination) {
-            $this->success()->withData($this->pagination->items())->withMessage('')->withExtra([
+            $this->withCode(200)->withData($this->pagination->items())->withMessage('')->withExtra([
                 'pagination' => [
                     'count'    => $this->pagination->total(),
                     'current'  => $this->pagination->currentPage(),

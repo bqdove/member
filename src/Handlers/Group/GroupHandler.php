@@ -59,6 +59,6 @@ class GroupHandler extends Handler
     protected function execute()
     {
         $this->configurations();
-        $this->success()->withData(MemberGroup::query()->find($this->id))->withMessage('获取分组成功！');
+        $this->withCode(200)->withData(MemberGroup::query()->find($this->id))->withMessage('获取分组成功！');
     }
 }
