@@ -9,7 +9,7 @@
 namespace Notadd\Member\Handlers\User;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Member\Models\Member;
+use Notadd\Foundation\Member\Member;
 
 /**
  * Class Create.

@@ -10,7 +10,7 @@ namespace Notadd\Member\Handlers\User;
 
 use Illuminate\Container\Container;
 use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Member\Models\Member;
+use Notadd\Foundation\Member\Member;
 
 /**
  * Class UserHandler.

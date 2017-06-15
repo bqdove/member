@@ -8,8 +8,8 @@
  */
 namespace Notadd\Member\Handlers\User;
 
+use Notadd\Foundation\Member\Member;
 use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Member\Models\Member;
 use Notadd\Member\Models\MemberBan;
 
 /**

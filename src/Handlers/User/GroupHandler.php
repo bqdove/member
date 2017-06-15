@@ -11,7 +11,7 @@ namespace Notadd\Member\Handlers\User;
 use Carbon\Carbon;
 use Illuminate\Container\Container;
 use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Member\Models\Member;
+use Notadd\Foundation\Member\Member;
 use Notadd\Member\Models\MemberGroupRelation;
 
 /**
