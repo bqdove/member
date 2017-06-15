@@ -9,6 +9,7 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
+use Notadd\Foundation\Member\Member;
 
 /**
  * Class MemberBan.
