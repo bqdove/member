@@ -9,6 +9,8 @@
 namespace Notadd\Member;
 
 use Illuminate\Events\Dispatcher;
+use Notadd\Foundation\Database\Model;
+use Notadd\Foundation\Member\Member;
 use Notadd\Member\Injections\Installer;
 use Notadd\Member\Injections\Uninstaller;
 use Notadd\Member\Listeners\FlowRegister;
@@ -20,6 +22,9 @@ use Notadd\Member\Listeners\RouteRegister;
 use Notadd\Member\Listeners\CsrfTokenRegister;
 use Notadd\Foundation\Member\MemberManagement;
 use Notadd\Foundation\Module\Abstracts\Module;
+use Notadd\Member\Models\MemberActivate;
+use Notadd\Member\Models\MemberBan;
+use Notadd\Member\Models\MemberGroupRelation;
 
 /**
  * Class Extension.
@@ -31,6 +36,26 @@ class ModuleServiceProvider extends Module
      */
     public function boot()
     {
+        Member::extend('fillable', [
+            'avatar',
+            'birthday',
+            'introduction',
+            'nickname',
+            'phone',
+            'realname',
+            'sex',
+            'signature',
+        ]);
+        Member::extend('relation', 'activate', function (Model $model) {
+            return $model->hasOne(MemberActivate::class, 'member_id');
+        });
+        Member::extend('relation', 'ban', function (Model $model) {
+            return $model->hasOne(MemberBan::class, 'member_id');
+        });
+        Member::extend('relation', 'groups', function (Model $model) {
+            return $model->hasMany(MemberGroupRelation::class, 'member_id');
+        });
+
         $manager = new Manager($this->app['events'], $this->app['router']);
         $this->app->make(Dispatcher::class)->subscribe(CsrfTokenRegister::class);
         $this->app->make(Dispatcher::class)->subscribe(FlowRegister::class);
