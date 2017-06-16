@@ -9,7 +9,6 @@
                 with: [
                     'ban',
                     'groups',
-                    'groups.details',
                 ],
             }).then(response => {
                 const data = response.data.data;
@@ -159,7 +158,6 @@
                     with: [
                         'ban',
                         'groups',
-                        'groups.details',
                     ],
                 }).then(response => {
                     const data = response.data.data;

@@ -11,6 +11,7 @@ namespace Notadd\Member\Handlers\User;
 use Illuminate\Container\Container;
 use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Foundation\Member\Member;
+use Notadd\Member\Models\MemberGroup;
 use Notadd\Member\Models\MemberGroupRelation;
 
 /**
@@ -103,7 +104,6 @@ class ListHandler extends Handler
                 'to'       => $this->pagination->lastItem(),
                 'total'    => $this->pagination->lastPage(),
             ],
-
         ]);
     }
 
@@ -122,10 +122,10 @@ class ListHandler extends Handler
             }
             $groups = collect($member->getAttribute('groups'));
             if ($groups->count()) {
-                $groups->each(function (MemberGroupRelation $group) use ($member) {
-                    if ($group->getAttribute('type') === 'default') {
-                        $details = $group->details()->getResults();
-                        $member->setAttribute('group', $details->name);
+                $groups->each(function (MemberGroup $group) use ($member) {
+                    $relation = MemberGroupRelation::query()->where('group_id', $group->getAttribute('id'))->where('member_id', $member->getAttribute('id'))->first();
+                    if ($relation->getAttribute('type') == 'default') {
+                        $member->setAttribute('group', $group->getAttribute('name'));
                     }
                 });
             } else {

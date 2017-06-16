@@ -24,7 +24,7 @@ use Notadd\Foundation\Member\MemberManagement;
 use Notadd\Foundation\Module\Abstracts\Module;
 use Notadd\Member\Models\MemberActivate;
 use Notadd\Member\Models\MemberBan;
-use Notadd\Member\Models\MemberGroupRelation;
+use Notadd\Member\Models\MemberGroup;
 
 /**
  * Class Extension.
@@ -53,7 +53,7 @@ class ModuleServiceProvider extends Module
             return $model->hasOne(MemberBan::class, 'member_id');
         });
         Member::extend('relation', 'groups', function (Model $model) {
-            return $model->hasMany(MemberGroupRelation::class, 'member_id');
+            return $model->belongsToMany(MemberGroup::class, 'member_group_relations', 'member_id', 'group_id');
         });
 
         $manager = new Manager($this->app['events'], $this->app['router']);
