@@ -66,6 +66,7 @@
                                 <li>{{ permission.description }}</li>
                                 <li v-for="(type, index) in types">
                                     <i-select multiple
+                                              :title="type.attributes.identification + '::' + module.attributes.identification + '::' + group.attributes.identification + '::' + permission.identification"
                                               v-model="types[index].has[type.attributes.identification + '::' + module.attributes.identification + '::' + group.attributes.identification + '::' + permission.identification]"
                                               @on-change="change">
                                         <i-option :key="g" :value="g.identification" v-for="g in groups">{{ g.name }}</i-option>
