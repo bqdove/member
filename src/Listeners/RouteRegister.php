@@ -17,10 +17,6 @@ use Notadd\Member\Controllers\Api\PermissionController;
 use Notadd\Member\Controllers\Api\TagController;
 use Notadd\Member\Controllers\Api\UserController;
 use Notadd\Member\Controllers\Api\VerificationController;
-use Notadd\Member\Middleware\Group;
-use Notadd\Member\Middleware\Permission;
-use Notadd\Member\Middleware\FrontPermission;
-use Notadd\Member\Middleware\AdminPermission;
 use Notadd\Foundation\Routing\Abstracts\RouteRegister as AbstractRouteRegister;
 use Notadd\Member\Controllers\Api\UploadController;
 
@@ -81,10 +77,5 @@ class RouteRegister extends AbstractRouteRegister
             $this->router->post('verification', VerificationController::class . '@verify');
             $this->router->post('verification/send', VerificationController::class . '@send');
         });
-
-        $this->router->aliasMiddleware('group', Group::class);
-        $this->router->aliasMiddleware('permission', Permission::class);
-        $this->router->aliasMiddleware('permission.admin', AdminPermission::class);
-        $this->router->aliasMiddleware('permission.front', FrontPermission::class);
     }
 }
