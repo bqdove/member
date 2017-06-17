@@ -4,17 +4,17 @@
  *
  * @author TwilRoad <269044570@qq.com>
  * @copyright (c) 2017, notadd.com
- * @datetime 2017-06-01 18:48
+ * @datetime 2017-06-01 18:47
  */
-namespace Notadd\Member\Entities;
+namespace Notadd\Member\Flows;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
 
 /**
- * Class MemberInformation.
+ * Class MemberBan.
  */
-class MemberInformation extends Entity
+class MemberBan extends Entity
 {
     /**
      * @return array
@@ -29,7 +29,7 @@ class MemberInformation extends Entity
      */
     public function name()
     {
-        return 'member.information';
+        return 'member.ban';
     }
 
     /**

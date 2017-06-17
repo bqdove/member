@@ -4,18 +4,18 @@
  *
  * @author TwilRoad <269044570@qq.com>
  * @copyright (c) 2017, notadd.com
- * @datetime 2017-06-01 18:47
+ * @datetime 2017-06-01 18:48
  */
-namespace Notadd\Member\Entities;
+namespace Notadd\Member\Flows;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Transition;
 
 /**
- * Class Member.
+ * Class MemberNotification.
  */
-class Member extends Entity
+class MemberNotification extends Entity
 {
     /**
      * @return array
@@ -30,7 +30,7 @@ class Member extends Entity
      */
     public function name()
     {
-        return 'member.member';
+        return 'member.notification';
     }
 
     /**
@@ -39,10 +39,12 @@ class Member extends Entity
     public function places()
     {
         return [
-            'register',
-            'registered',
-            'validate',
-            'validated',
+            'launch',
+            'launched',
+            'review',
+            'reviewed',
+            'publish',
+            'published',
         ];
     }
 
@@ -52,9 +54,11 @@ class Member extends Entity
     public function transitions()
     {
         return [
-            new Transition('register', 'register', 'registered'),
-            new Transition('wait_to_validate', 'registered', 'validate'),
-            new Transition('validate', 'validate', 'validated'),
+            new Transition('launch', 'launch', 'launched'),
+            new Transition('wait_to_review', 'launched', 'review'),
+            new Transition('review', 'review', 'reviewed'),
+            new Transition('wait_to_publish', 'reviewed', 'publish'),
+            new Transition('publish', 'publish', 'published'),
         ];
     }
 

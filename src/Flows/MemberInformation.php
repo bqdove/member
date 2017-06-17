@@ -6,16 +6,15 @@
  * @copyright (c) 2017, notadd.com
  * @datetime 2017-06-01 18:48
  */
-namespace Notadd\Member\Entities;
+namespace Notadd\Member\Flows;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
-use Symfony\Component\Workflow\Transition;
 
 /**
- * Class MemberNotification.
+ * Class MemberInformation.
  */
-class MemberNotification extends Entity
+class MemberInformation extends Entity
 {
     /**
      * @return array
@@ -30,7 +29,7 @@ class MemberNotification extends Entity
      */
     public function name()
     {
-        return 'member.notification';
+        return 'member.information';
     }
 
     /**
@@ -38,14 +37,7 @@ class MemberNotification extends Entity
      */
     public function places()
     {
-        return [
-            'launch',
-            'launched',
-            'review',
-            'reviewed',
-            'publish',
-            'published',
-        ];
+        return [];
     }
 
     /**
@@ -53,13 +45,7 @@ class MemberNotification extends Entity
      */
     public function transitions()
     {
-        return [
-            new Transition('launch', 'launch', 'launched'),
-            new Transition('wait_to_review', 'launched', 'review'),
-            new Transition('review', 'review', 'reviewed'),
-            new Transition('wait_to_publish', 'reviewed', 'publish'),
-            new Transition('publish', 'publish', 'published'),
-        ];
+        return [];
     }
 
     /**

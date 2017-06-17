@@ -9,14 +9,14 @@
 namespace Notadd\Member\Listeners;
 
 use Notadd\Foundation\Flow\Abstracts\FlowRegister as AbstractFlowRegister;
-use Notadd\Member\Entities\Member;
-use Notadd\Member\Entities\MemberBan;
-use Notadd\Member\Entities\MemberGroup;
-use Notadd\Member\Entities\MemberInformation;
-use Notadd\Member\Entities\MemberNotification;
-use Notadd\Member\Entities\MemberPermission;
-use Notadd\Member\Entities\MemberTag;
-use Notadd\Member\Entities\MemberVerification;
+use Notadd\Member\Flows\Member;
+use Notadd\Member\Flows\MemberBan;
+use Notadd\Member\Flows\MemberGroup;
+use Notadd\Member\Flows\MemberInformation;
+use Notadd\Member\Flows\MemberNotification;
+use Notadd\Member\Flows\MemberPermission;
+use Notadd\Member\Flows\MemberTag;
+use Notadd\Member\Flows\MemberVerification;
 
 /**
  * Class FlowRegister.

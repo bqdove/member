@@ -4,18 +4,17 @@
  *
  * @author TwilRoad <269044570@qq.com>
  * @copyright (c) 2017, notadd.com
- * @datetime 2017-06-01 18:48
+ * @datetime 2017-06-01 18:47
  */
-namespace Notadd\Member\Entities;
+namespace Notadd\Member\Flows;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
-use Symfony\Component\Workflow\Transition;
 
 /**
- * Class MemberVerification.
+ * Class MemberGroup.
  */
-class MemberVerification extends Entity
+class MemberGroup extends Entity
 {
     /**
      * @return array
@@ -30,7 +29,7 @@ class MemberVerification extends Entity
      */
     public function name()
     {
-        return 'member.verification';
+        return 'member.group';
     }
 
     /**
@@ -38,10 +37,7 @@ class MemberVerification extends Entity
      */
     public function places()
     {
-        return [
-            'validate',
-            'validated',
-        ];
+        return [];
     }
 
     /**
@@ -49,9 +45,7 @@ class MemberVerification extends Entity
      */
     public function transitions()
     {
-        return [
-            new Transition('validate', 'validate', 'validated'),
-        ];
+        return [];
     }
 
     /**

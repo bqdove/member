@@ -6,15 +6,16 @@
  * @copyright (c) 2017, notadd.com
  * @datetime 2017-06-01 18:47
  */
-namespace Notadd\Member\Entities;
+namespace Notadd\Member\Flows;
 
 use Notadd\Foundation\Flow\Abstracts\Entity;
 use Symfony\Component\Workflow\Event\GuardEvent;
+use Symfony\Component\Workflow\Transition;
 
 /**
- * Class MemberGroup.
+ * Class Member.
  */
-class MemberGroup extends Entity
+class Member extends Entity
 {
     /**
      * @return array
@@ -29,7 +30,7 @@ class MemberGroup extends Entity
      */
     public function name()
     {
-        return 'member.group';
+        return 'member.member';
     }
 
     /**
@@ -37,7 +38,12 @@ class MemberGroup extends Entity
      */
     public function places()
     {
-        return [];
+        return [
+            'register',
+            'registered',
+            'validate',
+            'validated',
+        ];
     }
 
     /**
@@ -45,7 +51,11 @@ class MemberGroup extends Entity
      */
     public function transitions()
     {
-        return [];
+        return [
+            new Transition('register', 'register', 'registered'),
+            new Transition('wait_to_validate', 'registered', 'validate'),
+            new Transition('validate', 'validate', 'validated'),
+        ];
     }
 
     /**
