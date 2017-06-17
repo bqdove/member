@@ -64,12 +64,16 @@ class GroupHandler extends Handler
                     if ($has->count()) {
                         $this->exits = $this->exits->diff($has);
                     }
-                    $data['end'] = Carbon::createFromTimestampUTC(strtotime($data['end']));
-
+                    if ($data['end']) {
+                        $data['end'] = Carbon::createFromTimestampUTC(strtotime($data['end']));
+                    } else {
+                        unset($data['end']);
+                    }
                     if (MemberGroupRelation::query()
                         ->where('member_id', $data['member_id'])
                         ->where('group_id', $data['group_id'])
-                        ->count()) {
+                        ->count()
+                    ) {
                         $group = MemberGroupRelation::query()
                             ->where('member_id', $data['member_id'])
                             ->where('group_id', $data['group_id'])
