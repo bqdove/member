@@ -8,10 +8,7 @@
                 injection.http.post(`${window.api}/member/group/list`),
                 injection.http.post(`${window.api}/member/user`, {
                     id: to.params.id,
-                    with: [
-                        'groups',
-                        'groups.details',
-                    ],
+                    with: 'groups',
                 }),
             ]).then(injection.http.spread((groups, user) => {
                 const data = groups.data.data;
@@ -22,9 +19,9 @@
                             group.map(has => {
                                 if (has.type === 'default') {
                                     vm.form.date = has.end;
-                                    vm.form.group = has.group_id;
+                                    vm.form.group = has.id;
                                     vm.form.next = has.next;
-                                } else if (has.group_id === item.id) {
+                                } else if (has.id === item.id) {
                                     item.check = true;
                                     item.end = has.end;
                                 }
