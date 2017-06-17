@@ -67,7 +67,6 @@
                     {
                         key: 'email',
                         title: injection.trans('member.user.table.email'),
-                        width: 240,
                     },
                     {
                         key: 'status',
