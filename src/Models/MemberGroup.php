@@ -60,7 +60,7 @@ class MemberGroup extends Model
      */
     public function name()
     {
-        // TODO: Implement name() method.
+        return 'member.group';
     }
 
     /**
@@ -70,7 +70,7 @@ class MemberGroup extends Model
      */
     public function places()
     {
-        // TODO: Implement places() method.
+        return [];
     }
 
     /**
@@ -80,7 +80,7 @@ class MemberGroup extends Model
      */
     public function transitions()
     {
-        // TODO: Implement transitions() method.
+        return [];
     }
 
     /**

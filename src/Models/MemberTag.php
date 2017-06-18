@@ -38,7 +38,7 @@ class MemberTag extends Model
      */
     public function name()
     {
-        // TODO: Implement name() method.
+        return 'member.tag';
     }
 
     /**
@@ -48,7 +48,7 @@ class MemberTag extends Model
      */
     public function places()
     {
-        // TODO: Implement places() method.
+        return [];
     }
 
     /**
@@ -58,7 +58,7 @@ class MemberTag extends Model
      */
     public function transitions()
     {
-        // TODO: Implement transitions() method.
+        return [];
     }
 
     /**
