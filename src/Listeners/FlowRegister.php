@@ -10,13 +10,13 @@ namespace Notadd\Member\Listeners;
 
 use Notadd\Foundation\Flow\Abstracts\FlowRegister as AbstractFlowRegister;
 use Notadd\Member\Flows\Member;
-use Notadd\Member\Flows\MemberBan;
-use Notadd\Member\Flows\MemberGroup;
-use Notadd\Member\Flows\MemberInformation;
 use Notadd\Member\Flows\MemberNotification;
 use Notadd\Member\Flows\MemberPermission;
-use Notadd\Member\Flows\MemberTag;
 use Notadd\Member\Flows\MemberVerification;
+use Notadd\Member\Models\MemberBan;
+use Notadd\Member\Models\MemberGroup;
+use Notadd\Member\Models\MemberInformation;
+use Notadd\Member\Models\MemberTag;
 
 /**
  * Class FlowRegister.
