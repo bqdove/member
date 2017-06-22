@@ -9,7 +9,7 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
-use Notadd\Foundation\Flow\Traits\HasFlow;
+use Notadd\Foundation\Database\Traits\HasFlow;
 use Notadd\Foundation\Member\Member;
 use Symfony\Component\Workflow\Event\GuardEvent;
 
@@ -24,6 +24,7 @@ class MemberBan extends Model
      * @var array
      */
     protected $fillable = [
+        'flow_marketing',
         'member_id',
         'reason',
         'type',

@@ -9,7 +9,7 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
-use Notadd\Foundation\Flow\Traits\HasFlow;
+use Notadd\Foundation\Database\Traits\HasFlow;
 use Notadd\Foundation\Member\Member;
 use Symfony\Component\Workflow\Event\GuardEvent;
 
@@ -33,6 +33,7 @@ class MemberGroup extends Model
      */
     protected $fillable = [
         'description',
+        'flow_marketing',
         'icon',
         'identification',
         'name',
