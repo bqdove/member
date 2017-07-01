@@ -87,16 +87,6 @@ class ModuleServiceProvider extends Module
     }
 
     /**
-     * Description of module
-     *
-     * @return string
-     */
-    public static function description()
-    {
-        return 'Notadd 用户管理模块';
-    }
-
-    /**
      * Install module.
      *
      * @return string
@@ -104,16 +94,6 @@ class ModuleServiceProvider extends Module
     public static function install()
     {
         return Installer::class;
-    }
-
-    /**
-     * Name of module.
-     *
-     * @return string
-     */
-    public static function name()
-    {
-        return '用户中心';
     }
 
     /**
@@ -127,30 +107,6 @@ class ModuleServiceProvider extends Module
     }
 
     /**
-     * Get script of extension.
-     *
-     * @return string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public static function script()
-    {
-        return asset('assets/member/administration/js/module.min.js');
-    }
-
-    /**
-     * Get stylesheet of extension.
-     *
-     * @return array
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public static function stylesheet()
-    {
-        return [
-            asset('assets/member/administration/css/module.min.css'),
-        ];
-    }
-
-    /**
      * Uninstall module.
      *
      * @return string
@@ -158,15 +114,5 @@ class ModuleServiceProvider extends Module
     public static function uninstall()
     {
         return Uninstaller::class;
-    }
-
-    /**
-     * Version of module.
-     *
-     * @return string
-     */
-    public static function version()
-    {
-        return '1.0.0';
     }
 }
