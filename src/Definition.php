@@ -35,7 +35,7 @@ class Definition extends AbstractDefinition
     {
         return [
             'administration' => [
-                'notadd/content'   => [
+                'notadd/member'   => [
                     'permissions' => '',
                     'scripts'     => asset('assets/member/administration/js/module.min.js'),
                     'stylesheets' => asset('assets/member/administration/css/module.min.css'),
