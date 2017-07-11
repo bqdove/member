@@ -19,6 +19,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -28,9 +29,16 @@
                     },
                     {
                         key: 'icon',
-                        render(row) {
-                            if (row.icon) {
-                                return `<img class="group-list-image" src="${row.icon}">`;
+                        render(h, data) {
+                            if (data.row.icon) {
+                                return h('img', {
+                                    domProps: {
+                                        class: {
+                                            'group-list-image': true,
+                                        },
+                                        src: data.row.icon,
+                                    },
+                                });
                             }
                             return '';
                         },
@@ -59,15 +67,50 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="combine(${row.id})">合并用户组</i-button>
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑用户组</i-button>
-                                    <i-button :loading="list[${index}].loading"  size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">${injection.trans('content.global.delete.submit')}</span>
-                                        <span v-else>${injection.trans('content.global.delete.loading')}</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('div', [
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.combine(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '合并用户组'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.edit(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '编辑用户组'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                }, [
+                                    h('span', text),
+                                ]),
+                            ]);
                         },
                         title: injection.trans('member.user.table.handle'),
                         width: 300,

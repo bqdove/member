@@ -8,6 +8,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -22,24 +23,51 @@
                     },
                     {
                         key: 'one',
-                        render(row) {
-                            return `<i-input v-model="row.one" :value="${row.one}"></i-input>`;
+                        render(h, data) {
+                            return h('i-input', {
+                                on: {
+                                    input(value) {
+                                        self.list[data.index].one = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].one,
+                                },
+                            });
                         },
                         title: '威望',
                         width: 150,
                     },
                     {
                         key: 'two',
-                        render(row) {
-                            return `<i-input v-model="row.two" :value="${row.two}"></i-input>`;
+                        render(h, data) {
+                            return h('i-input', {
+                                on: {
+                                    input(value) {
+                                        self.list[data.index].two = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].two,
+                                },
+                            });
                         },
                         title: '金钱',
                         width: 150,
                     },
                     {
                         key: 'three',
-                        render(row) {
-                            return `<i-input v-model="row.three" :value="${row.three}"></i-input>`;
+                        render(h, data) {
+                            return h('i-input', {
+                                on: {
+                                    input(value) {
+                                        self.list[data.index].three = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].three,
+                                },
+                            });
                         },
                         title: '其他',
                         width: 150,

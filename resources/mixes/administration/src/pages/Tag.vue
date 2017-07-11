@@ -16,6 +16,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -37,15 +38,26 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <!--<i-button size="small" type="default" @click.native="notification(${row.id})">发送通知</i-button>
-                                    <i-button size="small" type="default" @click.native="list(${row.id})">用户列表</i-button>-->
-                                    <i-button :loading="list[${index}].loading"  size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">${injection.trans('content.global.delete.submit')}</span>
-                                        <span v-else>${injection.trans('content.global.delete.loading')}</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('i-button', {
+                                on: {
+                                    click() {
+                                        self.remove(data.index);
+                                    },
+                                },
+                                props: {
+                                    size: 'small',
+                                    type: 'error',
+                                },
+                            }, [
+                                h('span', text),
+                            ]);
                         },
                         title: injection.trans('member.user.table.handle'),
                         width: 300,

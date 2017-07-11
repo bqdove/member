@@ -21,6 +21,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -44,11 +45,27 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `<i-button :loading="list[${index}].loading" size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">删除 IP</span>
-                                        <span v-else>正在删除 IP…</span>
-                                    </i-button>`;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = '删除 IP';
+                            } else {
+                                text = '正在删除 IP…';
+                            }
+                            return h('i-button', {
+                                on: {
+                                    click() {
+                                        self.remove(data.index);
+                                    },
+                                },
+                                props: {
+                                    loading: self.list[data.index].loading,
+                                    size: 'small',
+                                    type: 'error',
+                                },
+                            }, [
+                                h('span', text),
+                            ]);
                         },
                         title: injection.trans('操作'),
                         width: 300,

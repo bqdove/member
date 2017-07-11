@@ -21,21 +21,40 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
                         align: 'center',
                         key: 'show',
-                        render(row, column, index) {
-                            return `<checkbox v-model="groups[${index}].show"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        self.groups[data.index].show = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.groups[data.index].show,
+                                },
+                            });
                         },
                         title: '显示',
                         width: 100,
                     },
                     {
                         key: 'order',
-                        render(row, column, index) {
-                            return `<i-input v-model="groups[${index}].order"></i-input>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        self.groups[data.index].order = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.groups[data.index].order,
+                                },
+                            });
                         },
                         title: '显示顺序',
                         width: 200,
@@ -46,14 +65,39 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑</i-button>
-                                    <i-button :loading="groups[${index}].loading" size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!groups[${index}].loading">删除</span>
-                                        <span v-else>正在删除...</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.groups[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('div', [
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.edit(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '编辑'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                }, [
+                                    h('span', text),
+                                ]),
+                            ]);
                         },
                         title: '操作',
                         width: 300,

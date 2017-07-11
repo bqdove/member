@@ -31,6 +31,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -40,9 +41,16 @@
                     },
                     {
                         key: 'avatar',
-                        render(row) {
-                            if (row.avatar) {
-                                return `<img class="user-list-image" src="${row.avatar}">`;
+                        render(h, data) {
+                            if (data.row.avatar) {
+                                return h('img', {
+                                    domProps: {
+                                        class: {
+                                            'user-list-image': true,
+                                        },
+                                        src: data.row.avatar,
+                                    },
+                                });
                             }
                             return '';
                         },
@@ -70,10 +78,10 @@
                     },
                     {
                         key: 'status',
-                        render(row) {
-                            if (row.ban === 0) {
+                        render(h, data) {
+                            if (data.row.ban === 0) {
                                 return '不封禁';
-                            } else if (row.ban > 0 && row.ban < 3) {
+                            } else if (data.row.ban > 0 && data.row.ban < 3) {
                                 return '部分封禁';
                             }
                             return '完全封禁';
@@ -93,15 +101,64 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="group(${row.id})">用户组</i-button>
-                                    <!--<i-button size="small" type="default" @click.native="integral(${row.id})">积分</i-button>-->
-                                    <i-button size="small" type="default" @click.native="tag(${row.id})">标签</i-button>
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑详情</i-button>
-                                    <i-button size="small" type="default" @click.native="ban(${row.id})">封禁</i-button>
-                                    <i-button size="small" type="error" @click.native="remove(${index})">删除</i-button>
-                                    `;
+                        render(h, data) {
+                            return h('div', [
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.group(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '用户组'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.tag(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '标签'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.edit(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '编辑详情'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.ban(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '封禁'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                }, '删除'),
+                            ]);
                         },
                         title: injection.trans('member.user.table.handle'),
                         width: 360,

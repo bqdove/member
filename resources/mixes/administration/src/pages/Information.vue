@@ -21,6 +21,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -31,8 +32,17 @@
                     {
                         align: 'center',
                         key: 'order',
-                        render(row, column, index) {
-                            return `<i-input v-model="list[${index}].order"></i-input>`;
+                        render(h, data) {
+                            return h('i-input', {
+                                on: {
+                                    input(value) {
+                                        self.list[data.index].order = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].order,
+                                },
+                            });
                         },
                         title: '显示顺序',
                         width: 120,
@@ -40,8 +50,17 @@
                     {
                         align: 'center',
                         key: 'register',
-                        render(row, column, index) {
-                            return `<checkbox v-model="list[${index}].register"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        self.list[data.index].register = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].register,
+                                },
+                            });
                         },
                         title: '注册是否显示',
                         width: 120,
@@ -49,8 +68,17 @@
                     {
                         align: 'center',
                         key: 'details',
-                        render(row, column, index) {
-                            return `<checkbox v-model="list[${index}].details"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        self.list[data.index].details = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].details,
+                                },
+                            });
                         },
                         title: '资料页是否显示',
                         width: 120,
@@ -58,8 +86,17 @@
                     {
                         align: 'center',
                         key: 'required',
-                        render(row, column, index) {
-                            return `<checkbox v-model="list[${index}].required"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        self.list[data.index].required = value;
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].required,
+                                },
+                            });
                         },
                         title: '是否必填',
                         width: 120,
@@ -70,14 +107,39 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑</i-button>
-                                    <i-button :loading="list[${index}].loading" size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">删除</span>
-                                        <span v-else>正在删除...</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('div', [
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.edit(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'default',
+                                    },
+                                }, '编辑'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                }, [
+                                    h('span', text),
+                                ]),
+                            ]);
                         },
                         title: '操作',
                         width: 300,
