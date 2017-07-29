@@ -124,6 +124,9 @@
                                         size: 'small',
                                         type: 'default',
                                     },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
                                 }, '标签'),
                                 h('i-button', {
                                     on: {
@@ -134,6 +137,9 @@
                                     props: {
                                         size: 'small',
                                         type: 'default',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
                                     },
                                 }, '编辑详情'),
                                 h('i-button', {
@@ -146,6 +152,9 @@
                                         size: 'small',
                                         type: 'default',
                                     },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
                                 }, '封禁'),
                                 h('i-button', {
                                     on: {
@@ -156,6 +165,9 @@
                                     props: {
                                         size: 'small',
                                         type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
                                     },
                                 }, '删除'),
                             ]);

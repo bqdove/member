@@ -63,16 +63,15 @@
                     {
                         key: 'created_at',
                         title: injection.trans('创建时间'),
-                        width: 150,
                     },
                     {
                         key: 'handle',
                         render(h, data) {
                             let text;
                             if (self.list[data.index].loading) {
-                                text = injection.trans('content.global.delete.loading');
+                                text = injection.trans('正在删除...');
                             } else {
-                                text = injection.trans('content.global.delete.submit');
+                                text = injection.trans('删除');
                             }
                             return h('div', [
                                 h('i-button', {
@@ -85,6 +84,9 @@
                                         size: 'small',
                                         type: 'default',
                                     },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
                                 }, '合并用户组'),
                                 h('i-button', {
                                     on: {
@@ -96,6 +98,9 @@
                                         size: 'small',
                                         type: 'default',
                                     },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
                                 }, '编辑用户组'),
                                 h('i-button', {
                                     on: {
@@ -106,6 +111,9 @@
                                     props: {
                                         size: 'small',
                                         type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
                                     },
                                 }, [
                                     h('span', text),
