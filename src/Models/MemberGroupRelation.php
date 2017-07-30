@@ -6,6 +6,7 @@
  * @copyright (c) 2017, notadd.com
  * @datetime 2017-04-27 16:50
  */
+
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
@@ -24,6 +25,14 @@ class MemberGroupRelation extends Model
         'member_id',
         'next',
         'type',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $setters = [
+        'next' => 'empty|0',
+        'type' => 'empty|default',
     ];
 
     /**

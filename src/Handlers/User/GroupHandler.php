@@ -50,6 +50,11 @@ class GroupHandler extends Handler
         $this->groups = collect();
     }
 
+    /**
+     * Execute Handler.
+     *
+     * @throws \Exception
+     */
     public function execute()
     {
         if (!$this->request->input('member_id', 0)) {

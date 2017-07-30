@@ -23,7 +23,7 @@ class CreateMemberGroupsTable extends Migration
             $table->increments('id');
             $table->string('description')->nullable();
             $table->string('icon')->nullable();
-            $table->string('identification')->nullable();
+            $table->string('identification');
             $table->string('name', 100)->unique()->index();
             $table->timestamps();
         });

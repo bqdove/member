@@ -26,7 +26,7 @@ class CreateMemberGroupRelationsTable extends Migration
             $table->integer('group_id');
             $table->integer('member_id');
             $table->enum('type', ['default', 'extend'])->default('default');
-            $table->integer('next');
+            $table->integer('next')->default(0);
             $table->timestamps();
         });
     }
