@@ -13,7 +13,6 @@
             ]).then(injection.http.spread((groups, user) => {
                 const data = groups.data.data;
                 const group = user.data.data.groups;
-                window.console.log(group);
                 next(vm => {
                     data.forEach(item => {
                         if (group) {
