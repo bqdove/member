@@ -5,8 +5,8 @@
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
             injection.http.all([
-                injection.http.post(`${window.api}/member/group/list`),
-                injection.http.post(`${window.api}/member/user`, {
+                injection.http.post(`${window.api}/member/administration/group/list`),
+                injection.http.post(`${window.api}/member/administration/user`, {
                     id: to.params.id,
                     with: 'groups',
                 }),
@@ -96,7 +96,7 @@
                             }
                             return group;
                         });
-                        self.$http.post(`${window.api}/member/user/group`, {
+                        self.$http.post(`${window.api}/member/administration/user/group`, {
                             data: groups,
                             member_id: id,
                         }).then(response => {

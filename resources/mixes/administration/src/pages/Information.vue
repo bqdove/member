@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/information/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/information/list`).then(response => {
                 const data = response.data.data;
                 const pagination = response.data.pagination;
                 next(vm => {
@@ -159,7 +159,7 @@
                 const self = this;
                 const information = self.list[index];
                 information.loading = true;
-                self.$http.post(`${window.api}/member/information/remove`, {
+                self.$http.post(`${window.api}/member/administration/information/remove`, {
                     id: information.id,
                 }).then(() => {
                     self.$notice.open({
@@ -169,7 +169,7 @@
                         title: '正在刷新数据...',
                     });
                     self.$loading.start();
-                    self.$http.post(`${window.api}/member/information/list`).then(response => {
+                    self.$http.post(`${window.api}/member/administration/information/list`).then(response => {
                         const data = response.data.data;
                         const pagination = response.data.pagination;
                         data.forEach(item => {
@@ -191,7 +191,7 @@
             submit() {
                 const self = this;
                 self.loading = true;
-                self.$http.post(`${window.api}/member/information/patch`, {
+                self.$http.post(`${window.api}/member/administration/information/patch`, {
                     data: self.list,
                 }).then(() => {
                     self.$notice.open({
@@ -201,7 +201,7 @@
                         title: '正在更新信息项数据...',
                     });
                     self.$loading.start();
-                    self.$http.post(`${window.api}/member/information/list`).then(response => {
+                    self.$http.post(`${window.api}/member/administration/information/list`).then(response => {
                         const data = response.data.data;
                         const pagination = response.data.pagination;
                         data.forEach(item => {

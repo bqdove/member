@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/notification/list`, {
+            injection.http.post(`${window.api}/member/administration/notification/list`, {
                 with: [
                     'notifiable',
                 ],
@@ -83,7 +83,7 @@
                 const self = this;
                 const notification = self.list[index];
                 notification.loading = true;
-                self.$http.post(`${window.api}/member/notification/remove`, {
+                self.$http.post(`${window.api}/member/administration/notification/remove`, {
                     id: notification.id,
                 }).then(() => {
                     self.$notice.open({
@@ -93,7 +93,7 @@
                         title: '正在刷新数据...',
                     });
                     self.$loading.start();
-                    self.$http.post(`${window.api}/member/notification/list`, {
+                    self.$http.post(`${window.api}/member/administration/notification/list`, {
                         with: [
                             'notifiable',
                         ],

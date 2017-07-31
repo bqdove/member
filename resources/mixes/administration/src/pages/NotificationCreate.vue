@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/user/list`, {
+            injection.http.post(`${window.api}/member/administration/user/list`, {
                 format: 'beauty',
                 with: [
                     'ban',
@@ -132,7 +132,7 @@
                             self.step += 1;
                         } else {
                             self.$loading.start();
-                            self.$http.post(`${window.api}/member/notification/send`, self.form).then(() => {
+                            self.$http.post(`${window.api}/member/administration/notification/send`, self.form).then(() => {
                                 self.$loading.finish();
                                 self.$notice.open({
                                     title: '群发消息成功！',

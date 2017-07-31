@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/group`, {
+            injection.http.post(`${window.api}/member/administration/group`, {
                 id: to.params.id,
             }).then(response => {
                 next(vm => {
@@ -18,7 +18,7 @@
         },
         data() {
             return {
-                action: `${window.api}/member/upload`,
+                action: `${window.api}/member/administration/upload`,
                 form: {
                     description: '',
                     icon: '',
@@ -56,7 +56,7 @@
                 self.$refs.form.validate(valid => {
                     if (valid) {
                         self.loading = true;
-                        self.$http.post(`${window.api}/member/group/edit`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/group/edit`, self.form).then(() => {
                             self.$notice.open({
                                 title: '编辑用户组信息成功！',
                             });

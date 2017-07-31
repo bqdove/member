@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/tag/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/tag/list`).then(response => {
                 window.console.log(response);
                 next(vm => {
                     vm.list = response.data.data;
@@ -106,7 +106,7 @@
                     });
                     self.loading = false;
                 } else {
-                    self.$http.post(`${window.api}/member/tag/patch`, self.form).then(() => {
+                    self.$http.post(`${window.api}/member/administration/tag/patch`, self.form).then(() => {
                         self.$notice.open({
                             title: '批量更新标签数据成功！',
                         });
@@ -114,7 +114,7 @@
                             title: '准备更新标签数据...',
                         });
                         self.$loading.start();
-                        self.$http.post(`${window.api}/member/tag/list`).then(response => {
+                        self.$http.post(`${window.api}/member/administration/tag/list`).then(response => {
                             self.list = response.data.data;
                             self.$loading.finish();
                         }).catch(() => {

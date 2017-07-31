@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/ban/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/ban/list`).then(response => {
                 next(vm => {
                     window.console.log(response.data);
                     vm.list = response.data.data;

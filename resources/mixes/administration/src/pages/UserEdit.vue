@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/user`, {
+            injection.http.post(`${window.api}/member/administration/user`, {
                 id: to.params.id,
                 with: [
                     'activate',
@@ -26,7 +26,7 @@
         },
         data() {
             return {
-                action: `${window.api}/member/upload`,
+                action: `${window.api}/member/administration/upload`,
                 form: {
                     activate: 'no',
                     age: '',
@@ -98,7 +98,7 @@
                 self.loading = true;
                 self.$refs.form.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.api}/member/user/edit`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/user/edit`, self.form).then(() => {
                             self.$notice.open({
                                 title: '更新用户信息成功！',
                             });

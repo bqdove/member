@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/user/list`, {
+            injection.http.post(`${window.api}/member/administration/user/list`, {
                 format: 'beauty',
                 with: [
                     'ban',
@@ -220,7 +220,7 @@
                     });
                     return false;
                 }
-                self.$http.post(`${window.api}/member/user/list`, {
+                self.$http.post(`${window.api}/member/administration/user/list`, {
                     format: 'beauty',
                     search: self.keyword,
                     with: [

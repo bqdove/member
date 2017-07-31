@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/information`, {
+            injection.http.post(`${window.api}/member/administration/information`, {
                 id: to.params.id,
             }).then(response => {
                 const data = response.data.data;
@@ -100,7 +100,7 @@
                 self.loading = true;
                 self.$refs.form.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.api}/member/information/edit`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/information/edit`, self.form).then(() => {
                             self.$notice.open({
                                 title: '更新信息项数据成功！',
                             });

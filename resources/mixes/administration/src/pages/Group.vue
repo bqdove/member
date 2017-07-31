@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/group/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/group/list`).then(response => {
                 const data = response.data.data;
                 next(vm => {
                     data.forEach(item => {
@@ -147,14 +147,14 @@
                 const group = self.list[index];
                 window.console.log(group);
                 group.loading = true;
-                self.$http.post(`${window.api}/member/group/remove`, {
+                self.$http.post(`${window.api}/member/administration/group/remove`, {
                     id: group.id,
                 }).then(() => {
                     self.$notice.open({
                         title: '删除用户组成功，正在刷新数据...',
                     });
                     self.$loading.start();
-                    self.$http.post(`${window.api}/member/group/list`).then(response => {
+                    self.$http.post(`${window.api}/member/administration/group/list`).then(response => {
                         self.$loading.finish();
                         self.list = response.data.data;
                         self.list.forEach(item => {

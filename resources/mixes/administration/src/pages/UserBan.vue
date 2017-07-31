@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/user`, {
+            injection.http.post(`${window.api}/member/administration/user`, {
                 id: to.params.id,
                 with: [
                     'ban',
@@ -79,7 +79,7 @@
                 self.$refs.form.validate(valid => {
                     if (valid) {
                         self.$loading.start();
-                        self.$http.post(`${window.api}/member/user/ban`, self.form).then(response => {
+                        self.$http.post(`${window.api}/member/administration/user/ban`, self.form).then(response => {
                             self.$loading.finish();
                             self.$notice.open({
                                 title: response.data.message,

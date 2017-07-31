@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/ban/ip`).then(response => {
+            injection.http.post(`${window.api}/member/administration/ban/ip`).then(response => {
                 const list = response.data.data;
                 const pagination = response.data.pagination;
                 next(vm => {
@@ -88,7 +88,7 @@
                 self.$notice.open({
                     title: '正在更新数据',
                 });
-                self.$http.post(`${window.api}/member/ban/ip`).then(response => {
+                self.$http.post(`${window.api}/member/administration/ban/ip`).then(response => {
                     const list = response.data.data;
                     const pagination = response.data.pagination;
                     list.forEach(item => {
@@ -105,7 +105,7 @@
                 const self = this;
                 const item = self.list[index];
                 item.loading = true;
-                self.$http.post(`${window.api}/member/ban/remove`, {
+                self.$http.post(`${window.api}/member/administration/ban/remove`, {
                     id: item.id,
                 }).then(() => {
                     self.$notice.open({

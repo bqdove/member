@@ -9,7 +9,7 @@
         },
         data() {
             return {
-                action: `${window.api}/member/upload`,
+                action: `${window.api}/member/administration/upload`,
                 form: {
                     description: '',
                     icon: '',
@@ -47,7 +47,7 @@
                 self.$refs.form.validate(valid => {
                     if (valid) {
                         self.loading = true;
-                        self.$http.post(`${window.api}/member/group/create`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/group/create`, self.form).then(() => {
                             self.$notice.open({
                                 title: '添加用户组成功！',
                             });

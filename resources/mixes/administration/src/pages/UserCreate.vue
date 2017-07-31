@@ -9,7 +9,7 @@
         },
         data() {
             return {
-                action: `${window.api}/member/upload`,
+                action: `${window.api}/member/administration/upload`,
                 form: {
                     activated: 'no',
                     age: '',
@@ -99,7 +99,7 @@
                         } else {
                             data.sex = 0;
                         }
-                        self.$http.post(`${window.api}/member/user/create`, data).then(() => {
+                        self.$http.post(`${window.api}/member/administration/user/create`, data).then(() => {
                             self.$notice.open({
                                 title: '添加用户成功！',
                             });
