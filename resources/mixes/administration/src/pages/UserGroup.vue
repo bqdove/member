@@ -13,10 +13,12 @@
             ]).then(injection.http.spread((groups, user) => {
                 const data = groups.data.data;
                 const group = user.data.data.groups;
+                window.console.log(group);
                 next(vm => {
                     data.forEach(item => {
                         if (group) {
-                            group.map(has => {
+                            Object.keys(group).map(key => {
+                                const has = group[key];
                                 if (has.type === 'default') {
                                     vm.form.date = has.end;
                                     vm.form.group = has.id;
