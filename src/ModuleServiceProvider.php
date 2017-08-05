@@ -9,7 +9,6 @@
 namespace Notadd\Member;
 
 use Illuminate\Events\Dispatcher;
-use Notadd\Foundation\Database\Model;
 use Notadd\Foundation\Member\Member;
 use Notadd\Member\Injections\Installer;
 use Notadd\Member\Injections\Uninstaller;
@@ -36,24 +35,14 @@ class ModuleServiceProvider extends Module
      */
     public function boot()
     {
-        Member::extend('fillable', [
-            'avatar',
-            'birthday',
-            'introduction',
-            'nickname',
-            'phone',
-            'realname',
-            'sex',
-            'signature',
-        ]);
-        Member::extend('relation', 'activate', function (Model $model) {
-            return $model->hasOne(MemberActivate::class, 'member_id');
+        Member::macro('activate', function () {
+            return $this->hasOne(MemberActivate::class, 'member_id');
         });
-        Member::extend('relation', 'ban', function (Model $model) {
-            return $model->hasOne(MemberBan::class, 'member_id');
+        Member::macro('ban', function () {
+            return $this->hasOne(MemberBan::class, 'member_id');
         });
-        Member::extend('relation', 'groups', function (Model $model) {
-            return $model->belongsToMany(MemberGroup::class, 'member_group_relations', 'member_id', 'group_id');
+        Member::macro('groups', function () {
+            return $this->belongsToMany(MemberGroup::class, 'member_group_relations', 'member_id', 'group_id');
         });
 
         $manager = new Manager($this->app['events'], $this->app['router']);
