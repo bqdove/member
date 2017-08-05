@@ -93,6 +93,9 @@ class ModuleServiceProvider extends Module
         $this->app->singleton('integral', function ($app) {
             return new IntegralManager($app);
         });
+        $this->app->singleton('socialite', function ($app) {
+            return new SocialiteManager($app);
+        });
     }
 
     /**
