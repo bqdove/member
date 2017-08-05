@@ -8,6 +8,7 @@
  */
 namespace Notadd\Member;
 
+use InvalidArgumentException;
 use Notadd\Foundation\Http\Supports\Manager;
 
 /**
@@ -16,12 +17,36 @@ use Notadd\Foundation\Http\Supports\Manager;
 class SocialiteManager extends Manager
 {
     /**
+     * @param array $configuration
+     *
+     * @return array
+     */
+    public function formatCongiuration(array $configuration)
+    {
+        return array_merge([
+            'identifier' => $configuration['client_id'],
+            'secret' => $configuration['client_secret'],
+            'callback_uri' => $configuration['redirect'],
+        ], $configuration);
+    }
+
+    /**
      * Get the default driver name.
      *
      * @return string
      */
     public function getDefaultDriver()
     {
-        return '';
+        throw new InvalidArgumentException('No Socialite driver was specified.');
+    }
+
+    /**
+     * @param $driver
+     *
+     * @return mixed
+     */
+    public function with($driver)
+    {
+        return $this->driver($driver);
     }
 }
