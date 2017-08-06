@@ -22,7 +22,14 @@ abstract class Driver
     /**
      * @var array
      */
-    protected $configuration;
+    protected $configuration = [
+        'encoding_type'   => PHP_QUERY_RFC1738,
+        'client_id'       => '',
+        'client_secret'   => '',
+        'redirect_url'    => '',
+        'scope_separator' => ',',
+        'stateless'       => false,
+    ];
 
     /**
      * @var \Illuminate\Container\Container
@@ -47,7 +54,7 @@ abstract class Driver
      */
     public function __construct(array $configuration, Container $container = null)
     {
-        $this->configuration = $configuration;
+        $this->configuration = array_merge($this->configuration, $configuration);
         if (is_null($container)) {
             $this->container = Container::getInstance();
         } else {

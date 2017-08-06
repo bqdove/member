@@ -43,7 +43,7 @@ class SocialiteManager extends Manager
     /**
      * @param $driver
      *
-     * @return mixed
+     * @return \Notadd\Member\Abstracts\Driver
      */
     public function with($driver)
     {
