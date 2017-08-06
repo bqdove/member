@@ -20,6 +20,8 @@ use Notadd\Member\Controllers\Api\Administration\UploadController as UploadContr
 use Notadd\Member\Controllers\Api\Administration\UserController as UserControllerForAdministration;
 use Notadd\Member\Controllers\Api\Administration\VerificationController as VerificationControllerForAdministration;
 use Notadd\Member\Controllers\Api\User\UserController as UserControllerForUser;
+use Notadd\Member\Controllers\SocialiteController;
+use Notadd\Member\SocialiteManager;
 
 /**
  * Class RouteRegister.
@@ -82,6 +84,9 @@ class RouteRegister extends AbstractRouteRegister
             $this->router->post('login', UserControllerForUser::class . '@login');
             $this->router->post('register', UserControllerForUser::class . '@register');
             $this->router->post('way', UserControllerForUser::class . '@way');
+        });
+        $this->router->group(['middleware' => 'web', 'prefix' => 'socialite'], function () {
+            $this->router->get('{driver}/auth', SocialiteController::class . '@auth');
         });
     }
 }
