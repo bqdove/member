@@ -47,6 +47,11 @@ abstract class Driver
     protected $scopes = [];
 
     /**
+     * @var string
+     */
+    protected $state;
+
+    /**
      * Driver constructor.
      *
      * @param array                                $configuration
@@ -123,23 +128,20 @@ abstract class Driver
      */
     public function redirect($redirectUrl = null)
     {
-        $state = null;
         if (!is_null($redirectUrl)) {
             $this->configuration['redirect_url'] = $redirectUrl;
         }
-        if (!$this->configuration['stateless']) {
-            $state = '';
+        if ($this->configuration['stateless']) {
+            $this->state = '';
         }
 
-        return new RedirectResponse($this->getAuthUrl($state));
+        return new RedirectResponse($this->getAuthUrl());
     }
 
     /**
-     * @param $state
-     *
      * @return string
      */
-    abstract public function getAuthUrl($state);
+    abstract public function getAuthUrl();
 
     /**
      * @param string $clientId
@@ -238,28 +240,27 @@ abstract class Driver
     }
 
     /**
-     * @param bool $state
-     *
-     * @return $this
+     * @param $state
      */
-    public function withState(bool $state)
+    public function withState($state)
     {
-        $this->configuration['stateless'] = !$state;
-
-        return $this;
-    }
-
-    protected function buildAuthUrlFromBase($url, $state)
-    {
-        return $url . '?' . http_build_query($this->getCodeFields($state), '', '&', $this->configuration['encoding_type']);
+        $this->state = $state;
     }
 
     /**
-     * @param null $state
+     * @param $url
      *
+     * @return string
+     */
+    protected function buildAuthUrlFromBase($url)
+    {
+        return $url . '?' . http_build_query($this->getCodeFields(), '', '&', $this->configuration['encoding_type']);
+    }
+
+    /**
      * @return array
      */
-    protected function getCodeFields($state = null)
+    protected function getCodeFields()
     {
         $fields = array_merge([
             'client_id'     => $this->configuration['client_id'],
@@ -268,7 +269,7 @@ abstract class Driver
             'response_type' => 'code',
         ], $this->parameters);
         if (!$this->configuration['stateless']) {
-            $fields['state'] = $state;
+            $fields['state'] = $this->state;
         }
 
         return $fields;

@@ -41,6 +41,7 @@ class AuthHandler extends Handler
     protected function execute()
     {
         $driver = $this->container->make('socialite')->with($this->driver);
-        $this->withCode(200)->withData($driver->getAuthUrl(''))->withMessage('获取认证链接成功！');
+        $driver->withRedirectUrl('https://allen.ibenchu.pw/');
+        $this->withCode(200)->withData($driver->getAuthUrl())->withMessage('获取认证链接成功！');
     }
 }

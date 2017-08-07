@@ -8,6 +8,8 @@
  */
 namespace Notadd\Member\Controllers;
 
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Str;
 use Notadd\Foundation\Routing\Abstracts\Controller;
 use Notadd\Member\Handlers\Socialite\AuthHandler;
 
@@ -26,7 +28,16 @@ class SocialiteController extends Controller
         if ($this->request->expectsJson()) {
             return $this->container->make(AuthHandler::class)->withDriver($driver)->toResponse()->generateHttpResponse();
         } else {
-            return $this->container->make('socialite')->with($driver)->redirect();
+            $socialite = $this->container->make('socialite')->with($driver);
+            $socialite->withState(md5(Str::random(10) . time() . Str::random(10)));
+            $socialite->withRedirectUrl($this->container->make(UrlGenerator::class)->to("socialite/{$driver}/token"));
+
+            return $socialite->redirect();
         }
+    }
+
+    public function token($driver)
+    {
+
     }
 }

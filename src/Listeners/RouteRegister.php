@@ -87,6 +87,7 @@ class RouteRegister extends AbstractRouteRegister
         });
         $this->router->group(['middleware' => 'web', 'prefix' => 'socialite'], function () {
             $this->router->get('{driver}/auth', SocialiteController::class . '@auth');
+            $this->router->get('{driver}/token', SocialiteController::class . '@token');
         });
     }
 }
