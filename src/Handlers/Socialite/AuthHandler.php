@@ -9,7 +9,10 @@
 
 namespace Notadd\Member\Handlers\Socialite;
 
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Str;
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Member\Models\SocialiteAuth;
 
 /**
  * Class AuthHandler.
@@ -17,31 +20,30 @@ use Notadd\Foundation\Routing\Abstracts\Handler;
 class AuthHandler extends Handler
 {
     /**
-     * @var string
-     */
-    protected $driver;
-
-    /**
-     * @param string $driver
-     *
-     * @return $this
-     */
-    public function withDriver(string $driver)
-    {
-        $this->driver = $driver;
-
-        return $this;
-    }
-
-    /**
      * Execute Handler.
      *
      * @throws \Exception
      */
     protected function execute()
     {
-        $driver = $this->container->make('socialite')->with($this->driver);
-        $driver->withRedirectUrl('https://allen.ibenchu.pw/');
-        $this->withCode(200)->withData($driver->getAuthUrl())->withMessage('获取认证链接成功！');
+        $socialite = $this->authentic();
+        $this->withCode(200)->withData($socialite->getAuthUrl())->withMessage('获取认证链接成功！');
+    }
+
+    /**
+     * @return \Notadd\Member\Abstracts\Driver
+     */
+    public function authentic()
+    {
+        $driver = $this->request->route('driver');
+        $socialite = $this->container->make('socialite')->with($driver);
+        $socialite->withState(md5(Str::random(10) . time() . Str::random(10)));
+        $socialite->withRedirectUrl($this->container->make(UrlGenerator::class)->to("socialite/{$driver}/token"));
+        SocialiteAuth::query()->updateOrCreate([
+            'state' => $socialite->getState(),
+            'type'  => $driver,
+        ]);
+
+        return $socialite;
     }
 }

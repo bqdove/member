@@ -8,10 +8,9 @@
  */
 namespace Notadd\Member\Controllers;
 
-use Illuminate\Routing\UrlGenerator;
-use Illuminate\Support\Str;
 use Notadd\Foundation\Routing\Abstracts\Controller;
 use Notadd\Member\Handlers\Socialite\AuthHandler;
+use Notadd\Member\Handlers\Socialite\TokenHandler;
 
 /**
  * Class SocialiteController.
@@ -19,25 +18,37 @@ use Notadd\Member\Handlers\Socialite\AuthHandler;
 class SocialiteController extends Controller
 {
     /**
-     * @param $driver
+     * @param \Notadd\Member\Handlers\Socialite\AuthHandler $handler
      *
      * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Symfony\Component\HttpFoundation\RedirectResponse|\Zend\Diactoros\Response
      */
-    public function auth($driver)
+    public function auth(AuthHandler $handler)
     {
         if ($this->request->expectsJson()) {
-            return $this->container->make(AuthHandler::class)->withDriver($driver)->toResponse()->generateHttpResponse();
+            return $handler->toResponse()->generateHttpResponse();
         } else {
-            $socialite = $this->container->make('socialite')->with($driver);
-            $socialite->withState(md5(Str::random(10) . time() . Str::random(10)));
-            $socialite->withRedirectUrl($this->container->make(UrlGenerator::class)->to("socialite/{$driver}/token"));
+            $socialite = $handler->authentic();
 
             return $socialite->redirect();
         }
     }
 
-    public function token($driver)
+    /**
+     * @param \Notadd\Member\Handlers\Socialite\TokenHandler $handler
+     *
+     * @return bool|\Illuminate\Support\Collection|\Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|string|\Zend\Diactoros\Response
+     */
+    public function token(TokenHandler $handler)
     {
-
+        if ($this->request->expectsJson()) {
+            return $handler->toResponse()->generateHttpResponse();
+        } else {
+            $info = $handler->tokenize();
+            if ($info === false) {
+                return '授权失败！';
+            } else {
+                return $info;
+            }
+        }
     }
 }
