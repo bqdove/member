@@ -11,7 +11,11 @@ namespace Notadd\Member\Abstracts;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Container\Container;
+use Illuminate\Http\Request;
+use Notadd\Member\AccessToken;
+use Notadd\Member\Contracts\AccessToken as AccessTokenContract;
 use Notadd\Member\Exceptions\AuthorizeFailedException;
+use Notadd\Member\Exceptions\InvalidStateException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -65,60 +69,6 @@ abstract class Driver
         } else {
             $this->container = $container;
         }
-    }
-
-    /**
-     * @param $code
-     *
-     * @return mixed
-     */
-    public function getAccessToken($code)
-    {
-        $type = (version_compare(ClientInterface::VERSION, '6') === 1) ? 'form_params' : 'body';
-        $response = (new Client(['http_errors' => false]))->post($this->getTokenUrl(), [
-            'headers' => ['Accept' => 'application/json'],
-            $type     => $this->getTokenFields($code),
-        ]);
-
-        return $this->parseAccessToken($response->getBody());
-    }
-
-    /**
-     * @return string
-     */
-    abstract public function getTokenUrl();
-
-    /**
-     * @param $code
-     *
-     * @return array
-     */
-    protected function getTokenFields($code)
-    {
-        return [
-            'client_id'     => $this->configuration['client_id'],
-            'client_secret' => $this->configuration['client_secret'],
-            'code'          => $code,
-            'redirect_uri'  => $this->configuration['redirect_url'],
-        ];
-    }
-
-    /**
-     * @param $body
-     *
-     * @return mixed
-     */
-    protected function parseAccessToken($body)
-    {
-        if (!is_array($body)) {
-            $body = json_decode($body, true);
-        }
-
-        if (empty($body['access_token'])) {
-            throw new AuthorizeFailedException('Authorize Failed: ' . json_encode($body, JSON_UNESCAPED_UNICODE), $body);
-        }
-
-        return $body['access_token'];
     }
 
     /**
@@ -246,6 +196,103 @@ abstract class Driver
     {
         $this->state = $state;
     }
+
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param \Notadd\Member\Contracts\AccessToken|null $token
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function user(AccessTokenContract $token = null)
+    {
+        if (is_null($token)) {
+            throw new InvalidStateException();
+        }
+        $token = $token ?: $this->getAccessToken($this->getCode());
+
+        return collect($this->getUserByToken($token));
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return \Notadd\Member\Contracts\AccessToken
+     */
+    public function getAccessToken(string $code)
+    {
+        $type = (version_compare(ClientInterface::VERSION, '6') === 1) ? 'form_params' : 'body';
+        $response = (new Client(['http_errors' => false]))->post($this->getTokenUrl(), [
+            'headers' => ['Accept' => 'application/json'],
+            $type     => $this->getTokenFields($code),
+        ]);
+
+        return $this->parseAccessToken($response->getBody());
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getTokenUrl();
+
+    /**
+     * @param $code
+     *
+     * @return array
+     */
+    protected function getTokenFields($code)
+    {
+        return [
+            'client_id'     => $this->configuration['client_id'],
+            'client_secret' => $this->configuration['client_secret'],
+            'code'          => $code,
+            'redirect_uri'  => $this->configuration['redirect_url'],
+        ];
+    }
+
+    /**
+     * @param $body
+     *
+     * @return \Notadd\Member\Contracts\AccessToken
+     */
+    protected function parseAccessToken($body)
+    {
+        if (!is_array($body)) {
+            $body = json_decode($body, true);
+        }
+
+        if (empty($body['access_token'])) {
+            throw new AuthorizeFailedException('Authorize Failed: ' . json_encode($body, JSON_UNESCAPED_UNICODE), $body);
+        }
+
+        return new AccessToken($body);
+    }
+
+    /**
+     * @return array|string
+     */
+    protected function getCode()
+    {
+        return Container::getInstance()->make(Request::class)->query('code');
+    }
+
+    /**
+     * @param \Notadd\Member\Contracts\AccessToken $token
+     *
+     * @return array
+     */
+    abstract protected function getUserByToken(AccessTokenContract $token);
+
+    /**
+     * @return string
+     */
+    abstract public function getIdentification();
 
     /**
      * @param $url
