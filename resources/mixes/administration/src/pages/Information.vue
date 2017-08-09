@@ -4,7 +4,10 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/administration/information/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/information/list`, {
+                order: 'asc',
+                sort: 'order',
+            }).then(response => {
                 const data = response.data.data;
                 const pagination = response.data.pagination;
                 next(vm => {
@@ -33,10 +36,14 @@
                         align: 'center',
                         key: 'order',
                         render(h, data) {
+                            const row = data.row;
                             return h('i-input', {
                                 on: {
-                                    input(value) {
-                                        self.list[data.index].order = value;
+                                    'on-change': event => {
+                                        row.order = event.target.value;
+                                    },
+                                    'on-blur': () => {
+                                        self.update(row);
                                     },
                                 },
                                 props: {
@@ -54,7 +61,8 @@
                             return h('checkbox', {
                                 on: {
                                     input(value) {
-                                        self.list[data.index].register = value;
+                                        data.row.register = value;
+                                        self.update(data.row);
                                     },
                                 },
                                 props: {
@@ -72,7 +80,8 @@
                             return h('checkbox', {
                                 on: {
                                     input(value) {
-                                        self.list[data.index].details = value;
+                                        data.row.details = value;
+                                        self.update(data.row);
                                     },
                                 },
                                 props: {
@@ -90,7 +99,8 @@
                             return h('checkbox', {
                                 on: {
                                     input(value) {
-                                        self.list[data.index].required = value;
+                                        data.row.required = value;
+                                        self.update(data.row);
                                     },
                                 },
                                 props: {
@@ -137,6 +147,9 @@
                                         size: 'small',
                                         type: 'error',
                                     },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
                                 }, [
                                     h('span', text),
                                 ]),
@@ -177,7 +190,10 @@
                     title: '正在刷新数据...',
                 });
                 self.$loading.start();
-                self.$http.post(`${window.api}/member/administration/information/list`).then(response => {
+                self.$http.post(`${window.api}/member/administration/information/list`, {
+                    order: 'asc',
+                    sort: 'order',
+                }).then(response => {
                     const data = response.data.data;
                     const pagination = response.data.pagination;
                     data.forEach(item => {
@@ -191,6 +207,25 @@
                     self.pagination = pagination;
                 }).catch(() => {
                     self.$loading.error();
+                });
+            },
+            update(data) {
+                const self = this;
+                self.$notice.open({
+                    title: '更新信息项',
+                });
+                self.$loading.start();
+                self.$http.post(`${window.api}/member/administration/information/edit`, data).then(() => {
+                    self.$loading.finish();
+                    self.$notice.open({
+                        title: '更新信息项数据成功！',
+                    });
+                    self.refresh();
+                }).catch(() => {
+                    self.$loading.fail();
+                    self.$notice.error({
+                        title: '更新信息项数据失败！',
+                    });
                 });
             },
         },
