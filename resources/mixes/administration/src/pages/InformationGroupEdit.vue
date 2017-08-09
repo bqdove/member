@@ -3,8 +3,17 @@
 
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('member');
+            injection.loading.start();
+            injection.http.post(`${window.api}/member/administration/information/group`, {
+                id: to.params.id,
+            }).then(response => {
+                next(vm => {
+                    vm.form = response.data.data;
+                    injection.loading.finish();
+                    injection.sidebar.active('member');
+                });
+            }).catch(() => {
+                injection.loading.fail();
             });
         },
         data() {
@@ -22,7 +31,26 @@
                         text: '真实姓名',
                     },
                 ],
+                loading: false,
             };
+        },
+        methods: {
+            submit() {
+                const self = this;
+                self.loading = true;
+                self.$http.post(`${window.api}/member/administration/information/group/edit`, self.form).then(() => {
+                    self.$notice.open({
+                        title: '编辑信息分组信息成功！',
+                    });
+                    self.$router.push('/member/information/group');
+                }).catch(() => {
+                    self.$notice.error({
+                        title: '编辑信息分组信息失败！',
+                    });
+                }).finally(() => {
+                    self.loading = false;
+                });
+            },
         },
     };
 </script>

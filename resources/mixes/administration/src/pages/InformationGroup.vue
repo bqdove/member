@@ -4,7 +4,10 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/administration/information/group/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/information/group/list`, {
+                order: 'asc',
+                sort: 'order',
+            }).then(response => {
                 const data = response.data.data;
                 const pagination = response.data.pagination;
                 next(vm => {
@@ -33,6 +36,25 @@
                                     input(value) {
                                         self.groups[data.index].show = value;
                                     },
+                                    'on-change': value => {
+                                        data.row.show = value;
+                                        self.$loading.start();
+                                        self.$notice.open({
+                                            title: '正在更新信息分组信息...',
+                                        });
+                                        self.$http.post(`${window.api}/member/administration/information/group/edit`, data.row).then(() => {
+                                            self.$loading.finish();
+                                            self.$notice.open({
+                                                title: '更新信息分组信息成功！',
+                                            });
+                                            self.refresh();
+                                        }).catch(() => {
+                                            self.$loading.fail();
+                                            self.$notice.error({
+                                                title: '更新信息分组信息失败！',
+                                            });
+                                        });
+                                    },
                                 },
                                 props: {
                                     value: self.groups[data.index].show,
@@ -45,10 +67,29 @@
                     {
                         key: 'order',
                         render(h, data) {
-                            return h('checkbox', {
+                            const row = data.row;
+                            return h('i-input', {
                                 on: {
-                                    input(value) {
-                                        self.groups[data.index].order = value;
+                                    'on-change': event => {
+                                        row.order = event.target.value;
+                                    },
+                                    'on-blur': () => {
+                                        self.$loading.start();
+                                        self.$notice.open({
+                                            title: '正在更新信息分组信息...',
+                                        });
+                                        self.$http.post(`${window.api}/member/administration/information/group/edit`, row).then(() => {
+                                            self.$loading.finish();
+                                            self.$notice.open({
+                                                title: '更新信息分组信息成功！',
+                                            });
+                                            self.refresh();
+                                        }).catch(() => {
+                                            self.$loading.fail();
+                                            self.$notice.error({
+                                                title: '更新信息分组信息失败！',
+                                            });
+                                        });
                                     },
                                 },
                                 props: {
@@ -125,59 +166,34 @@
                     self.$notice.open({
                         title: '删除信息分组成功！',
                     });
-                    self.$notice.open({
-                        title: '正在刷新数据...',
-                    });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/administration/information/group/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '刷新数据成功！',
-                        });
-                        self.groups = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
-                    });
+                    self.refresh();
                 }).finally(() => {
                     group.loading = false;
                 });
             },
-            submit() {
+            refresh() {
                 const self = this;
-                self.loading = true;
-                self.$http.post(`${window.api}/member/administration/information/group/patch`, {
-                    data: self.groups,
-                }).then(() => {
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$loading.start();
+                self.$http.post(`${window.api}/member/administration/information/group/list`, {
+                    order: 'asc',
+                    sort: 'order',
+                }).then(response => {
+                    const data = response.data.data;
+                    const pagination = response.data.pagination;
+                    data.forEach(item => {
+                        item.loading = false;
+                    });
+                    self.$loading.finish();
                     self.$notice.open({
-                        title: '批量更新数据成功！',
+                        title: '刷新数据成功！',
                     });
-                    self.$notice.open({
-                        title: '正在刷新数据...',
-                    });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/administration/information/group/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '刷新数据成功！',
-                        });
-                        self.groups = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
-                    });
-                }).finally(() => {
-                    self.loading = false;
+                    self.groups = data;
+                    self.pagination = pagination;
+                }).catch(() => {
+                    self.$loading.error();
                 });
             },
         },
@@ -198,16 +214,6 @@
                 </div>
                 <i-form :label-width="0" :model="form" ref="form" :rules="rules">
                     <i-table :columns="columns" :context="self" :data="groups"></i-table>
-                    <row>
-                        <i-col span="12">
-                            <form-item>
-                                <i-button :loading="loading" type="primary" @click.native="submit">
-                                    <span v-if="!loading">确认提交</span>
-                                    <span v-else>正在提交…</span>
-                                </i-button>
-                            </form-item>
-                        </i-col>
-                    </row>
                 </i-form>
             </card>
         </div>
