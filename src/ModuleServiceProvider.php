@@ -44,7 +44,6 @@ class ModuleServiceProvider extends Module
         Member::macro('groups', function () {
             return $this->belongsToMany(MemberGroup::class, 'member_group_relations', 'member_id', 'group_id');
         });
-
         $manager = new Manager($this->app['events'], $this->app['router']);
         $this->app->make(Dispatcher::class)->subscribe(CsrfTokenRegister::class);
         $this->app->make(Dispatcher::class)->subscribe(FlowRegister::class);

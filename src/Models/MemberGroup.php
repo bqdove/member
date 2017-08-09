@@ -9,9 +9,7 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
-use Notadd\Foundation\Database\Traits\HasFlow;
 use Notadd\Foundation\Member\Member;
-use Symfony\Component\Workflow\Event\GuardEvent;
 
 /**
  * Class Group.
@@ -26,8 +24,6 @@ use Symfony\Component\Workflow\Event\GuardEvent;
  */
 class MemberGroup extends Model
 {
-    use HasFlow;
-
     /**
      * @var array
      */
@@ -45,52 +41,10 @@ class MemberGroup extends Model
     protected $table = 'member_groups';
 
     /**
-     * Many-to-Many relations with the member model.
-     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function members()
     {
-        return $this->belongsToMany(Member::class, 'group_member', 'group_id', 'member_id');
-    }
-
-    /**
-     * Definition of name for flow.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'member.group';
-    }
-
-    /**
-     * Definition of places for flow.
-     *
-     * @return array
-     */
-    public function places()
-    {
-        return [];
-    }
-
-    /**
-     * Definition of transitions for flow.
-     *
-     * @return array
-     */
-    public function transitions()
-    {
-        return [];
-    }
-
-    /**
-     * Guard a transition.
-     *
-     * @param \Symfony\Component\Workflow\Event\GuardEvent $event
-     */
-    public function guardTransition(GuardEvent $event)
-    {
-        // TODO: Implement guardTransition() method.
+        return $this->belongsToMany(Member::class, 'member_group_relations', 'group_id', 'member_id');
     }
 }
