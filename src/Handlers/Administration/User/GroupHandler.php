@@ -10,8 +10,8 @@ namespace Notadd\Member\Handlers\Administration\User;
 
 use Carbon\Carbon;
 use Illuminate\Container\Container;
-use Notadd\Foundation\Member\Member;
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Foundation\Validation\Rule;
 use Notadd\Member\Models\MemberGroupRelation;
 
 /**
@@ -30,14 +30,14 @@ class GroupHandler extends Handler
     protected $group;
 
     /**
-     * @var \Illuminate\Support\Collection
-     */
-    private $groups;
-
-    /**
      * @var \Notadd\Member\Models\MemberGroupRelation
      */
     protected $memberGroup;
+
+    /**
+     * @var \Illuminate\Support\Collection
+     */
+    private $groups;
 
     /**
      * GroupHandler constructor.
@@ -57,42 +57,41 @@ class GroupHandler extends Handler
      */
     public function execute()
     {
-        if (!$this->request->input('member_id', 0)) {
-            $this->withCode(500)->withError('参数缺失！');
-        } else {
-            if (Member::query()->where('id', $this->request->input('member_id'))->count() == 0) {
-                $this->withCode(500)->withError('用户不存在！');
+        $this->validate($this->request, [
+            'member_id' => [
+                Rule::exists('members', 'id'),
+                Rule::numeric(),
+                Rule::required(),
+            ],
+        ], [
+            'member_id.exists'   => '没有对应的用户信息',
+            'member_id.numeric'  => '用户 ID 必须为数值',
+            'member_id.required' => '用户 ID 必须填写',
+        ]);
+        $this->beginTransaction();
+        $builder = MemberGroupRelation::query();
+        $builder->with('group');
+        $builder->with('member');
+        $builder->where('member_id', $this->request->input('member_id'));
+        $exits = $builder->get()->keyBy('group_id');
+        collect($this->request->input('data'))->each(function ($data) use ($exits) {
+            $groupId = $data['group_id'];
+            if ($data['end']) {
+                $data['end'] = Carbon::createFromTimestamp(strtotime($data['end']));
             } else {
-                $this->exits = MemberGroupRelation::query()->where('member_id', $this->request->input('member_id'))->get();
-                collect($this->request->input('data'))->each(function ($data) {
-                    $has = $this->exits->where('group_id', '=', $data['group_id']);
-                    if ($has->count()) {
-                        $this->exits = $this->exits->diff($has);
-                    }
-                    if ($data['end']) {
-                        $data['end'] = Carbon::createFromTimestampUTC(strtotime($data['end']));
-                    } else {
-                        unset($data['end']);
-                    }
-                    if (MemberGroupRelation::query()
-                        ->where('member_id', $data['member_id'])
-                        ->where('group_id', $data['group_id'])
-                        ->count()
-                    ) {
-                        $group = MemberGroupRelation::query()
-                            ->where('member_id', $data['member_id'])
-                            ->where('group_id', $data['group_id'])
-                            ->first();
-                        $group->update($data);
-                    } else {
-                        MemberGroupRelation::query()->create($data);
-                    }
-                });
-                $this->exits->each(function (MemberGroupRelation $group) {
-                    $group->delete();
-                });
-                $this->withCode(200)->withMessage('更新用户用户组信息成功！');
+                unset($data['end']);
             }
-        }
+            if ($exits->has($data['group_id'])) {
+                $exits->get($groupId)->update($data);
+                $exits->pull($groupId);
+            } else {
+                MemberGroupRelation::query()->create($data);
+            }
+        });
+        $exits->each(function (MemberGroupRelation $group) {
+            $group->delete();
+        });
+        $this->commitTransaction();
+        $this->withCode(200)->withMessage('更新用户用户组信息成功！');
     }
 }

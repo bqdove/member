@@ -14,7 +14,6 @@ use Notadd\Member\Flows\MemberNotification;
 use Notadd\Member\Flows\MemberPermission;
 use Notadd\Member\Flows\MemberVerification;
 use Notadd\Member\Models\MemberBan;
-use Notadd\Member\Models\MemberGroup;
 use Notadd\Member\Models\MemberInformation;
 use Notadd\Member\Models\MemberTag;
 
@@ -30,7 +29,6 @@ class FlowRegister extends AbstractFlowRegister
     {
         $this->flow->register(Member::class);
         $this->flow->register(MemberBan::class);
-        $this->flow->register(MemberGroup::class);
         $this->flow->register(MemberInformation::class);
         $this->flow->register(MemberNotification::class);
         $this->flow->register(MemberPermission::class);

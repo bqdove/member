@@ -11,6 +11,7 @@ namespace Notadd\Member\Handlers\Administration\User;
 use Illuminate\Container\Container;
 use Notadd\Foundation\Member\Member;
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Foundation\Validation\Rule;
 use Notadd\Member\Models\MemberGroup;
 use Notadd\Member\Models\MemberGroupRelation;
 
@@ -20,60 +21,24 @@ use Notadd\Member\Models\MemberGroupRelation;
 class ListHandler extends Handler
 {
     /**
-     * @var string
-     */
-    protected $format;
-
-    /**
-     * @var string
-     */
-    protected $order;
-
-    /**
-     * @var int
-     */
-    protected $paginate;
-
-    /**
-     * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    protected $pagination;
-
-    /**
-     * @var string
-     */
-    protected $sort;
-
-    /**
-     * ListHandler constructor.
-     *
-     * @param \Illuminate\Container\Container $container
-     */
-    public function __construct(Container $container)
-    {
-        parent::__construct($container);
-        $this->format = 'raw';
-        $this->order = 'created_at';
-        $this->paginate = 20;
-        $this->sort = 'desc';
-    }
-
-    public function configurations()
-    {
-        $this->format = $this->request->input('format') ?: $this->format;
-        $this->order = $this->request->input('order') ?: $this->order;
-        $this->paginate = $this->request->input('paginate') ?: $this->paginate;
-        $this->sort = $this->request->input('sort') ?: $this->sort;
-    }
-
-    /**
      * Execute Handler.
      *
      * @throws \Exception
      */
     protected function execute()
     {
-        $this->configurations();
+        $this->validate($this->request, [
+            'order'    => Rule::in([
+                'asc',
+                'desc',
+            ]),
+            'page'     => Rule::numeric(),
+            'paginate' => Rule::numeric(),
+        ], [
+            'order.in'         => '排序规则错误',
+            'page.numeric'     => '当前页面必须为数值',
+            'paginate.numeric' => '分页数必须为数值',
+        ]);
         $builder = Member::query();
         if ($withs = $this->request->input('with', [])) {
             foreach ((array)$withs as $with) {
@@ -83,26 +48,26 @@ class ListHandler extends Handler
         if ($this->request->has('search')) {
             $builder = $builder->where('name', 'like', "%{$this->request->input('search')}%");
         }
-        $this->pagination = $builder->orderBy($this->order, $this->sort)->paginate($this->paginate);
+        $builder->orderBy($this->request->input('sort', 'created_at'), $this->request->input('order', 'desc'));
+        $pagination = $builder->paginate($this->request->input('paginate', 20));
         $data = [];
-        switch ($this->format) {
+        switch ($this->request->input('format', 'raw')) {
             case 'raw':
-                $data = $this->pagination->items();
+                $data = $pagination->items();
                 break;
             case 'beauty':
-                $data = $this->format($this->pagination->items());
+                $data = $this->format($pagination->items());
                 break;
         }
         $this->withCode(200)->withData($data)->withMessage('')->withExtra([
             'pagination' => [
-                'count'    => $this->pagination->total(),
-                'current'  => $this->pagination->currentPage(),
-                'from'     => $this->pagination->firstItem(),
-                'next'     => $this->pagination->nextPageUrl(),
-                'paginate' => $this->paginate,
-                'prev'     => $this->pagination->previousPageUrl(),
-                'to'       => $this->pagination->lastItem(),
-                'total'    => $this->pagination->lastPage(),
+                'count'    => $pagination->total(),
+                'current'  => $pagination->currentPage(),
+                'from'     => $pagination->firstItem(),
+                'next'     => $pagination->nextPageUrl(),
+                'prev'     => $pagination->previousPageUrl(),
+                'to'       => $pagination->lastItem(),
+                'total'    => $pagination->lastPage(),
             ],
         ]);
     }
@@ -129,7 +94,7 @@ class ListHandler extends Handler
                     }
                 });
             } else {
-                $member->setAttribute('group', '默认分组');
+                $member->setAttribute('group', '');
             }
 
             return $member;
