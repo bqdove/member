@@ -27,4 +27,20 @@ class MemberInformationRelation extends Model
      * @var string
      */
     protected $table = 'member_information_relations';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(MemberInformationGroup::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function information()
+    {
+        return $this->belongsTo(MemberInformation::class);
+    }
 }
