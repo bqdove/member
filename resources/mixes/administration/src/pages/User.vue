@@ -103,59 +103,66 @@
                         key: 'handle',
                         render(h, data) {
                             return h('div', [
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.group(data.row.id);
-                                        },
-                                    },
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
-                                    },
-                                }, '用户组'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.tag(data.row.id);
-                                        },
-                                    },
-                                    props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/user/${data.row.id}/group`,
                                     },
                                     style: {
                                         marginLeft: '10px',
                                     },
-                                }, '标签'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.edit(data.row.id);
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
                                         },
-                                    },
+                                    }, '用户组'),
+                                ]),
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/user/${data.row.id}/tag`,
                                     },
                                     style: {
                                         marginLeft: '10px',
                                     },
-                                }, '编辑详情'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.ban(data.row.id);
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
                                         },
-                                    },
+                                    }, '标签'),
+                                ]),
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/user/${data.row.id}/edit`,
                                     },
                                     style: {
                                         marginLeft: '10px',
                                     },
-                                }, '封禁'),
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑详情'),
+                                ]),
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/user/${data.row.id}/ban`,
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '封禁'),
+                                ]),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -193,18 +200,6 @@
             };
         },
         methods: {
-            ban(id) {
-                this.$router.push(`/member/user/${id}/ban`);
-            },
-            edit(id) {
-                this.$router.push(`/member/user/${id}/edit`);
-            },
-            group(id) {
-                this.$router.push(`/member/user/${id}/group`);
-            },
-            integral(id) {
-                this.$router.push(`/member/user/${id}/integral`);
-            },
             output() {
                 window.console.log('Output done!');
             },
@@ -278,7 +273,7 @@
                     </div>
                 </template>
                 <i-table :columns="columns" :context="self" :data="list" @on-selection-change="selection"></i-table>
-                <div class="user-page-wrap">
+                <div class="ivu-page-wrap">
                     <page :current="pagination.current" :page-size="pagination.paginate" :total="pagination.total"
                           @on-change="paginator"></page>
                 </div>

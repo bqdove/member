@@ -115,17 +115,18 @@
                                 text = injection.trans('content.global.delete.submit');
                             }
                             return h('div', [
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.edit(data.row.id);
-                                        },
-                                    },
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/information/${data.row.id}/edit`,
                                     },
-                                }, '编辑'),
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑'),
+                                ]),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -152,9 +153,6 @@
             };
         },
         methods: {
-            edit(id) {
-                this.$router.push(`/member/information/${id}/edit`);
-            },
             remove(index) {
                 const self = this;
                 const information = self.list[index];
@@ -230,7 +228,7 @@
                 <template slot="title">
                     <span class="text">信息列表</span>
                     <router-link class="extend" to="/member/information/create">
-                        <i-button type="default">添加信息分组</i-button>
+                        <i-button type="default">添加信息项</i-button>
                     </router-link>
                 </template>
                 <i-form :label-width="0" :model="form" ref="form" :rules="rules">

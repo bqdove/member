@@ -73,17 +73,18 @@
                                 text = injection.trans('content.global.delete.submit');
                             }
                             return h('div', [
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.edit(data.row.id);
-                                        },
-                                    },
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/information/group/${data.row.id}/edit`,
                                     },
-                                }, '编辑'),
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑'),
+                                ]),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -93,6 +94,9 @@
                                     props: {
                                         size: 'small',
                                         type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
                                     },
                                 }, [
                                     h('span', text),
@@ -110,9 +114,6 @@
             };
         },
         methods: {
-            edit(id) {
-                this.$router.push(`/member/information/group/${id}/edit`);
-            },
             remove(index) {
                 const self = this;
                 const group = self.groups[index];

@@ -58,50 +58,66 @@
                         key: 'handle',
                         render(h, data) {
                             return h('div', [
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.group(data.row.id);
-                                        },
-                                    },
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/user/${data.row.id}/group`,
                                     },
-                                }, '用户组'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.integral(data.row.id);
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
                                         },
-                                    },
+                                    }, '用户组'),
+                                ]),
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/user/${data.row.id}/integral`,
                                     },
-                                }, '积分'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.edit(data.row.id);
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
                                         },
-                                    },
+                                    }, '积分'),
+                                ]),
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/user/${data.row.id}/edit`,
                                     },
-                                }, '编辑详情'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.ban(data.row.id);
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
                                         },
-                                    },
+                                    }, '编辑详情'),
+                                ]),
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/user/${data.row.id}/ban`,
                                     },
-                                }, '封禁'),
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '封禁'),
+                                ]),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -111,6 +127,9 @@
                                     props: {
                                         size: 'small',
                                         type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
                                     },
                                 }, '删除'),
                             ]);
@@ -136,18 +155,6 @@
             };
         },
         methods: {
-            ban(id) {
-                this.$router.push(`/member/user/${id}/ban`);
-            },
-            edit(id) {
-                this.$router.push(`/member/user/${id}/edit`);
-            },
-            group(id) {
-                this.$router.push(`/member/user/${id}/group`);
-            },
-            integral(id) {
-                this.$router.push(`/member/user/${id}/integral`);
-            },
             output() {
                 window.console.log('Output done!');
             },

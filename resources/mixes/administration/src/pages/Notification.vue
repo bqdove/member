@@ -129,8 +129,10 @@
                     <span class="text">通知消息</span>
                 </template>
                 <i-table :columns="columns" :context="self" :data="list" @on-selection-change="selection"></i-table>
-                <div class="notification-page-wrap">
-                    <page :current="pagination.current" :page-size="pagination.paginate" :total="pagination.total"
+                <div class="ivu-page-wrap">
+                    <page :current="pagination.current"
+                          :page-size="pagination.paginate"
+                          :total="pagination.total"
                           @on-change="paginator"></page>
                 </div>
             </card>

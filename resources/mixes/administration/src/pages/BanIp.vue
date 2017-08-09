@@ -136,7 +136,7 @@
                     </div>
                 </template>
                 <i-table :columns="columns" :context="self" :data="list" @on-selection-change="selection"></i-table>
-                <div class="user-page-wrap">
+                <div class="ivu-page-wrap">
                     <page :current="pagination.current"
                           :page-size="pagination.paginate"
                           :total="pagination.total"

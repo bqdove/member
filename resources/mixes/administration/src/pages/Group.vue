@@ -56,7 +56,8 @@
                         width: 200,
                     },
                     {
-                        key: 'group',
+                        align: 'right',
+                        key: 'members_count',
                         title: injection.trans('已有用户数'),
                         width: 100,
                     },
@@ -74,34 +75,36 @@
                                 text = injection.trans('删除');
                             }
                             return h('div', [
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.combine(data.row.id);
-                                        },
-                                    },
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/group/${data.row.id}/combine`,
                                     },
                                     style: {
                                         marginLeft: '10px',
                                     },
-                                }, '合并用户组'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.edit(data.row.id);
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
                                         },
-                                    },
+                                    }, '合并用户组'),
+                                ]),
+                                h('router-link', {
                                     props: {
-                                        size: 'small',
-                                        type: 'default',
+                                        to: `/member/group/${data.row.id}/edit`,
                                     },
                                     style: {
                                         marginLeft: '10px',
                                     },
-                                }, '编辑用户组'),
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑用户组'),
+                                ]),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -136,12 +139,6 @@
             };
         },
         methods: {
-            combine(id) {
-                this.$router.push(`/member/group/${id}/combine`);
-            },
-            edit(id) {
-                this.$router.push(`/member/group/${id}/edit`);
-            },
             remove(index) {
                 const self = this;
                 const group = self.list[index];
