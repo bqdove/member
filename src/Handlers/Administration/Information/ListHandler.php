@@ -8,8 +8,8 @@
  */
 namespace Notadd\Member\Handlers\Administration\Information;
 
-use Illuminate\Container\Container;
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Foundation\Validation\Rule;
 use Notadd\Member\Models\MemberInformation;
 
 /**
@@ -18,80 +18,43 @@ use Notadd\Member\Models\MemberInformation;
 class ListHandler extends Handler
 {
     /**
-     * @var string
-     */
-    protected $format;
-
-    /**
-     * @var string
-     */
-    protected $order;
-
-    /**
-     * @var int
-     */
-    protected $paginate;
-
-    /**
-     * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    protected $pagination;
-
-    /**
-     * @var string
-     */
-    protected $sort;
-
-    /**
-     * ListHandler constructor.
-     *
-     * @param \Illuminate\Container\Container $container
-     */
-    public function __construct(Container $container)
-    {
-        parent::__construct($container);
-        $this->format = 'raw';
-        $this->order = 'created_at';
-        $this->paginate = 20;
-        $this->sort = 'desc';
-    }
-
-    public function configurations()
-    {
-        $this->format = $this->request->input('format') ?: $this->format;
-        $this->order = $this->request->input('order') ?: $this->order;
-        $this->paginate = $this->request->input('paginate') ?: $this->paginate;
-        $this->sort = $this->request->input('sort') ?: $this->sort;
-    }
-
-    /**
      * Execute Handler.
      *
      * @throws \Exception
      */
     protected function execute()
     {
-        $this->configurations();
+        $this->validate($this->request, [
+            'order'    => Rule::in([
+                'asc',
+                'desc',
+            ]),
+            'page'     => Rule::numeric(),
+            'paginate' => Rule::numeric(),
+        ], [
+            'order.in'         => '排序规则错误',
+            'page.numeric'     => '当前页面必须为数值',
+            'paginate.numeric' => '分页数必须为数值',
+        ]);
         $builder = MemberInformation::query();
         if ($withs = $this->request->input('with', [])) {
             foreach ((array)$withs as $with) {
                 $builder = $builder->with($with);
             }
         }
-        $this->pagination = $builder->orderBy($this->order, $this->sort)->paginate($this->paginate);
-        if ($this->pagination) {
-            $this->withCode(200)->withData($this->pagination->items())->withMessage('')->withExtra([
-                'pagination' => [
-                    'count'    => $this->pagination->total(),
-                    'current'  => $this->pagination->currentPage(),
-                    'from'     => $this->pagination->firstItem(),
-                    'next'     => $this->pagination->nextPageUrl(),
-                    'paginate' => $this->paginate,
-                    'prev'     => $this->pagination->previousPageUrl(),
-                    'to'       => $this->pagination->lastItem(),
-                    'total'    => $this->pagination->lastPage(),
-                ],
-            ]);
-        }
+        $builder->orderBy($this->request->input('sort', 'order'), $this->request->input('order', 'desc'));
+        $pagination = $builder->paginate($this->request->input('paginate', 20));
+        $this->withCode(200)->withData($pagination->items())->withMessage('')->withExtra([
+            'pagination' => [
+                'count'    => $pagination->total(),
+                'current'  => $pagination->currentPage(),
+                'from'     => $pagination->firstItem(),
+                'next'     => $pagination->nextPageUrl(),
+                'paginate' => $this->request->input('paginate', 20),
+                'prev'     => $pagination->previousPageUrl(),
+                'to'       => $pagination->lastItem(),
+                'total'    => $pagination->lastPage(),
+            ],
+        ]);
     }
 }
