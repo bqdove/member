@@ -147,7 +147,6 @@
                     },
                 ],
                 list: [],
-                loading: false,
                 pagination: {},
                 self: this,
             };
@@ -163,59 +162,35 @@
                     self.$notice.open({
                         title: '删除信息项成功！',
                     });
-                    self.$notice.open({
-                        title: '正在刷新数据...',
-                    });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/administration/information/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '刷新数据完成！',
-                        });
-                        self.list = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
+                    self.refresh();
+                }).catch(() => {
+                    self.$notice.error({
+                        title: '删除信息项失败！',
                     });
                 }).finally(() => {
                     information.loading = false;
                 });
             },
-            submit() {
+            refresh() {
                 const self = this;
-                self.loading = true;
-                self.$http.post(`${window.api}/member/administration/information/patch`, {
-                    data: self.list,
-                }).then(() => {
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$loading.start();
+                self.$http.post(`${window.api}/member/administration/information/list`).then(response => {
+                    const data = response.data.data;
+                    const pagination = response.data.pagination;
+                    data.forEach(item => {
+                        item.loading = false;
+                    });
+                    self.$loading.finish();
                     self.$notice.open({
-                        title: '批量更新信息项数据成功！',
+                        title: '刷新数据完成！',
                     });
-                    self.$notice.open({
-                        title: '正在更新信息项数据...',
-                    });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/administration/information/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '更新信息项数据完成！',
-                        });
-                        self.list = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
-                    });
-                }).finally(() => {
-                    self.loading = false;
+                    self.list = data;
+                    self.pagination = pagination;
+                }).catch(() => {
+                    self.$loading.error();
                 });
             },
         },
@@ -231,19 +206,13 @@
                         <i-button type="default">添加信息项</i-button>
                     </router-link>
                 </template>
-                <i-form :label-width="0" :model="form" ref="form" :rules="rules">
-                    <i-table :columns="columns" :context="self" :data="list"></i-table>
-                    <row>
-                        <i-col span="12">
-                            <form-item>
-                                <i-button :loading="loading" type="primary" @click.native="submit">
-                                    <span v-if="!loading">确认提交</span>
-                                    <span v-else>正在提交…</span>
-                                </i-button>
-                            </form-item>
-                        </i-col>
-                    </row>
-                </i-form>
+                <i-table :columns="columns" :context="self" :data="list"></i-table>
+                <div class="ivu-page-wrap">
+                    <page :current="pagination.current"
+                          :page-size="pagination.paginate"
+                          :total="pagination.total"
+                          @on-change="paginator"></page>
+                </div>
             </card>
         </div>
     </div>

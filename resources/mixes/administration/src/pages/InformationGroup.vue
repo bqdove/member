@@ -212,9 +212,13 @@
                 <div class="extend-info">
                     <p>用户数据分组列表</p>
                 </div>
-                <i-form :label-width="0" :model="form" ref="form" :rules="rules">
-                    <i-table :columns="columns" :context="self" :data="groups"></i-table>
-                </i-form>
+                <i-table :columns="columns" :context="self" :data="groups"></i-table>
+                <div class="ivu-page-wrap">
+                    <page :current="pagination.current"
+                          :page-size="pagination.paginate"
+                          :total="pagination.total"
+                          @on-change="paginator"></page>
+                </div>
             </card>
         </div>
     </div>
