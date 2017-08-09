@@ -11,6 +11,7 @@ namespace Notadd\Member\Controllers\Api\Administration;
 use Notadd\Foundation\Routing\Abstracts\Controller;
 use Notadd\Member\Handlers\Administration\Information\Group\CreateHandler;
 use Notadd\Member\Handlers\Administration\Information\Group\EditHandler;
+use Notadd\Member\Handlers\Administration\Information\Group\GroupHandler;
 use Notadd\Member\Handlers\Administration\Information\Group\ListHandler;
 use Notadd\Member\Handlers\Administration\Information\Group\PatchHandler;
 use Notadd\Member\Handlers\Administration\Information\Group\RemoveHandler;
@@ -36,6 +37,16 @@ class InformationGroupController extends Controller
      * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function edit(EditHandler $handler)
+    {
+        return $handler->toResponse()->generateHttpResponse();
+    }
+
+    /**
+     * @param \Notadd\Member\Handlers\Administration\Information\Group\GroupHandler $handler
+     *
+     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     */
+    public function group(GroupHandler $handler)
     {
         return $handler->toResponse()->generateHttpResponse();
     }
