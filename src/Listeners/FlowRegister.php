@@ -29,7 +29,6 @@ class FlowRegister extends AbstractFlowRegister
     {
         $this->flow->register(Member::class);
         $this->flow->register(MemberBan::class);
-        $this->flow->register(MemberInformation::class);
         $this->flow->register(MemberNotification::class);
         $this->flow->register(MemberPermission::class);
         $this->flow->register(MemberTag::class);
