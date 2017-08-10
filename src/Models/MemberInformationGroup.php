@@ -34,6 +34,6 @@ class MemberInformationGroup extends Model
      */
     public function informations()
     {
-        return $this->belongsToMany(MemberInformationGroup::class, 'member_information_relations', 'group_id', 'information_id');
+        return $this->belongsToMany(MemberInformation::class, 'member_information_relations', 'group_id', 'information_id');
     }
 }
