@@ -43,13 +43,14 @@ class InformationHandler extends Handler
         if ($information instanceof MemberInformation) {
             $exists = $information->getRelation('groups');
             $exists instanceof Collection && $exists = $exists->keyBy('id');
-            $groups = MemberInformationGroup::all();
+            $groups = MemberInformationGroup::query()->orderBy('order', 'asc')->get();
             $groups->transform(function (MemberInformationGroup $group) use ($exists) {
                 if ($exists->has($group->getAttribute('id'))) {
                     $group->setAttribute('exists', true);
                 } else {
                     $group->setAttribute('exists', false);
                 }
+
                 return $group;
             });
             $this->withCode(200)->withData($information)->withExtra([
