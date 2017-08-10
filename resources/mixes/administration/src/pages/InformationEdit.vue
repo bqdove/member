@@ -8,8 +8,18 @@
                 id: to.params.id,
             }).then(response => {
                 const data = response.data.data;
+                const groups = response.data.groups;
                 next(vm => {
                     vm.form = data;
+                    vm.form.groups = [];
+                    Object.keys(groups).forEach(index => {
+                        groups[index].label = groups[index].id;
+                        groups[index].text = groups[index].name;
+                        if (groups[index].exists) {
+                            vm.form.groups.push(groups[index].id);
+                        }
+                    });
+                    vm.groups = groups;
                     injection.loading.finish();
                     injection.sidebar.active('member');
                 });
@@ -31,12 +41,7 @@
                     required: false,
                     type: 'input',
                 },
-                groups: [
-                    {
-                        label: 'base',
-                        text: '资料',
-                    },
-                ],
+                groups: [],
                 loading: false,
                 privacies: [
                     {
@@ -211,7 +216,7 @@
                     <row>
                         <i-col span="12">
                             <form-item label="用户资料分组">
-                                <checkbox-group v-model="form.group">
+                                <checkbox-group v-model="form.groups">
                                     <checkbox :label="item.label" v-for="item in groups">
                                         <span>{{ item.text }}</span>
                                     </checkbox>

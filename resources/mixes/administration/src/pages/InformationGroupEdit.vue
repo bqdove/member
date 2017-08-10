@@ -86,7 +86,7 @@
                     </row>
                     <row>
                         <i-col span="12">
-                            <form-item label="用户资料分组">
+                            <form-item label="用户资料项">
                                 <checkbox-group v-model="form.group">
                                     <checkbox :label="item.label" v-for="item in informations">
                                         <span>{{ item.text }}</span>
