@@ -21,7 +21,6 @@ use Notadd\Member\Controllers\Api\Administration\UserController as UserControlle
 use Notadd\Member\Controllers\Api\Administration\VerificationController as VerificationControllerForAdministration;
 use Notadd\Member\Controllers\Api\User\UserController as UserControllerForUser;
 use Notadd\Member\Controllers\SocialiteController;
-use Notadd\Member\SocialiteManager;
 
 /**
  * Class RouteRegister.
@@ -47,13 +46,11 @@ class RouteRegister extends AbstractRouteRegister
             $this->router->post('information/create', InformationControllerForAdministration::class . '@create');
             $this->router->post('information/edit', InformationControllerForAdministration::class . '@edit');
             $this->router->post('information/list', InformationControllerForAdministration::class . '@list');
-            $this->router->post('information/patch', InformationControllerForAdministration::class . '@patch');
             $this->router->post('information/remove', InformationControllerForAdministration::class . '@remove');
             $this->router->post('information/group', InformationGroupControllerForAdministration::class . '@group');
             $this->router->post('information/group/create', InformationGroupControllerForAdministration::class . '@create');
             $this->router->post('information/group/edit', InformationGroupControllerForAdministration::class . '@edit');
             $this->router->post('information/group/list', InformationGroupControllerForAdministration::class . '@list');
-            $this->router->post('information/group/patch', InformationGroupControllerForAdministration::class . '@patch');
             $this->router->post('information/group/remove', InformationGroupControllerForAdministration::class . '@remove');
             $this->router->post('notification', NotificationControllerForAdministration::class . '@notification');
             $this->router->post('notification/create', NotificationControllerForAdministration::class . '@create');

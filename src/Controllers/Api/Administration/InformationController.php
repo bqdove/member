@@ -62,16 +62,6 @@ class InformationController extends Controller
     }
 
     /**
-     * @param \Notadd\Member\Handlers\Administration\Information\PatchHandler $handler
-     *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
-     */
-    public function patch(PatchHandler $handler)
-    {
-        return $handler->toResponse()->generateHttpResponse();
-    }
-
-    /**
      * @param \Notadd\Member\Handlers\Administration\Information\RemoveHandler $handler
      *
      * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
