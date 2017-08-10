@@ -13,14 +13,6 @@ use Notadd\Foundation\Member\Member;
 
 /**
  * Class Group.
- *
- * @property integer             $id
- * @property string              $name
- * @property string              $display_name
- * @property string              $icon
- * @property string              $description
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
  */
 class MemberGroup extends Model
 {

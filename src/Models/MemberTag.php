@@ -9,7 +9,6 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
-use Notadd\Foundation\Database\Traits\HasFlow;
 use Symfony\Component\Workflow\Event\GuardEvent;
 
 /**
@@ -17,8 +16,6 @@ use Symfony\Component\Workflow\Event\GuardEvent;
  */
 class MemberTag extends Model
 {
-    use HasFlow;
-
     /**
      * @var array
      */
@@ -31,44 +28,4 @@ class MemberTag extends Model
      * @var string
      */
     protected $table = 'member_tags';
-
-    /**
-     * Definition of name for flow.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'member.tag';
-    }
-
-    /**
-     * Definition of places for flow.
-     *
-     * @return array
-     */
-    public function places()
-    {
-        return [];
-    }
-
-    /**
-     * Definition of transitions for flow.
-     *
-     * @return array
-     */
-    public function transitions()
-    {
-        return [];
-    }
-
-    /**
-     * Guard a transition.
-     *
-     * @param \Symfony\Component\Workflow\Event\GuardEvent $event
-     */
-    public function guardTransition(GuardEvent $event)
-    {
-        // TODO: Implement guardTransition() method.
-    }
 }
