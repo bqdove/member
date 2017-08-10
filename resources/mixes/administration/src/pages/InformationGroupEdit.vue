@@ -7,8 +7,21 @@
             injection.http.post(`${window.api}/member/administration/information/group`, {
                 id: to.params.id,
             }).then(response => {
+                const group = response.data.data;
+                const informations = response.data.informations;
                 next(vm => {
-                    vm.form = response.data.data;
+                    vm.form = group;
+                    vm.form.informations = [];
+                    Object.keys(informations).forEach(index => {
+                        informations[index].label = informations[index].id;
+                        informations[index].text = informations[index].name;
+                        if (informations[index].exists) {
+                            vm.form.informations.push(informations[index].id);
+                        }
+                    });
+                    window.console.log(vm.form.informations);
+                    window.console.log(vm.informations);
+                    vm.informations = informations;
                     injection.loading.finish();
                     injection.sidebar.active('member');
                 });
@@ -25,12 +38,7 @@
                     order: '1',
                     show: false,
                 },
-                informations: [
-                    {
-                        label: '1',
-                        text: '真实姓名',
-                    },
-                ],
+                informations: [],
                 loading: false,
             };
         },
@@ -87,8 +95,8 @@
                     <row>
                         <i-col span="12">
                             <form-item label="用户资料项">
-                                <checkbox-group v-model="form.group">
-                                    <checkbox :label="item.label" v-for="item in informations">
+                                <checkbox-group v-model="form.informations">
+                                    <checkbox :label="item.label" style="width: 31%" v-for="item in informations">
                                         <span>{{ item.text }}</span>
                                     </checkbox>
                                 </checkbox-group>
