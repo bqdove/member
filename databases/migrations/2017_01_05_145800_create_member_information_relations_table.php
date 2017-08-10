@@ -21,10 +21,12 @@ class CreateMemberInformationRelationsTable extends Migration
     public function up()
     {
         $this->schema->create('member_information_relations', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('group_id');
             $table->integer('information_id');
-            $table->timestamps();
+            $table->primary([
+                'group_id',
+                'information_id',
+            ]);
         });
     }
 
