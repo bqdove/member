@@ -9,6 +9,7 @@
 namespace Notadd\Member\Handlers\Administration\Information;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Foundation\Validation\Rule;
 use Notadd\Member\Models\MemberInformation;
 
 /**
@@ -24,17 +25,43 @@ class EditHandler extends Handler
     public function execute()
     {
         $this->validate($this->request, [
-            'id'   => 'required',
-            'name' => 'required',
+            'id'     => [
+                Rule::exists('member_informations'),
+                Rule::numeric(),
+                Rule::required(),
+            ],
+            'groups' => Rule::array(),
+            'name'   => Rule::required(),
         ], [
-            'id.required'   => $this->translator->trans('参数缺失！'),
-            'name.required' => $this->translator->trans('必须填写信息项名称！'),
+            'id.exists'     => '没有对应的信息项信息',
+            'id.numeric'    => '信息项 ID 必须为数值',
+            'id.required'   => '信息项 ID 必须填写',
+            'name.required' => '信息项名称必须填写',
         ]);
-        if (MemberInformation::query()->where('id', $this->request->input('id'))->count()) {
-            MemberInformation::query()->find($this->request->input('id'))->update($this->request->all());
+        $this->beginTransaction();
+        $builder = MemberInformation::query();
+        $builder->with('groups');
+        $information = $builder->find($this->request->input('id'));
+        $data = $this->request->only([
+            'description',
+            'details',
+            'length',
+            'name',
+            'order',
+            'opinions',
+            'privacy',
+            'register',
+            'required',
+            'type',
+        ]);
+        if ($information instanceof MemberInformation) {
+            $information->update($data);
+            $information->groups()->sync((array)$this->request->input('groups'));
+            $this->commitTransaction();
             $this->withCode(200)->withMessage('更新信息项数据成功！');
         } else {
-            $this->withCode(500)->withError('信息项不存在！');
+            $this->rollBackTransaction();
+            $this->withCode(500)->withError('更新信息项数据失败！');
         }
     }
 }
