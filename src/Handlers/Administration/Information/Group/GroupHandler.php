@@ -9,8 +9,10 @@
 
 namespace Notadd\Member\Handlers\Administration\Information\Group;
 
+use Illuminate\Support\Collection;
 use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Foundation\Validation\Rule;
+use Notadd\Member\Models\MemberInformation;
 use Notadd\Member\Models\MemberInformationGroup;
 
 /**
@@ -38,6 +40,26 @@ class GroupHandler extends Handler
         ]);
         $builder = MemberInformationGroup::query();
         $builder->with('informations');
-        $this->withCode(200)->withData($builder->find($this->request->input('id')))->withMessage('获取信息分组信息成功！');
+        $builder->withCount('informations');
+        $group = $builder->find($this->request->input('id'));
+        if ($group instanceof MemberInformationGroup) {
+            $exists = $group->getRelation('informations');
+            $exists instanceof Collection && $exists = $exists->keyBy('id');
+            $informations = MemberInformation::query()->orderBy('order', 'asc')->get();
+            $informations->transform(function (MemberInformation $information) use ($exists) {
+                if ($exists->has($information->getAttribute('id'))) {
+                    $information->setAttribute('exists', true);
+                } else {
+                    $information->setAttribute('exists', false);
+                }
+
+                return $information;
+            });
+            $this->withCode(200)->withData($group)->withExtra([
+                'informations' => $informations->toArray(),
+            ])->withMessage('获取信息分组信息成功！');
+        } else {
+            $this->withCode(500)->withError('获取信息分组信息失败！');
+        }
     }
 }

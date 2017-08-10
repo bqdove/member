@@ -48,7 +48,9 @@ class EditHandler extends Handler
             'order',
             'show',
         ]);
-        if ($group instanceof MemberInformationGroup && $group->update($data)) {
+        if ($group instanceof MemberInformationGroup) {
+            $group->update($data);
+            $group->informations()->sync((array)$this->request->input('informations'));
             $this->commitTransaction();
             $this->withCode(200)->withMessage('编辑信息分组信息成功！');
         } else {
