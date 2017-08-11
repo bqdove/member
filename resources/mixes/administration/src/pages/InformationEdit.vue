@@ -1,4 +1,6 @@
 <script>
+    import fields from '../helpers/fields';
+    import fieldPrivacies from '../helpers/privacies';
     import injection from '../helpers/injection';
 
     export default {
@@ -43,20 +45,7 @@
                 },
                 groups: [],
                 loading: false,
-                privacies: [
-                    {
-                        label: '管理员可见',
-                        value: 0,
-                    },
-                    {
-                        label: '自己可见',
-                        value: 1,
-                    },
-                    {
-                        label: '登录可见',
-                        value: 2,
-                    },
-                ],
+                privacies: fieldPrivacies,
                 rules: {
                     name: [
                         {
@@ -67,36 +56,7 @@
                         },
                     ],
                 },
-                types: [
-                    {
-                        label: 'input',
-                        text: '单行文本框',
-                    },
-                    {
-                        label: 'textarea',
-                        text: '多行文本框',
-                    },
-                    {
-                        label: 'radio',
-                        text: '单选框',
-                    },
-                    {
-                        label: 'checkbox',
-                        text: '复选框',
-                    },
-                    {
-                        label: 'dropdown',
-                        text: '下拉菜单',
-                    },
-                    {
-                        label: 'select',
-                        text: '多选列表框',
-                    },
-                    {
-                        label: 'file',
-                        text: '上传图片',
-                    },
-                ],
+                types: fields,
             };
         },
         methods: {
