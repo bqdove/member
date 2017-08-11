@@ -15,6 +15,7 @@ use Notadd\Member\Handlers\Administration\Information\InformationHandler;
 use Notadd\Member\Handlers\Administration\Information\ListHandler;
 use Notadd\Member\Handlers\Administration\Information\PatchHandler;
 use Notadd\Member\Handlers\Administration\Information\RemoveHandler;
+use Notadd\Member\Handlers\Administration\Information\RuleHandler;
 
 /**
  * Class InformationController.
@@ -67,6 +68,16 @@ class InformationController extends Controller
      * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function remove(RemoveHandler $handler)
+    {
+        return $handler->toResponse()->generateHttpResponse();
+    }
+
+    /**
+     * @param \Notadd\Member\Handlers\Administration\Information\RuleHandler $handler
+     *
+     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     */
+    public function rule(RuleHandler $handler)
     {
         return $handler->toResponse()->generateHttpResponse();
     }
