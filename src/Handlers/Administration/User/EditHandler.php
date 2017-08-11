@@ -8,42 +8,16 @@
  */
 namespace Notadd\Member\Handlers\Administration\User;
 
-use Illuminate\Container\Container;
 use Notadd\Foundation\Member\Member;
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Foundation\Validation\Rule;
+use Notadd\Member\Models\MemberInformation;
 
 /**
  * Class EditHandler.
  */
 class EditHandler extends Handler
 {
-    /**
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * EditHandler constructor.
-     *
-     * @param \Illuminate\Container\Container $container
-     */
-    public function __construct(Container $container)
-    {
-        parent::__construct($container);
-        $this->id = 0;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function configurations()
-    {
-        $this->id = $this->request->input('id') ?: $this->id;
-        if (!$this->id) {
-            throw new \Exception('Id is not setted!');
-        }
-    }
-
     /**
      * Execute Handler.
      *
@@ -52,19 +26,49 @@ class EditHandler extends Handler
     public function execute()
     {
         $this->validate($this->request, [
-            'email' => 'required|email',
-            'name' => 'required',
+            'email' => [
+                Rule::email(),
+                Rule::required(),
+            ],
+            'id'    => [
+                Rule::exists('members'),
+                Rule::numeric(),
+                Rule::required(),
+            ],
+            'name'  => Rule::required(),
         ], [
-            'email.required' => $this->translator->trans('必须填写电子邮箱账号！'),
-            'email.email' => $this->translator->trans('请填写格式正确的电子邮箱账号！'),
-            'name.required' => $this->translator->trans('必须填写用户名！'),
+            'email.required' => '电子邮箱必须填写',
+            'email.email'    => '电子邮箱格式不正确',
+            'id.exists'      => '没有对应的用户信息',
+            'id.numeric'     => '用户 ID 必须为数值',
+            'id.required'    => '用户 ID 必须填写',
+            'name.required'  => '用户名必须填写',
         ]);
-        $this->configurations();
-        $member = Member::query()->find($this->id);
-        if ($member && $member->update($this->request->all())) {
-            $this->withCode(200)->withMessage('');
+        $this->beginTransaction();
+        $member = Member::query()->find($this->request->input('id'));
+        $data = $this->request->only([
+            'email',
+            'name',
+        ]);
+        if ($member instanceof Member) {
+            $member->update($data);
+            $groups = collect($this->request->input('informations'))->pluck('informations');
+            $groups->collapse()->keyBy('id')->unique()->each(function ($data) {
+                $information = MemberInformation::query()->with('values')->find($data['id']);
+                if ($information instanceof MemberInformation && $information->getAttribute('type') == $data['type']) {
+                    $information->values()->updateOrCreate([
+                        'information_id' => $data['id'],
+                        'member_id'      => $this->request->input('id'),
+                    ], [
+                        'value' => $data['value'],
+                    ]);
+                }
+            });
+            $this->commitTransaction();
+            $this->withCode(200)->withMessage('更新用户信息成功！');
         } else {
-            $this->withCode(500)->withError('');
+            $this->rollBackTransaction();
+            $this->withCode(500)->withError('更新用户信息失败！');
         }
     }
 }

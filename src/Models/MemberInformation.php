@@ -43,4 +43,12 @@ class MemberInformation extends Model
     {
         return $this->belongsToMany(MemberInformationGroup::class, 'member_information_relations', 'information_id', 'group_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function values()
+    {
+        return $this->hasMany(MemberInformationValue::class, 'information_id');
+    }
 }

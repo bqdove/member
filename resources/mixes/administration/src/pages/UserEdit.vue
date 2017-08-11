@@ -10,8 +10,11 @@
                     'activate',
                 ],
             }).then(response => {
+                const informations = response.data.informations;
+                const user = response.data.data;
                 next(vm => {
-                    vm.form = response.data.data;
+                    vm.form = user;
+                    vm.informations = informations;
                     if (vm.form.activate) {
                         vm.form.activate = vm.form.activate.activated ? 'yes' : 'no';
                     } else {
@@ -29,21 +32,11 @@
                 action: `${window.api}/member/administration/upload`,
                 form: {
                     activate: 'no',
-                    age: '',
-                    avatar: '',
-                    birthday: '',
                     email: '',
-                    group: '',
-                    id: 1,
-                    introduction: '',
+                    id: 0,
                     name: '',
-                    nickname: '',
-                    phone: '',
-                    points: '',
-                    realname: '',
-                    sex: '',
-                    signature: '',
                 },
+                informations: [],
                 loading: false,
                 sex: [
                     {
@@ -98,6 +91,8 @@
                 self.loading = true;
                 self.$refs.form.validate(valid => {
                     if (valid) {
+                        const form = self.form;
+                        form.informations = self.informations;
                         self.$http.post(`${window.api}/member/administration/user/edit`, self.form).then(() => {
                             self.$notice.open({
                                 title: '更新用户信息成功！',
@@ -149,6 +144,14 @@
         },
         mounted() {
             this.$store.commit('title', '用户详情 - 用户中心');
+        },
+        watch: {
+            informations: {
+                deep: true,
+                handler(val) {
+                    window.console.log(val);
+                },
+            },
         },
     };
 </script>
@@ -210,58 +213,28 @@
                             </form-item>
                         </i-col>
                     </row>
-                    <p class="extend-title">用户栏目</p>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="用户昵称">
-                                <i-input placeholder="请输入用户昵称" v-model="form.nickname"></i-input>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="真实姓名">
-                                <i-input placeholder="请输入真实姓名" v-model="form.realname"></i-input>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="性别">
-                                <i-select v-model="form.sex">
-                                    <i-option v-for="item in sex" :value="item.value" :key="item">{{ item.label }}</i-option>
-                                </i-select>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="生日">
-                                <date-picker :placeholder="trans('content.article.form.date.placeholder')"
-                                             type="date"
-                                             :value="form.birthday"
-                                             @on-change="dateChange"></date-picker>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="个性签名">
-                                <i-input type="textarea" placeholder="请输入自我介绍" v-model="form.signature"
-                                         :autosize="{minRows: 5,maxRows: 9}"></i-input>
-                                <p class="info">自我介绍将显示在您的主页上方，不填写则不显示</p>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="自我介绍">
-                                <i-input type="textarea" placeholder="请输入自我介绍" v-model="form.introduction"
-                                         :autosize="{minRows: 5,maxRows: 9}"></i-input>
-                                <p class="info">自我介绍将显示在您的主页上方，不填写则不显示</p>
-                            </form-item>
-                        </i-col>
-                    </row>
+                    <template v-for="group in informations">
+                        <p class="extend-title">{{ group.name }}</p>
+                        <row v-for="information in group.informations">
+                            <i-col span="12">
+                                <form-item :label="information.name">
+                                    <i-input v-if="information.type === 'input'" v-model="information.value"></i-input>
+                                    <i-input :rows="4" type="textarea"
+                                             v-if="information.type === 'textarea'"
+                                             v-model="information.value"></i-input>
+                                    <date-picker :type="information.type"
+                                                 v-if="information.type === 'date' ||
+                                                       information.type === 'daterange' ||
+                                                       information.type === 'datetime'"
+                                                 v-model="information.value"></date-picker>
+                                    <radio-group v-model="information.value" size="large" v-if="information.type === 'radio'">
+                                        <radio :label="option" v-for="option in information.opinions"></radio>
+                                    </radio-group>
+                                    <p>{{ information.description }}</p>
+                                </form-item>
+                            </i-col>
+                        </row>
+                    </template>
                     <row>
                         <i-col span="12">
                             <form-item>
