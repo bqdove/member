@@ -52,8 +52,7 @@ class EditHandler extends Handler
         ]);
         if ($member instanceof Member) {
             $member->update($data);
-            $groups = collect($this->request->input('informations'))->pluck('informations');
-            $groups->collapse()->keyBy('id')->unique()->each(function ($data) {
+            collect($this->request->input('informations'))->each(function ($data) {
                 $information = MemberInformation::query()->with('values')->find($data['id']);
                 if ($information instanceof MemberInformation && $information->getAttribute('type') == $data['type']) {
                     $information->values()->updateOrCreate([

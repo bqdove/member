@@ -10,11 +10,11 @@
                     'activate',
                 ],
             }).then(response => {
-                const informations = response.data.informations;
+                const groups = response.data.extras;
                 const user = response.data.data;
                 next(vm => {
                     vm.form = user;
-                    vm.informations = informations;
+                    vm.groups = groups;
                     if (vm.form.activate) {
                         vm.form.activate = vm.form.activate.activated ? 'yes' : 'no';
                     } else {
@@ -34,24 +34,11 @@
                     activate: 'no',
                     email: '',
                     id: 0,
+                    informations: [],
                     name: '',
                 },
-                informations: [],
+                groups: [],
                 loading: false,
-                sex: [
-                    {
-                        label: '男',
-                        value: 1,
-                    },
-                    {
-                        label: '女',
-                        value: 2,
-                    },
-                    {
-                        label: '保密',
-                        value: 0,
-                    },
-                ],
                 rules: {
                     email: [
                         {
@@ -80,19 +67,15 @@
             };
         },
         methods: {
-            dateChange(val) {
-                this.form.birthday = val;
-            },
             removeAvatar() {
                 this.form.avatar = '';
             },
             submit() {
                 const self = this;
                 self.loading = true;
+                window.console.log(self.$refs.form);
                 self.$refs.form.validate(valid => {
                     if (valid) {
-                        const form = self.form;
-                        form.informations = self.informations;
                         self.$http.post(`${window.api}/member/administration/user/edit`, self.form).then(() => {
                             self.$notice.open({
                                 title: '更新用户信息成功！',
@@ -144,14 +127,6 @@
         },
         mounted() {
             this.$store.commit('title', '用户详情 - 用户中心');
-        },
-        watch: {
-            informations: {
-                deep: true,
-                handler(val) {
-                    window.console.log(val);
-                },
-            },
         },
     };
 </script>
@@ -213,21 +188,21 @@
                             </form-item>
                         </i-col>
                     </row>
-                    <template v-for="group in informations">
+                    <template v-for="group in groups">
                         <p class="extend-title">{{ group.name }}</p>
                         <row v-for="information in group.informations">
                             <i-col span="12">
-                                <form-item :label="information.name">
-                                    <i-input v-if="information.type === 'input'" v-model="information.value"></i-input>
+                                <form-item :label="information.name" :key="information.id" :prop="'informations.' + information.id + '.value'" :rules="form.informations[information.id].rules">
+                                    <i-input v-if="information.type === 'input'" v-model="form.informations[information.id].value"></i-input>
                                     <i-input :rows="4" type="textarea"
                                              v-if="information.type === 'textarea'"
-                                             v-model="information.value"></i-input>
+                                             v-model="form.informations[information.id].value"></i-input>
                                     <date-picker :type="information.type"
                                                  v-if="information.type === 'date' ||
                                                        information.type === 'daterange' ||
                                                        information.type === 'datetime'"
-                                                 v-model="information.value"></date-picker>
-                                    <radio-group v-model="information.value" size="large" v-if="information.type === 'radio'">
+                                                 v-model="form.informations[information.id].value"></date-picker>
+                                    <radio-group v-model="form.informations[information.id].value" size="large" v-if="information.type === 'radio'">
                                         <radio :label="option" v-for="option in information.opinions"></radio>
                                     </radio-group>
                                     <p>{{ information.description }}</p>

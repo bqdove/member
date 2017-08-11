@@ -66,7 +66,24 @@ class UserHandler extends Handler
                 'type',
             ]);
         }]);
-        $informations = $builder->orderBy('order', 'asc')->get();
+        $builder->orderBy('order', 'asc');
+        $extras = $builder->get()->transform(function (MemberInformationGroup $group) {
+            $informations = $group->getRelation('informations');
+            $informations instanceof Collection && $informations->transform(function (MemberInformation $information) {
+                switch ($information->getAttribute('type')) {
+                    case 'radio':
+                        $information->setAttribute('opinions', explode(PHP_EOL, $information->getAttribute('opinions')));
+                        break;
+                }
+                $value = $information->getRelation('values')->first();
+                $information->setAttribute('value', $value instanceof MemberInformationValue ? $value->getAttribute('value') : '');
+
+                return $information;
+            });
+            $group->setRelation('informations', $informations);
+
+            return $group;
+        });
         if ($user instanceof Model) {
             $groups = $user->getAttribute('groups');
             if ($groups instanceof Collection) {
@@ -85,24 +102,25 @@ class UserHandler extends Handler
                 });
             }
             $user->setAttribute('groups', $groups);
-            $this->withCode(200)->withData($user)->withExtra([
-                'informations' => $informations->transform(function (MemberInformationGroup $group) {
-                    $informations = $group->getRelation('informations');
-                    $informations instanceof Collection && $informations->transform(function (MemberInformation $information) {
-                        switch ($information->getAttribute('type')) {
-                            case 'radio':
-                                $information->setAttribute('opinions', explode(PHP_EOL, $information->getAttribute('opinions')));
-                                break;
+            $this->withCode(200)->withData($user)->withData([
+                'informations' => $extras->pluck('informations')->collapse()->keyBy('id')->transform(function (MemberInformation $information) {
+                    $rules = [];
+                    if ($information->getAttribute('required')) {
+                        $rules['required'] = true;
+                        $rules['message'] = '请输入' . $information->getAttribute('name');
+                        $rules['trigger'] = 'change';
+                        if (in_array($information->getAttribute('type'), ['date', 'datetime'])) {
+                            $rules['type'] = 'date';
+                        } else {
+                            $rules['type'] = 'string';
                         }
-                        $value = $information->getRelation('values')->first();
-                        $information->setAttribute('value', $value instanceof MemberInformationValue ? $value->getAttribute('value') : '');
+                    }
+                    $information->setAttribute('rules', $rules);
 
-                        return $information;
-                    });
-                    $group->setRelation('informations', $informations);
-
-                    return $group;
+                    return $information;
                 }),
+            ])->withExtra([
+                'extras' => $extras,
             ])->withMessage('获取用户信息成功！');
         } else {
             $this->withCode(500)->withError('获取用户信息失败！');
