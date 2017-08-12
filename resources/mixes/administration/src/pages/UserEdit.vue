@@ -67,8 +67,10 @@
             };
         },
         methods: {
-            removeAvatar() {
-                this.form.avatar = '';
+            remove(key) {
+                const self = this;
+                const information = self.form.informations[key];
+                information.value = '';
             },
             submit() {
                 const self = this;
@@ -120,9 +122,15 @@
                 const self = this;
                 injection.loading.finish();
                 self.$notice.open({
-                    title: data.message,
+                    title: '上传图片成功！',
                 });
-                self.form.avatar = data.data.path;
+                switch (data.data.type) {
+                    case 'information':
+                        self.form.informations[data.data.id].value = data.data.path;
+                        break;
+                    default:
+                        break;
+                }
             },
         },
         mounted() {
@@ -205,6 +213,29 @@
                                     <radio-group v-model="form.informations[information.id].value" size="large" v-if="information.type === 'radio'">
                                         <radio :label="option" v-for="option in information.opinions"></radio>
                                     </radio-group>
+                                    <div class="ivu-upload-wrapper" v-if="information.type === 'picture'">
+                                        <div class="preview" v-if="form.informations[information.id].value">
+                                            <img :src="form.informations[information.id].value">
+                                            <icon type="close" @click.native="remove(information.id)"></icon>
+                                        </div>
+                                        <upload :action="action"
+                                                :data="{
+                                                    id: information.id,
+                                                    type: 'information'
+                                                }"
+                                                :format="['jpg','jpeg','png']"
+                                                :headers="{
+                                                    Authorization: `Bearer ${$store.state.token.access_token}`
+                                                }"
+                                                :max-size="2048"
+                                                :on-error="uploadError"
+                                                :on-format-error="uploadFormatError"
+                                                :on-success="uploadSuccess"
+                                                ref="upload"
+                                                :show-upload-list="false"
+                                                v-if="form.informations[information.id].value === '' || form.informations[information.id].value === null">
+                                        </upload>
+                                    </div>
                                     <p>{{ information.description }}</p>
                                 </form-item>
                             </i-col>
