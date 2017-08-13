@@ -43,18 +43,22 @@ class ListHandler extends Handler
             }
         }
         $builder->orderBy($this->request->input('sort', 'order'), $this->request->input('order', 'desc'));
-        $pagination = $builder->paginate($this->request->input('paginate', 20));
-        $this->withCode(200)->withData($pagination->items())->withMessage('')->withExtra([
-            'pagination' => [
-                'count'    => $pagination->total(),
-                'current'  => $pagination->currentPage(),
-                'from'     => $pagination->firstItem(),
-                'next'     => $pagination->nextPageUrl(),
-                'paginate' => $this->request->input('paginate', 20),
-                'prev'     => $pagination->previousPageUrl(),
-                'to'       => $pagination->lastItem(),
-                'total'    => $pagination->lastPage(),
-            ],
-        ]);
+        if ($this->request->input('paginate') === 0) {
+            $this->withCode(200)->withData($builder->get())->withMessage('获取分类信息项列表成功！');
+        } else {
+            $pagination = $builder->paginate($this->request->input('paginate', 20));
+            $this->withCode(200)->withData($pagination->items())->withMessage('获取分类信息项列表成功！')->withExtra([
+                'pagination' => [
+                    'count'    => $pagination->total(),
+                    'current'  => $pagination->currentPage(),
+                    'from'     => $pagination->firstItem(),
+                    'next'     => $pagination->nextPageUrl(),
+                    'paginate' => $this->request->input('paginate', 20),
+                    'prev'     => $pagination->previousPageUrl(),
+                    'to'       => $pagination->lastItem(),
+                    'total'    => $pagination->lastPage(),
+                ],
+            ]);
+        }
     }
 }
