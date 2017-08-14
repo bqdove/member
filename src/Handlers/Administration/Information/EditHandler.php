@@ -56,7 +56,7 @@ class EditHandler extends Handler
         ]);
         if ($information instanceof MemberInformation) {
             $information->update($data);
-            $information->groups()->sync((array)$this->request->input('groups'));
+            $this->request->has('groups') && $information->groups()->sync((array)$this->request->input('groups'));
             $this->commitTransaction();
             $this->withCode(200)->withMessage('更新信息项数据成功！');
         } else {
