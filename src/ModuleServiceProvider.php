@@ -8,16 +8,9 @@
  */
 namespace Notadd\Member;
 
-use Illuminate\Events\Dispatcher;
 use Notadd\Foundation\Member\Member;
 use Notadd\Member\Injections\Installer;
 use Notadd\Member\Injections\Uninstaller;
-use Notadd\Member\Listeners\PermissionGroupRegister;
-use Notadd\Member\Listeners\PermissionModuleRegister;
-use Notadd\Member\Listeners\PermissionRegister;
-use Notadd\Member\Listeners\PermissionTypeRegister;
-use Notadd\Member\Listeners\RouteRegister;
-use Notadd\Member\Listeners\CsrfTokenRegister;
 use Notadd\Foundation\Member\MemberManagement;
 use Notadd\Foundation\Module\Abstracts\Module;
 use Notadd\Member\Models\MemberActivate;
@@ -44,12 +37,6 @@ class ModuleServiceProvider extends Module
             return $this->belongsToMany(MemberGroup::class, 'member_group_relations', 'member_id', 'group_id');
         });
         $manager = new Manager($this->app['events'], $this->app['router']);
-        $this->app->make(Dispatcher::class)->subscribe(CsrfTokenRegister::class);
-        $this->app->make(Dispatcher::class)->subscribe(PermissionGroupRegister::class);
-        $this->app->make(Dispatcher::class)->subscribe(PermissionModuleRegister::class);
-        $this->app->make(Dispatcher::class)->subscribe(PermissionRegister::class);
-        $this->app->make(Dispatcher::class)->subscribe(PermissionTypeRegister::class);
-        $this->app->make(Dispatcher::class)->subscribe(RouteRegister::class);
         $this->app->make(MemberManagement::class)->registerManager($manager);
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
         $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'member');
@@ -58,18 +45,6 @@ class ModuleServiceProvider extends Module
         $this->publishes([
             realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/member/administration') => public_path('assets/member/administration'),
         ], 'public');
-
-        $this->app->make('setting')->set('member.user.create.rules', collect([
-            'name'     => 'required|unique:members,name',
-            'email'    => 'required|unique:members,email',
-            'birthday' => 'nullable|date',
-        ])->toJson());
-
-        $this->app->make('setting')->set('member.user.update.rules', collect([
-            'name'     => 'required|unique:members,name',
-            'email'    => 'required|unique:members,email',
-            'birthday' => 'nullable|date',
-        ])->toJson());
     }
 
     /**
