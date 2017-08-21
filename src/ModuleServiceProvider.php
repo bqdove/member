@@ -44,16 +44,6 @@ class ModuleServiceProvider extends Module
     }
 
     /**
-     * Install module.
-     *
-     * @return string
-     */
-    public static function install()
-    {
-        return Installer::class;
-    }
-
-    /**
      * Register module extra providers.
      */
     public function register()
@@ -64,15 +54,5 @@ class ModuleServiceProvider extends Module
         $this->app->singleton('socialite', function ($app) {
             return new SocialiteManager($app);
         });
-    }
-
-    /**
-     * Uninstall module.
-     *
-     * @return string
-     */
-    public static function uninstall()
-    {
-        return Uninstaller::class;
     }
 }
