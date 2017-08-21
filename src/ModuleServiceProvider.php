@@ -41,10 +41,6 @@ class ModuleServiceProvider extends Module
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
         $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'member');
         $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'member');
-
-        $this->publishes([
-            realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/member/administration') => public_path('assets/member/administration'),
-        ], 'public');
     }
 
     /**
