@@ -40,7 +40,7 @@
                     if (valid) {
                         self.loading = true;
                         window.console.log(self.form);
-                        self.$http.post(`${window.api}/member/ban/create`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/ban/create`, self.form).then(() => {
                             self.$notice.open({
                                 title: '添加封禁 IP 成功！',
                             });

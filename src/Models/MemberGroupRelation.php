@@ -9,6 +9,7 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
+use Notadd\Foundation\Member\Member;
 
 /**
  * Class MemberGroup.
@@ -27,15 +28,31 @@ class MemberGroupRelation extends Model
     ];
 
     /**
+     * @var array
+     */
+    protected $setters = [
+        'next' => 'empty|0',
+        'type' => 'empty|default',
+    ];
+
+    /**
      * @var string
      */
     protected $table = 'member_group_relations';
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function details()
+    public function group()
     {
-        return $this->hasOne(MemberGroup::class, 'id', 'group_id');
+        return $this->belongsTo(MemberGroup::class, 'group_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function member()
+    {
+        return $this->belongsTo(Member::class, 'member_id');
     }
 }

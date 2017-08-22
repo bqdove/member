@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/permission/get`).then(response => {
+            injection.http.post(`${window.api}/member/administration/permission/get`).then(response => {
                 window.console.log(response);
                 const data = response.data.data;
                 next(vm => {
@@ -36,7 +36,7 @@
                     desc: '等待期间请不要继续操作！',
                     title: '正在批量更新权限值，请耐心等待...',
                 });
-                self.$http.post(`${window.api}/member/permission/set`, {
+                self.$http.post(`${window.api}/member/administration/permission/set`, {
                     data: self.types,
                 }).then(() => {
                     self.$loading.finish();
@@ -66,6 +66,7 @@
                                 <li>{{ permission.description }}</li>
                                 <li v-for="(type, index) in types">
                                     <i-select multiple
+                                              :title="type.attributes.identification + '::' + module.attributes.identification + '::' + group.attributes.identification + '::' + permission.identification"
                                               v-model="types[index].has[type.attributes.identification + '::' + module.attributes.identification + '::' + group.attributes.identification + '::' + permission.identification]"
                                               @on-change="change">
                                         <i-option :key="g" :value="g.identification" v-for="g in groups">{{ g.name }}</i-option>

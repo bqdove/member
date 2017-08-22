@@ -9,7 +9,7 @@
 namespace Notadd\Member;
 
 use Notadd\Foundation\Member\Abstracts\Manager as AbstractManager;
-use Notadd\Member\Models\Member;
+use Notadd\Foundation\Member\Member;
 
 /**
  * Class Manager.

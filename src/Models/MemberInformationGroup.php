@@ -28,4 +28,12 @@ class MemberInformationGroup extends Model
      * @var string
      */
     protected $table = 'member_information_groups';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function informations()
+    {
+        return $this->belongsToMany(MemberInformation::class, 'member_information_relations', 'group_id', 'information_id');
+    }
 }

@@ -4,7 +4,6 @@
  *
  * @datetime 2017-04-27 16:45:43
  */
-
 use Illuminate\Database\Schema\Blueprint;
 use Notadd\Foundation\Database\Migrations\Migration;
 
@@ -26,7 +25,7 @@ class CreateMemberGroupRelationsTable extends Migration
             $table->integer('group_id');
             $table->integer('member_id');
             $table->enum('type', ['default', 'extend'])->default('default');
-            $table->integer('next');
+            $table->integer('next')->default(0);
             $table->timestamps();
         });
     }

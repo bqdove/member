@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/ban/ip`).then(response => {
+            injection.http.post(`${window.api}/member/administration/ban/ip`).then(response => {
                 const list = response.data.data;
                 const pagination = response.data.pagination;
                 next(vm => {
@@ -21,6 +21,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -44,11 +45,27 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `<i-button :loading="list[${index}].loading" size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">删除 IP</span>
-                                        <span v-else>正在删除 IP…</span>
-                                    </i-button>`;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = '删除 IP';
+                            } else {
+                                text = '正在删除 IP…';
+                            }
+                            return h('i-button', {
+                                on: {
+                                    click() {
+                                        self.remove(data.index);
+                                    },
+                                },
+                                props: {
+                                    loading: self.list[data.index].loading,
+                                    size: 'small',
+                                    type: 'error',
+                                },
+                            }, [
+                                h('span', text),
+                            ]);
                         },
                         title: injection.trans('操作'),
                         width: 300,
@@ -71,7 +88,7 @@
                 self.$notice.open({
                     title: '正在更新数据',
                 });
-                self.$http.post(`${window.api}/member/ban/ip`).then(response => {
+                self.$http.post(`${window.api}/member/administration/ban/ip`).then(response => {
                     const list = response.data.data;
                     const pagination = response.data.pagination;
                     list.forEach(item => {
@@ -88,7 +105,7 @@
                 const self = this;
                 const item = self.list[index];
                 item.loading = true;
-                self.$http.post(`${window.api}/member/ban/remove`, {
+                self.$http.post(`${window.api}/member/administration/ban/remove`, {
                     id: item.id,
                 }).then(() => {
                     self.$notice.open({
@@ -119,7 +136,7 @@
                     </div>
                 </template>
                 <i-table :columns="columns" :context="self" :data="list" @on-selection-change="selection"></i-table>
-                <div class="user-page-wrap">
+                <div class="ivu-page-wrap">
                     <page :current="pagination.current"
                           :page-size="pagination.paginate"
                           :total="pagination.total"

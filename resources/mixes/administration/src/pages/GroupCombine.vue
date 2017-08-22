@@ -5,10 +5,10 @@
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
             injection.http.all([
-                injection.http.post(`${window.api}/member/group`, {
+                injection.http.post(`${window.api}/member/administration/group`, {
                     id: to.params.id,
                 }),
-                injection.http.post(`${window.api}/member/group/list`, {
+                injection.http.post(`${window.api}/member/administration/group/list`, {
                     without: [
                         to.params.id,
                     ],

@@ -5,13 +5,10 @@
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
             injection.http.all([
-                injection.http.post(`${window.api}/member/group/list`),
-                injection.http.post(`${window.api}/member/user`, {
+                injection.http.post(`${window.api}/member/administration/group/list`),
+                injection.http.post(`${window.api}/member/administration/user`, {
                     id: to.params.id,
-                    with: [
-                        'groups',
-                        'groups.details',
-                    ],
+                    with: 'groups',
                 }),
             ]).then(injection.http.spread((groups, user) => {
                 const data = groups.data.data;
@@ -19,12 +16,13 @@
                 next(vm => {
                     data.forEach(item => {
                         if (group) {
-                            group.map(has => {
+                            Object.keys(group).map(key => {
+                                const has = group[key];
                                 if (has.type === 'default') {
                                     vm.form.date = has.end;
-                                    vm.form.group = has.group_id;
+                                    vm.form.group = has.id;
                                     vm.form.next = has.next;
-                                } else if (has.group_id === item.id) {
+                                } else if (has.id === item.id) {
                                     item.check = true;
                                     item.end = has.end;
                                 }
@@ -34,9 +32,6 @@
                         item.check = item.check ? item.check : false;
                         item.end = item.end ? item.end : '';
                     });
-                    if (vm.form.group === 0 && data.length > 0) {
-                        vm.form.group = data[0].id;
-                    }
                     vm.form.id = user.data.data.id;
                     vm.groups = data;
                     injection.loading.finish();
@@ -98,7 +93,7 @@
                             }
                             return group;
                         });
-                        self.$http.post(`${window.api}/member/user/group`, {
+                        self.$http.post(`${window.api}/member/administration/user/group`, {
                             data: groups,
                             member_id: id,
                         }).then(response => {

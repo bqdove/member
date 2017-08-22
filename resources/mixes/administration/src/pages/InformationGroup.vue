@@ -4,7 +4,10 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/information/group/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/information/group/list`, {
+                order: 'asc',
+                sort: 'order',
+            }).then(response => {
                 const data = response.data.data;
                 const pagination = response.data.pagination;
                 next(vm => {
@@ -21,21 +24,78 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
                         align: 'center',
                         key: 'show',
-                        render(row, column, index) {
-                            return `<checkbox v-model="groups[${index}].show"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        self.groups[data.index].show = value;
+                                    },
+                                    'on-change': value => {
+                                        data.row.show = value;
+                                        self.$loading.start();
+                                        self.$notice.open({
+                                            title: '正在更新信息分组信息...',
+                                        });
+                                        self.$http.post(`${window.api}/member/administration/information/group/edit`, data.row).then(() => {
+                                            self.$loading.finish();
+                                            self.$notice.open({
+                                                title: '更新信息分组信息成功！',
+                                            });
+                                            self.refresh();
+                                        }).catch(() => {
+                                            self.$loading.fail();
+                                            self.$notice.error({
+                                                title: '更新信息分组信息失败！',
+                                            });
+                                        });
+                                    },
+                                },
+                                props: {
+                                    value: self.groups[data.index].show,
+                                },
+                            });
                         },
                         title: '显示',
                         width: 100,
                     },
                     {
                         key: 'order',
-                        render(row, column, index) {
-                            return `<i-input v-model="groups[${index}].order"></i-input>`;
+                        render(h, data) {
+                            const row = data.row;
+                            return h('i-input', {
+                                on: {
+                                    'on-change': event => {
+                                        row.order = event.target.value;
+                                    },
+                                    'on-blur': () => {
+                                        self.$loading.start();
+                                        self.$notice.open({
+                                            title: '正在更新信息分组信息...',
+                                        });
+                                        self.$http.post(`${window.api}/member/administration/information/group/edit`, row).then(() => {
+                                            self.$loading.finish();
+                                            self.$notice.open({
+                                                title: '更新信息分组信息成功！',
+                                            });
+                                            self.refresh();
+                                        }).catch(() => {
+                                            self.$loading.fail();
+                                            self.$notice.error({
+                                                title: '更新信息分组信息失败！',
+                                            });
+                                        });
+                                    },
+                                },
+                                props: {
+                                    value: self.groups[data.index].order,
+                                },
+                            });
                         },
                         title: '显示顺序',
                         width: 200,
@@ -46,14 +106,43 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑</i-button>
-                                    <i-button :loading="groups[${index}].loading" size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!groups[${index}].loading">删除</span>
-                                        <span v-else>正在删除...</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.groups[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('div', [
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/information/group/${data.row.id}/edit`,
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑'),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('span', text),
+                                ]),
+                            ]);
                         },
                         title: '操作',
                         width: 300,
@@ -66,73 +155,45 @@
             };
         },
         methods: {
-            edit(id) {
-                this.$router.push(`/member/information/group/${id}/edit`);
-            },
             remove(index) {
                 const self = this;
                 const group = self.groups[index];
                 group.loading = true;
-                self.$http.post(`${window.api}/member/information/group/remove`, {
+                self.$http.post(`${window.api}/member/administration/information/group/remove`, {
                     id: group.id,
                 }).then(() => {
                     self.$loading.finish();
                     self.$notice.open({
                         title: '删除信息分组成功！',
                     });
-                    self.$notice.open({
-                        title: '正在刷新数据...',
-                    });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/information/group/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '刷新数据成功！',
-                        });
-                        self.groups = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
-                    });
+                    self.refresh();
                 }).finally(() => {
                     group.loading = false;
                 });
             },
-            submit() {
+            refresh() {
                 const self = this;
-                self.loading = true;
-                self.$http.post(`${window.api}/member/information/group/patch`, {
-                    data: self.groups,
-                }).then(() => {
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$loading.start();
+                self.$http.post(`${window.api}/member/administration/information/group/list`, {
+                    order: 'asc',
+                    sort: 'order',
+                }).then(response => {
+                    const data = response.data.data;
+                    const pagination = response.data.pagination;
+                    data.forEach(item => {
+                        item.loading = false;
+                    });
+                    self.$loading.finish();
                     self.$notice.open({
-                        title: '批量更新数据成功！',
+                        title: '刷新数据成功！',
                     });
-                    self.$notice.open({
-                        title: '正在刷新数据...',
-                    });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/information/group/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '刷新数据成功！',
-                        });
-                        self.groups = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
-                    });
-                }).finally(() => {
-                    self.loading = false;
+                    self.groups = data;
+                    self.pagination = pagination;
+                }).catch(() => {
+                    self.$loading.error();
                 });
             },
         },
@@ -151,19 +212,13 @@
                 <div class="extend-info">
                     <p>用户数据分组列表</p>
                 </div>
-                <i-form :label-width="0" :model="form" ref="form" :rules="rules">
-                    <i-table :columns="columns" :context="self" :data="groups"></i-table>
-                    <row>
-                        <i-col span="12">
-                            <form-item>
-                                <i-button :loading="loading" type="primary" @click.native="submit">
-                                    <span v-if="!loading">确认提交</span>
-                                    <span v-else>正在提交…</span>
-                                </i-button>
-                            </form-item>
-                        </i-col>
-                    </row>
-                </i-form>
+                <i-table :columns="columns" :context="self" :data="groups"></i-table>
+                <div class="ivu-page-wrap">
+                    <page :current="pagination.current"
+                          :page-size="pagination.paginate"
+                          :total="pagination.total"
+                          @on-change="paginator"></page>
+                </div>
             </card>
         </div>
     </div>

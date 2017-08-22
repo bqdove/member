@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/tag/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/tag/list`).then(response => {
                 window.console.log(response);
                 next(vm => {
                     vm.list = response.data.data;
@@ -16,6 +16,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -37,15 +38,26 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <!--<i-button size="small" type="default" @click.native="notification(${row.id})">发送通知</i-button>
-                                    <i-button size="small" type="default" @click.native="list(${row.id})">用户列表</i-button>-->
-                                    <i-button :loading="list[${index}].loading"  size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">${injection.trans('content.global.delete.submit')}</span>
-                                        <span v-else>${injection.trans('content.global.delete.loading')}</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('i-button', {
+                                on: {
+                                    click() {
+                                        self.remove(data.index);
+                                    },
+                                },
+                                props: {
+                                    size: 'small',
+                                    type: 'error',
+                                },
+                            }, [
+                                h('span', text),
+                            ]);
                         },
                         title: injection.trans('member.user.table.handle'),
                         width: 300,
@@ -94,7 +106,7 @@
                     });
                     self.loading = false;
                 } else {
-                    self.$http.post(`${window.api}/member/tag/patch`, self.form).then(() => {
+                    self.$http.post(`${window.api}/member/administration/tag/patch`, self.form).then(() => {
                         self.$notice.open({
                             title: '批量更新标签数据成功！',
                         });
@@ -102,7 +114,7 @@
                             title: '准备更新标签数据...',
                         });
                         self.$loading.start();
-                        self.$http.post(`${window.api}/member/tag/list`).then(response => {
+                        self.$http.post(`${window.api}/member/administration/tag/list`).then(response => {
                             self.list = response.data.data;
                             self.$loading.finish();
                         }).catch(() => {

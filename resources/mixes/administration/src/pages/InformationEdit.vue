@@ -1,15 +1,27 @@
 <script>
+    import fields from '../helpers/fields';
+    import fieldPrivacies from '../helpers/privacies';
     import injection from '../helpers/injection';
 
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/information`, {
+            injection.http.post(`${window.api}/member/administration/information`, {
                 id: to.params.id,
             }).then(response => {
                 const data = response.data.data;
+                const groups = response.data.groups;
                 next(vm => {
                     vm.form = data;
+                    vm.form.groups = [];
+                    Object.keys(groups).forEach(index => {
+                        groups[index].label = groups[index].id;
+                        groups[index].text = groups[index].name;
+                        if (groups[index].exists) {
+                            vm.form.groups.push(groups[index].id);
+                        }
+                    });
+                    vm.groups = groups;
                     injection.loading.finish();
                     injection.sidebar.active('member');
                 });
@@ -31,27 +43,9 @@
                     required: false,
                     type: 'input',
                 },
-                groups: [
-                    {
-                        label: 'base',
-                        text: '资料',
-                    },
-                ],
+                groups: [],
                 loading: false,
-                privacies: [
-                    {
-                        label: '管理员可见',
-                        value: 0,
-                    },
-                    {
-                        label: '自己可见',
-                        value: 1,
-                    },
-                    {
-                        label: '登录可见',
-                        value: 2,
-                    },
-                ],
+                privacies: fieldPrivacies,
                 rules: {
                     name: [
                         {
@@ -62,36 +56,7 @@
                         },
                     ],
                 },
-                types: [
-                    {
-                        label: 'input',
-                        text: '单行文本框',
-                    },
-                    {
-                        label: 'textarea',
-                        text: '多行文本框',
-                    },
-                    {
-                        label: 'radio',
-                        text: '单选框',
-                    },
-                    {
-                        label: 'checkbox',
-                        text: '复选框',
-                    },
-                    {
-                        label: 'dropdown',
-                        text: '下拉菜单',
-                    },
-                    {
-                        label: 'select',
-                        text: '多选列表框',
-                    },
-                    {
-                        label: 'file',
-                        text: '上传图片',
-                    },
-                ],
+                types: fields,
             };
         },
         methods: {
@@ -100,7 +65,7 @@
                 self.loading = true;
                 self.$refs.form.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.api}/member/information/edit`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/information/edit`, self.form).then(() => {
                             self.$notice.open({
                                 title: '更新信息项数据成功！',
                             });
@@ -211,7 +176,7 @@
                     <row>
                         <i-col span="12">
                             <form-item label="用户资料分组">
-                                <checkbox-group v-model="form.group">
+                                <checkbox-group v-model="form.groups">
                                     <checkbox :label="item.label" v-for="item in groups">
                                         <span>{{ item.text }}</span>
                                     </checkbox>

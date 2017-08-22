@@ -5,11 +5,11 @@
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
             injection.http.all([
-                injection.http.post(`${window.api}/member/tag/list`),
-                injection.http.post(`${window.api}/member/user`, {
+                injection.http.post(`${window.api}/member/administration/tag/list`),
+                injection.http.post(`${window.api}/member/administration/user`, {
                     id: to.params.id,
                 }),
-                injection.http.post(`${window.api}/member/user/tag`, {
+                injection.http.post(`${window.api}/member/administration/user/tag`, {
                     id: to.params.id,
                 }),
             ]).then(injection.http.spread((tags, user, relations) => {
@@ -59,7 +59,7 @@
                         has.push(item.id);
                     }
                 });
-                self.$http.post(`${window.api}/member/tag/user`, {
+                self.$http.post(`${window.api}/member/administration/tag/user`, {
                     id: self.user.id,
                     tags: has,
                 }).then(() => {

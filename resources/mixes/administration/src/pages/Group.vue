@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/group/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/group/list`).then(response => {
                 const data = response.data.data;
                 next(vm => {
                     data.forEach(item => {
@@ -19,6 +19,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -28,9 +29,16 @@
                     },
                     {
                         key: 'icon',
-                        render(row) {
-                            if (row.icon) {
-                                return `<img class="group-list-image" src="${row.icon}">`;
+                        render(h, data) {
+                            if (data.row.icon) {
+                                return h('img', {
+                                    domProps: {
+                                        class: {
+                                            'group-list-image': true,
+                                        },
+                                        src: data.row.icon,
+                                    },
+                                });
                             }
                             return '';
                         },
@@ -48,7 +56,8 @@
                         width: 200,
                     },
                     {
-                        key: 'group',
+                        align: 'right',
+                        key: 'members_count',
                         title: injection.trans('已有用户数'),
                         width: 100,
                     },
@@ -58,15 +67,61 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="combine(${row.id})">合并用户组</i-button>
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑用户组</i-button>
-                                    <i-button :loading="list[${index}].loading"  size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">${injection.trans('content.global.delete.submit')}</span>
-                                        <span v-else>${injection.trans('content.global.delete.loading')}</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = injection.trans('正在删除...');
+                            } else {
+                                text = injection.trans('删除');
+                            }
+                            return h('div', [
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/group/${data.row.id}/combine`,
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '合并用户组'),
+                                ]),
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/group/${data.row.id}/edit`,
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑用户组'),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('span', text),
+                                ]),
+                            ]);
                         },
                         title: injection.trans('member.user.table.handle'),
                         width: 300,
@@ -84,25 +139,19 @@
             };
         },
         methods: {
-            combine(id) {
-                this.$router.push(`/member/group/${id}/combine`);
-            },
-            edit(id) {
-                this.$router.push(`/member/group/${id}/edit`);
-            },
             remove(index) {
                 const self = this;
                 const group = self.list[index];
                 window.console.log(group);
                 group.loading = true;
-                self.$http.post(`${window.api}/member/group/remove`, {
+                self.$http.post(`${window.api}/member/administration/group/remove`, {
                     id: group.id,
                 }).then(() => {
                     self.$notice.open({
                         title: '删除用户组成功，正在刷新数据...',
                     });
                     self.$loading.start();
-                    self.$http.post(`${window.api}/member/group/list`).then(response => {
+                    self.$http.post(`${window.api}/member/administration/group/list`).then(response => {
                         self.$loading.finish();
                         self.list = response.data.data;
                         self.list.forEach(item => {

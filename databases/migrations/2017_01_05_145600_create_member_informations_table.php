@@ -33,9 +33,13 @@ class CreateMemberInformationsTable extends Migration
             $table->tinyInteger('required')->default(0);
             $table->enum('type', [
                 'checkbox',
+                'date',
+                'daterange',
                 'dropdown',
+                'datetime',
                 'file',
                 'input',
+                'picture',
                 'radio',
                 'select',
                 'textarea',

@@ -3,8 +3,19 @@
 
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('member');
+            injection.loading.start();
+            injection.http.post(`${window.api}/member/administration/information/list`, {
+                paginate: 0,
+            }).then(response => {
+                const informations = response.data.data;
+                next(vm => {
+                    vm.informations = informations;
+                    injection.loading.finish();
+                    injection.sidebar.active('member');
+                    injection.sidebar.active('member');
+                });
+            }).catch(() => {
+                injection.loading.error();
             });
         },
         data() {
@@ -16,12 +27,7 @@
                     order: '0',
                     show: false,
                 },
-                informations: [
-                    {
-                        label: '1',
-                        text: '真实姓名',
-                    },
-                ],
+                informations: [],
                 loading: false,
                 rules: {
                     name: [
@@ -41,7 +47,7 @@
                 self.loading = true;
                 self.$refs.form.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.api}/member/information/group/create`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/information/group/create`, self.form).then(() => {
                             self.$notice.open({
                                 title: '创建信息分组成功！',
                             });

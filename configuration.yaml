@@ -1,0 +1,26 @@
+name: 用户中心
+identification: notadd/member
+description: 'Notadd 用户管理模块'
+author:
+    - twilroad
+    - 269044570@qq.com
+version: 1.0.0
+assets:
+    administration:
+        notadd/member:
+            permissions: ''
+            scripts:
+                - assets/member/administration/js/module.min.js
+            stylesheets:
+                - assets/member/administration/css/module.min.css
+csrf:
+    - 'api/member*'
+events:
+    subscribes:
+        - Notadd\Member\Listeners\RouteRegister
+installer:
+    - Notadd\Member\Injections\Installer
+publishes:
+    assets/member/administration: resources/mixes/administration/dist/assets/member/administration
+uninstaller:
+    - Notadd\Member\Injections\Uninstaller

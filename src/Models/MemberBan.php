@@ -9,6 +9,7 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
+use Notadd\Foundation\Member\Member;
 
 /**
  * Class MemberBan.
@@ -35,6 +36,6 @@ class MemberBan extends Model
      */
     public function member()
     {
-        return $this->belongsTo(Member::class, 'id', 'member_id');
+        return $this->belongsTo(Member::class, 'member_id', 'id');
     }
 }

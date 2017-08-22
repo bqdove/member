@@ -3,32 +3,30 @@
 
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('member');
+            injection.loading.start();
+            injection.http.post(`${window.api}/member/administration/information/rule`).then(response => {
+                next(vm => {
+                    vm.form.informations = response.data.data.informations;
+                    vm.groups = response.data.data.extras;
+                    injection.loading.finish();
+                    injection.sidebar.active('member');
+                });
+            }).catch(() => {
+                injection.loading.error();
             });
         },
         data() {
             return {
-                action: `${window.api}/member/upload`,
+                action: `${window.api}/member/administration/upload`,
                 form: {
-                    activated: 'no',
-                    age: '',
-                    avatar: '',
-                    birthday: '',
-                    created_at: '',
+                    activate: 'no',
                     email: '',
-                    group: '',
-                    id: 1,
-                    introduction: '',
+                    id: 0,
+                    informations: [],
                     name: '',
-                    nickname: '',
                     password: '',
-                    phone: '',
-                    points: '',
-                    realname: '',
-                    sex: '',
-                    signature: '',
                 },
+                groups: [],
                 loading: false,
                 sex: [
                     {
@@ -80,12 +78,6 @@
             };
         },
         methods: {
-            dateChange(val) {
-                this.form.birthday = val;
-            },
-            removeAvatar() {
-                this.form.avatar = '';
-            },
             submit() {
                 const self = this;
                 self.loading = true;
@@ -99,7 +91,7 @@
                         } else {
                             data.sex = 0;
                         }
-                        self.$http.post(`${window.api}/member/user/create`, data).then(() => {
+                        self.$http.post(`${window.api}/member/administration/user/create`, data).then(() => {
                             self.$notice.open({
                                 title: '添加用户成功！',
                             });
@@ -169,13 +161,6 @@
                     </row>
                     <row>
                         <i-col span="12">
-                            <form-item label="密码" prop="name">
-                                <i-input placeholder="请输入密码" v-model="form.password"></i-input>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
                             <form-item label="头像" prop="avatar">
                                 <div class="image-preview" v-if="form.avatar">
                                     <img :src="form.avatar">
@@ -199,6 +184,13 @@
                     </row>
                     <row>
                         <i-col span="12">
+                            <form-item label="密码" prop="name">
+                                <i-input placeholder="请输入密码" v-model="form.password"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
                             <form-item label="E-mail" prop="email">
                                 <i-input placeholder="请输入电子邮件" v-model="form.email"></i-input>
                             </form-item>
@@ -206,8 +198,8 @@
                     </row>
                     <row>
                         <i-col span="12">
-                            <form-item label="邮箱激活状态">
-                                <radio-group v-model="form.activated" size="large">
+                            <form-item label="激活状态">
+                                <radio-group v-model="form.activate" size="large">
                                     <radio label="yes">
                                         <span>已激活</span>
                                     </radio>
@@ -218,58 +210,28 @@
                             </form-item>
                         </i-col>
                     </row>
-                    <p class="extend-title">用户栏目</p>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="用户昵称">
-                                <i-input placeholder="请输入用户昵称" v-model="form.nickname"></i-input>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="真实姓名">
-                                <i-input placeholder="请输入真实姓名" v-model="form.realname"></i-input>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="性别">
-                                <i-select v-model="form.sex">
-                                    <i-option v-for="item in sex" :value="item.value" :key="item">{{ item.label }}</i-option>
-                                </i-select>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="生日">
-                                <date-picker :placeholder="trans('content.article.form.date.placeholder')"
-                                             type="date"
-                                             :value="form.birthday"
-                                             @on-change="dateChange"></date-picker>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="个性签名">
-                                <i-input type="textarea" placeholder="请输入自我介绍" v-model="form.signature"
-                                         :autosize="{minRows: 5,maxRows: 9}"></i-input>
-                                <p class="info">自我介绍将显示在您的主页上方，不填写则不显示</p>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="自我介绍">
-                                <i-input type="textarea" placeholder="请输入自我介绍" v-model="form.introduction"
-                                         :autosize="{minRows: 5,maxRows: 9}"></i-input>
-                                <p class="info">自我介绍将显示在您的主页上方，不填写则不显示</p>
-                            </form-item>
-                        </i-col>
-                    </row>
+                    <template v-for="group in groups">
+                        <p class="extend-title">{{ group.name }}</p>
+                        <row v-for="information in group.informations">
+                            <i-col span="12">
+                                <form-item :label="information.name" :key="information.id" :prop="'informations.' + information.id + '.value'" :rules="form.informations[information.id].rules">
+                                    <i-input v-if="information.type === 'input'" v-model="form.informations[information.id].value"></i-input>
+                                    <i-input :rows="4" type="textarea"
+                                             v-if="information.type === 'textarea'"
+                                             v-model="form.informations[information.id].value"></i-input>
+                                    <date-picker :type="information.type"
+                                                 v-if="information.type === 'date' ||
+                                                       information.type === 'daterange' ||
+                                                       information.type === 'datetime'"
+                                                 v-model="form.informations[information.id].value"></date-picker>
+                                    <radio-group v-model="form.informations[information.id].value" size="large" v-if="information.type === 'radio'">
+                                        <radio :label="option" v-for="option in information.opinions"></radio>
+                                    </radio-group>
+                                    <p>{{ information.description }}</p>
+                                </form-item>
+                            </i-col>
+                        </row>
+                    </template>
                     <row>
                         <i-col span="12">
                             <form-item>

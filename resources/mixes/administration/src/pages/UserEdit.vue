@@ -4,14 +4,17 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/user`, {
+            injection.http.post(`${window.api}/member/administration/user`, {
                 id: to.params.id,
                 with: [
                     'activate',
                 ],
             }).then(response => {
+                const groups = response.data.extras;
+                const user = response.data.data;
                 next(vm => {
-                    vm.form = response.data.data;
+                    vm.form = user;
+                    vm.groups = groups;
                     if (vm.form.activate) {
                         vm.form.activate = vm.form.activate.activated ? 'yes' : 'no';
                     } else {
@@ -26,39 +29,16 @@
         },
         data() {
             return {
-                action: `${window.api}/member/upload`,
+                action: `${window.api}/member/administration/upload`,
                 form: {
                     activate: 'no',
-                    age: '',
-                    avatar: '',
-                    birthday: '',
                     email: '',
-                    group: '',
-                    id: 1,
-                    introduction: '',
+                    id: 0,
+                    informations: [],
                     name: '',
-                    nickname: '',
-                    phone: '',
-                    points: '',
-                    realname: '',
-                    sex: '',
-                    signature: '',
                 },
+                groups: [],
                 loading: false,
-                sex: [
-                    {
-                        label: '男',
-                        value: 1,
-                    },
-                    {
-                        label: '女',
-                        value: 2,
-                    },
-                    {
-                        label: '保密',
-                        value: 0,
-                    },
-                ],
                 rules: {
                     email: [
                         {
@@ -87,18 +67,18 @@
             };
         },
         methods: {
-            dateChange(val) {
-                this.form.birthday = val;
-            },
-            removeAvatar() {
-                this.form.avatar = '';
+            remove(key) {
+                const self = this;
+                const information = self.form.informations[key];
+                information.value = '';
             },
             submit() {
                 const self = this;
                 self.loading = true;
+                window.console.log(self.$refs.form);
                 self.$refs.form.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.api}/member/user/edit`, self.form).then(() => {
+                        self.$http.post(`${window.api}/member/administration/user/edit`, self.form).then(() => {
                             self.$notice.open({
                                 title: '更新用户信息成功！',
                             });
@@ -142,9 +122,15 @@
                 const self = this;
                 injection.loading.finish();
                 self.$notice.open({
-                    title: data.message,
+                    title: '上传图片成功！',
                 });
-                self.form.avatar = data.data.path;
+                switch (data.data.type) {
+                    case 'information':
+                        self.form.informations[data.data.id].value = data.data.path;
+                        break;
+                    default:
+                        break;
+                }
             },
         },
         mounted() {
@@ -210,58 +196,51 @@
                             </form-item>
                         </i-col>
                     </row>
-                    <p class="extend-title">用户栏目</p>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="用户昵称">
-                                <i-input placeholder="请输入用户昵称" v-model="form.nickname"></i-input>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="真实姓名">
-                                <i-input placeholder="请输入真实姓名" v-model="form.realname"></i-input>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="性别">
-                                <i-select v-model="form.sex">
-                                    <i-option v-for="item in sex" :value="item.value" :key="item">{{ item.label }}</i-option>
-                                </i-select>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="生日">
-                                <date-picker :placeholder="trans('content.article.form.date.placeholder')"
-                                             type="date"
-                                             :value="form.birthday"
-                                             @on-change="dateChange"></date-picker>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="个性签名">
-                                <i-input type="textarea" placeholder="请输入自我介绍" v-model="form.signature"
-                                         :autosize="{minRows: 5,maxRows: 9}"></i-input>
-                                <p class="info">自我介绍将显示在您的主页上方，不填写则不显示</p>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="12">
-                            <form-item label="自我介绍">
-                                <i-input type="textarea" placeholder="请输入自我介绍" v-model="form.introduction"
-                                         :autosize="{minRows: 5,maxRows: 9}"></i-input>
-                                <p class="info">自我介绍将显示在您的主页上方，不填写则不显示</p>
-                            </form-item>
-                        </i-col>
-                    </row>
+                    <template v-for="group in groups">
+                        <p class="extend-title">{{ group.name }}</p>
+                        <row v-for="information in group.informations">
+                            <i-col span="12">
+                                <form-item :label="information.name" :key="information.id" :prop="'informations.' + information.id + '.value'" :rules="form.informations[information.id].rules">
+                                    <i-input v-if="information.type === 'input'" v-model="form.informations[information.id].value"></i-input>
+                                    <i-input :rows="4" type="textarea"
+                                             v-if="information.type === 'textarea'"
+                                             v-model="form.informations[information.id].value"></i-input>
+                                    <date-picker :type="information.type"
+                                                 v-if="information.type === 'date' ||
+                                                       information.type === 'daterange' ||
+                                                       information.type === 'datetime'"
+                                                 v-model="form.informations[information.id].value"></date-picker>
+                                    <radio-group v-model="form.informations[information.id].value" size="large" v-if="information.type === 'radio'">
+                                        <radio :label="option" v-for="option in information.opinions"></radio>
+                                    </radio-group>
+                                    <div class="ivu-upload-wrapper" v-if="information.type === 'picture'">
+                                        <div class="preview" v-if="form.informations[information.id].value">
+                                            <img :src="form.informations[information.id].value">
+                                            <icon type="close" @click.native="remove(information.id)"></icon>
+                                        </div>
+                                        <upload :action="action"
+                                                :data="{
+                                                    id: information.id,
+                                                    type: 'information'
+                                                }"
+                                                :format="['jpg','jpeg','png']"
+                                                :headers="{
+                                                    Authorization: `Bearer ${$store.state.token.access_token}`
+                                                }"
+                                                :max-size="2048"
+                                                :on-error="uploadError"
+                                                :on-format-error="uploadFormatError"
+                                                :on-success="uploadSuccess"
+                                                ref="upload"
+                                                :show-upload-list="false"
+                                                v-if="form.informations[information.id].value === '' || form.informations[information.id].value === null">
+                                        </upload>
+                                    </div>
+                                    <p>{{ information.description }}</p>
+                                </form-item>
+                            </i-col>
+                        </row>
+                    </template>
                     <row>
                         <i-col span="12">
                             <form-item>

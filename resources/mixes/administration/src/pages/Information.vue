@@ -4,7 +4,10 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/information/list`).then(response => {
+            injection.http.post(`${window.api}/member/administration/information/list`, {
+                order: 'asc',
+                sort: 'order',
+            }).then(response => {
                 const data = response.data.data;
                 const pagination = response.data.pagination;
                 next(vm => {
@@ -21,6 +24,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -31,8 +35,21 @@
                     {
                         align: 'center',
                         key: 'order',
-                        render(row, column, index) {
-                            return `<i-input v-model="list[${index}].order"></i-input>`;
+                        render(h, data) {
+                            const row = data.row;
+                            return h('i-input', {
+                                on: {
+                                    'on-change': event => {
+                                        row.order = event.target.value;
+                                    },
+                                    'on-blur': () => {
+                                        self.update(row);
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].order,
+                                },
+                            });
                         },
                         title: '显示顺序',
                         width: 120,
@@ -40,8 +57,18 @@
                     {
                         align: 'center',
                         key: 'register',
-                        render(row, column, index) {
-                            return `<checkbox v-model="list[${index}].register"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        data.row.register = value;
+                                        self.update(data.row);
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].register,
+                                },
+                            });
                         },
                         title: '注册是否显示',
                         width: 120,
@@ -49,8 +76,18 @@
                     {
                         align: 'center',
                         key: 'details',
-                        render(row, column, index) {
-                            return `<checkbox v-model="list[${index}].details"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        data.row.details = value;
+                                        self.update(data.row);
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].details,
+                                },
+                            });
                         },
                         title: '资料页是否显示',
                         width: 120,
@@ -58,8 +95,18 @@
                     {
                         align: 'center',
                         key: 'required',
-                        render(row, column, index) {
-                            return `<checkbox v-model="list[${index}].required"></checkbox>`;
+                        render(h, data) {
+                            return h('checkbox', {
+                                on: {
+                                    input(value) {
+                                        data.row.required = value;
+                                        self.update(data.row);
+                                    },
+                                },
+                                props: {
+                                    value: self.list[data.index].required,
+                                },
+                            });
                         },
                         title: '是否必填',
                         width: 120,
@@ -70,92 +117,115 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑</i-button>
-                                    <i-button :loading="list[${index}].loading" size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">删除</span>
-                                        <span v-else>正在删除...</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('div', [
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/information/${data.row.id}/edit`,
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑'),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('span', text),
+                                ]),
+                            ]);
                         },
                         title: '操作',
                         width: 300,
                     },
                 ],
                 list: [],
-                loading: false,
                 pagination: {},
                 self: this,
             };
         },
         methods: {
-            edit(id) {
-                this.$router.push(`/member/information/${id}/edit`);
-            },
             remove(index) {
                 const self = this;
                 const information = self.list[index];
                 information.loading = true;
-                self.$http.post(`${window.api}/member/information/remove`, {
+                self.$http.post(`${window.api}/member/administration/information/remove`, {
                     id: information.id,
                 }).then(() => {
                     self.$notice.open({
                         title: '删除信息项成功！',
                     });
-                    self.$notice.open({
-                        title: '正在刷新数据...',
-                    });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/information/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '刷新数据完成！',
-                        });
-                        self.list = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
+                    self.refresh();
+                }).catch(() => {
+                    self.$notice.error({
+                        title: '删除信息项失败！',
                     });
                 }).finally(() => {
                     information.loading = false;
                 });
             },
-            submit() {
+            refresh() {
                 const self = this;
-                self.loading = true;
-                self.$http.post(`${window.api}/member/information/patch`, {
-                    data: self.list,
-                }).then(() => {
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$loading.start();
+                self.$http.post(`${window.api}/member/administration/information/list`, {
+                    order: 'asc',
+                    sort: 'order',
+                }).then(response => {
+                    const data = response.data.data;
+                    const pagination = response.data.pagination;
+                    data.forEach(item => {
+                        item.loading = false;
+                    });
+                    self.$loading.finish();
                     self.$notice.open({
-                        title: '批量更新信息项数据成功！',
+                        title: '刷新数据完成！',
                     });
+                    self.list = data;
+                    self.pagination = pagination;
+                }).catch(() => {
+                    self.$loading.error();
+                });
+            },
+            update(data) {
+                const self = this;
+                self.$notice.open({
+                    title: '更新信息项',
+                });
+                self.$loading.start();
+                self.$http.post(`${window.api}/member/administration/information/edit`, data).then(() => {
+                    self.$loading.finish();
                     self.$notice.open({
-                        title: '正在更新信息项数据...',
+                        title: '更新信息项数据成功！',
                     });
-                    self.$loading.start();
-                    self.$http.post(`${window.api}/member/information/list`).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
-                        data.forEach(item => {
-                            item.loading = false;
-                        });
-                        self.$loading.finish();
-                        self.$notice.open({
-                            title: '更新信息项数据完成！',
-                        });
-                        self.list = data;
-                        self.pagination = pagination;
-                    }).catch(() => {
-                        self.$loading.error();
+                    self.refresh();
+                }).catch(() => {
+                    self.$loading.fail();
+                    self.$notice.error({
+                        title: '更新信息项数据失败！',
                     });
-                }).finally(() => {
-                    self.loading = false;
                 });
             },
         },
@@ -168,22 +238,16 @@
                 <template slot="title">
                     <span class="text">信息列表</span>
                     <router-link class="extend" to="/member/information/create">
-                        <i-button type="default">添加信息分组</i-button>
+                        <i-button type="default">添加信息项</i-button>
                     </router-link>
                 </template>
-                <i-form :label-width="0" :model="form" ref="form" :rules="rules">
-                    <i-table :columns="columns" :context="self" :data="list"></i-table>
-                    <row>
-                        <i-col span="12">
-                            <form-item>
-                                <i-button :loading="loading" type="primary" @click.native="submit">
-                                    <span v-if="!loading">确认提交</span>
-                                    <span v-else>正在提交…</span>
-                                </i-button>
-                            </form-item>
-                        </i-col>
-                    </row>
-                </i-form>
+                <i-table :columns="columns" :context="self" :data="list"></i-table>
+                <div class="ivu-page-wrap">
+                    <page :current="pagination.current"
+                          :page-size="pagination.paginate"
+                          :total="pagination.total"
+                          @on-change="paginator"></page>
+                </div>
             </card>
         </div>
     </div>

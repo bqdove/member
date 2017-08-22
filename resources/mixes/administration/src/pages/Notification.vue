@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/notification/list`, {
+            injection.http.post(`${window.api}/member/administration/notification/list`, {
                 with: [
                     'notifiable',
                 ],
@@ -27,6 +27,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -45,13 +46,26 @@
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button :loading="list[${index}].loading" size="small" type="error" @click.native="remove(${index})">
-                                        <span v-if="!list[${index}].loading">删除</span>
-                                        <span v-else>正在删除...</span>
-                                    </i-button>
-                                    `;
+                        render(h, data) {
+                            let text;
+                            if (self.list[data.index].loading) {
+                                text = injection.trans('content.global.delete.loading');
+                            } else {
+                                text = injection.trans('content.global.delete.submit');
+                            }
+                            return h('i-button', {
+                                on: {
+                                    click() {
+                                        self.remove(data.index);
+                                    },
+                                },
+                                props: {
+                                    size: 'small',
+                                    type: 'error',
+                                },
+                            }, [
+                                h('span', text),
+                            ]);
                         },
                         title: '操作',
                         width: 200,
@@ -69,7 +83,7 @@
                 const self = this;
                 const notification = self.list[index];
                 notification.loading = true;
-                self.$http.post(`${window.api}/member/notification/remove`, {
+                self.$http.post(`${window.api}/member/administration/notification/remove`, {
                     id: notification.id,
                 }).then(() => {
                     self.$notice.open({
@@ -79,7 +93,7 @@
                         title: '正在刷新数据...',
                     });
                     self.$loading.start();
-                    self.$http.post(`${window.api}/member/notification/list`, {
+                    self.$http.post(`${window.api}/member/administration/notification/list`, {
                         with: [
                             'notifiable',
                         ],
@@ -115,8 +129,10 @@
                     <span class="text">通知消息</span>
                 </template>
                 <i-table :columns="columns" :context="self" :data="list" @on-selection-change="selection"></i-table>
-                <div class="notification-page-wrap">
-                    <page :current="pagination.current" :page-size="pagination.paginate" :total="pagination.total"
+                <div class="ivu-page-wrap">
+                    <page :current="pagination.current"
+                          :page-size="pagination.paginate"
+                          :total="pagination.total"
                           @on-change="paginator"></page>
                 </div>
             </card>

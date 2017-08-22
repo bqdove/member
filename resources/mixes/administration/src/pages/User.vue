@@ -4,12 +4,11 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/user/list`, {
+            injection.http.post(`${window.api}/member/administration/user/list`, {
                 format: 'beauty',
                 with: [
                     'ban',
                     'groups',
-                    'groups.details',
                 ],
             }).then(response => {
                 const data = response.data.data;
@@ -32,6 +31,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -41,9 +41,16 @@
                     },
                     {
                         key: 'avatar',
-                        render(row) {
-                            if (row.avatar) {
-                                return `<img class="user-list-image" src="${row.avatar}">`;
+                        render(h, data) {
+                            if (data.row.avatar) {
+                                return h('img', {
+                                    domProps: {
+                                        class: {
+                                            'user-list-image': true,
+                                        },
+                                        src: data.row.avatar,
+                                    },
+                                });
                             }
                             return '';
                         },
@@ -68,14 +75,13 @@
                     {
                         key: 'email',
                         title: injection.trans('member.user.table.email'),
-                        width: 240,
                     },
                     {
                         key: 'status',
-                        render(row) {
-                            if (row.ban === 0) {
+                        render(h, data) {
+                            if (data.row.ban === 0) {
                                 return '不封禁';
-                            } else if (row.ban > 0 && row.ban < 3) {
+                            } else if (data.row.ban > 0 && data.row.ban < 3) {
                                 return '部分封禁';
                             }
                             return '完全封禁';
@@ -91,18 +97,87 @@
                     {
                         key: 'created_at',
                         title: injection.trans('member.user.table.date'),
+                        width: 150,
                     },
                     {
                         key: 'handle',
-                        render(row, column, index) {
-                            return `
-                                    <i-button size="small" type="default" @click.native="group(${row.id})">用户组</i-button>
-                                    <!--<i-button size="small" type="default" @click.native="integral(${row.id})">积分</i-button>-->
-                                    <i-button size="small" type="default" @click.native="tag(${row.id})">标签</i-button>
-                                    <i-button size="small" type="default" @click.native="edit(${row.id})">编辑详情</i-button>
-                                    <i-button size="small" type="default" @click.native="ban(${row.id})">封禁</i-button>
-                                    <i-button size="small" type="error" @click.native="remove(${index})">删除</i-button>
-                                    `;
+                        render(h, data) {
+                            return h('div', [
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/user/${data.row.id}/group`,
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '用户组'),
+                                ]),
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/user/${data.row.id}/tag`,
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '标签'),
+                                ]),
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/user/${data.row.id}/edit`,
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '编辑详情'),
+                                ]),
+                                h('router-link', {
+                                    props: {
+                                        to: `/member/user/${data.row.id}/ban`,
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'default',
+                                        },
+                                    }, '封禁'),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.row.id);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'error',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
                         },
                         title: injection.trans('member.user.table.handle'),
                         width: 360,
@@ -125,18 +200,6 @@
             };
         },
         methods: {
-            ban(id) {
-                this.$router.push(`/member/user/${id}/ban`);
-            },
-            edit(id) {
-                this.$router.push(`/member/user/${id}/edit`);
-            },
-            group(id) {
-                this.$router.push(`/member/user/${id}/group`);
-            },
-            integral(id) {
-                this.$router.push(`/member/user/${id}/integral`);
-            },
             output() {
                 window.console.log('Output done!');
             },
@@ -152,13 +215,12 @@
                     });
                     return false;
                 }
-                self.$http.post(`${window.api}/member/user/list`, {
+                self.$http.post(`${window.api}/member/administration/user/list`, {
                     format: 'beauty',
                     search: self.keyword,
                     with: [
                         'ban',
                         'groups',
-                        'groups.details',
                     ],
                 }).then(response => {
                     const data = response.data.data;
@@ -211,7 +273,7 @@
                     </div>
                 </template>
                 <i-table :columns="columns" :context="self" :data="list" @on-selection-change="selection"></i-table>
-                <div class="user-page-wrap">
+                <div class="ivu-page-wrap">
                     <page :current="pagination.current" :page-size="pagination.paginate" :total="pagination.total"
                           @on-change="paginator"></page>
                 </div>

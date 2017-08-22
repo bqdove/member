@@ -9,6 +9,7 @@
 namespace Notadd\Member\Models;
 
 use Notadd\Foundation\Database\Model;
+use Symfony\Component\Workflow\Event\GuardEvent;
 
 /**
  * Class MemberTag.
@@ -19,6 +20,7 @@ class MemberTag extends Model
      * @var array
      */
     protected $fillable = [
+        'flow_marketing',
         'tag',
     ];
 
