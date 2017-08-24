@@ -38,7 +38,6 @@ class ModuleServiceProvider extends Module
         });
         $manager = new Manager($this->app['events'], $this->app['router']);
         $this->app->make(MemberManagement::class)->registerManager($manager);
-        $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
         $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'member');
         $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'member');
     }

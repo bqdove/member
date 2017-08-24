@@ -18,5 +18,8 @@ csrf:
 events:
     subscribes:
         - Notadd\Member\Listeners\RouteRegister
+installer: Notadd\Member\Installer
+migrations:
+    - databases/migrations
 publishes:
     assets/member/administration: resources/mixes/administration/dist/assets/member/administration
