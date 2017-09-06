@@ -2,8 +2,8 @@ name: 用户中心
 identification: notadd/member
 description: 'Notadd 用户管理模块'
 author:
-    - twilroad
-    - 269044570@qq.com
+    - Notadd
+    - notadd@ibenchu.com
 version: 1.0.0
 assets:
     administration:
