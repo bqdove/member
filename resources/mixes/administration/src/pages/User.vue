@@ -190,9 +190,7 @@
                     loading: true,
                     visible: false,
                 },
-                pagination: {
-                    count: 1,
-                },
+                pagination: {},
                 selections: [],
                 self: this,
                 trans: injection.trans,
@@ -200,6 +198,37 @@
             };
         },
         methods: {
+            changePage(page) {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在搜索数据...',
+                });
+                self.$http.post(`${window.api}/member/administration/user/list?page=${page}`, {
+                    format: 'beauty',
+                    with: [
+                        'ban',
+                        'groups',
+                    ],
+                }).then(response => {
+                    const data = response.data;
+                    if (data.data.length > 0) {
+                        self.list = data.data.map(item => {
+                            if (item.ban) {
+                                item.ban = item.ban.type;
+                            } else {
+                                item.ban = 0;
+                            }
+                            return item;
+                        });
+                    }
+                    self.pagination = data.pagination;
+                    injection.loading.finish();
+                    self.$notice.open({
+                        title: '搜索数据完成！',
+                    });
+                });
+            },
             output() {
                 window.console.log('Output done!');
             },
@@ -274,8 +303,10 @@
                 </template>
                 <i-table :columns="columns" :context="self" :data="list" @on-selection-change="selection"></i-table>
                 <div class="ivu-page-wrap">
-                    <page :current="pagination.current" :page-size="pagination.paginate" :total="pagination.total"
-                          @on-change="paginator"></page>
+                    <page :current="pagination.current"
+                          :page-size="pagination.paginate"
+                          :total="pagination.count"
+                          @on-change="changePage"></page>
                 </div>
                 <modal class-name="user-list-modal"
                        :loading="modal.loading"
