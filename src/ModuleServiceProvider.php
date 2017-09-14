@@ -9,8 +9,6 @@
 namespace Notadd\Member;
 
 use Notadd\Foundation\Member\Member;
-use Notadd\Member\Injections\Installer;
-use Notadd\Member\Injections\Uninstaller;
 use Notadd\Foundation\Member\MemberManagement;
 use Notadd\Foundation\Module\Abstracts\Module;
 use Notadd\Member\Models\MemberActivate;

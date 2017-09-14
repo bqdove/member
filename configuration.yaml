@@ -17,7 +17,7 @@ csrf:
     - 'api/member*'
 events:
     subscribes:
-        - Notadd\Member\Listeners\RouteRegister
+        - Notadd\Member\Subscribers\RouteRegister
 installer: Notadd\Member\Installer
 migrations:
     - databases/migrations

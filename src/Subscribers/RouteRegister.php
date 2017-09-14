@@ -6,7 +6,7 @@
  * @copyright (c) 2016, notadd.com
  * @datetime 2016-10-14 13:56
  */
-namespace Notadd\Member\Listeners;
+namespace Notadd\Member\Subscribers;
 
 use Notadd\Foundation\Routing\Abstracts\RouteRegister as AbstractRouteRegister;
 use Notadd\Member\Controllers\Api\Administration\BanController as BanControllerForAdministration;
