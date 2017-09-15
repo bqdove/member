@@ -1,5 +1,4 @@
 import {
-    mixinNavigation,
     mixinRouter,
     mixinSidebar,
 } from '../mixes/injection';
@@ -14,7 +13,6 @@ function install(instance) {
         sidebar: instance.sidebar,
         trans: instance.trans,
     });
-    mixinNavigation(instance);
     mixinRouter(instance);
     mixinSidebar(instance);
 }
