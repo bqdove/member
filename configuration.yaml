@@ -15,9 +15,6 @@ assets:
                 - assets/member/administration/css/module.min.css
 csrf:
     - 'api/member*'
-events:
-    subscribes:
-        - Notadd\Member\Subscribers\RouteRegister
 installer: Notadd\Member\Installer
 migrations:
     - databases/migrations
