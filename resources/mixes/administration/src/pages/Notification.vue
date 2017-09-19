@@ -9,8 +9,7 @@
                     'notifiable',
                 ],
             }).then(response => {
-                const data = response.data.data;
-                const pagination = response.data.pagination;
+                const { data, pagination } = response.data;
                 next(vm => {
                     data.forEach(item => {
                         item.loading = false;
@@ -98,8 +97,7 @@
                             'notifiable',
                         ],
                     }).then(response => {
-                        const data = response.data.data;
-                        const pagination = response.data.pagination;
+                        const { data, pagination } = response.data;
                         data.forEach(item => {
                             item.loading = false;
                             item.title = item.data.title;

@@ -7,10 +7,9 @@
             injection.http.post(`${window.api}/member/administration/information/group`, {
                 id: to.params.id,
             }).then(response => {
-                const group = response.data.data;
-                const informations = response.data.informations;
+                const { data, informations } = response.data.data;
                 next(vm => {
-                    vm.form = group;
+                    vm.form = data;
                     vm.form.informations = [];
                     Object.keys(informations).forEach(index => {
                         informations[index].label = informations[index].id;

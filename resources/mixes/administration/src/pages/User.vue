@@ -11,8 +11,7 @@
                     'groups',
                 ],
             }).then(response => {
-                const data = response.data.data;
-                const pagination = response.data.pagination;
+                const { data, pagination } = response.data.data;
                 next(vm => {
                     data.forEach(item => {
                         if (item.ban) {
@@ -211,9 +210,8 @@
                         'groups',
                     ],
                 }).then(response => {
-                    const data = response.data;
-                    if (data.data.length > 0) {
-                        self.list = data.data.map(item => {
+                    if (response.data.data.length > 0) {
+                        self.list = response.data.data.map(item => {
                             if (item.ban) {
                                 item.ban = item.ban.type;
                             } else {
@@ -222,7 +220,7 @@
                             return item;
                         });
                     }
-                    self.pagination = data.pagination;
+                    self.pagination = response.data.pagination;
                     injection.loading.finish();
                     self.$notice.open({
                         title: '搜索数据完成！',
@@ -252,8 +250,7 @@
                         'groups',
                     ],
                 }).then(response => {
-                    const data = response.data.data;
-                    const pagination = response.data.pagination;
+                    const { data, pagination } = response.data.data;
                     data.forEach(item => {
                         if (item.ban) {
                             item.ban = item.ban.type;

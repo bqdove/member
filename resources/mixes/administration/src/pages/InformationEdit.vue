@@ -9,8 +9,7 @@
             injection.http.post(`${window.api}/member/administration/information`, {
                 id: to.params.id,
             }).then(response => {
-                const data = response.data.data;
-                const groups = response.data.groups;
+                const { data, groups } = response.data;
                 next(vm => {
                     vm.form = data;
                     vm.form.groups = [];

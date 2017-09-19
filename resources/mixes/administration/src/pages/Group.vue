@@ -5,12 +5,11 @@
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
             injection.http.post(`${window.api}/member/administration/group/list`).then(response => {
-                const data = response.data.data;
                 next(vm => {
-                    data.forEach(item => {
+                    response.data.data.forEach(item => {
                         item.loading = false;
                     });
-                    vm.list = data;
+                    vm.list = response.data.data;
                     injection.loading.finish();
                     injection.sidebar.active('member');
                 });

@@ -8,8 +8,7 @@
                 order: 'asc',
                 sort: 'order',
             }).then(response => {
-                const data = response.data.data;
-                const pagination = response.data.pagination;
+                const { data, pagination } = response.data;
                 next(vm => {
                     data.forEach(item => {
                         item.loading = false;
@@ -67,18 +66,18 @@
                     {
                         key: 'order',
                         render(h, data) {
-                            const row = data.row;
+                            const store = data.row;
                             return h('i-input', {
                                 on: {
                                     'on-change': event => {
-                                        row.order = event.target.value;
+                                        store.order = event.target.value;
                                     },
                                     'on-blur': () => {
                                         self.$loading.start();
                                         self.$notice.open({
                                             title: '正在更新信息分组信息...',
                                         });
-                                        self.$http.post(`${window.api}/member/administration/information/group/edit`, row).then(() => {
+                                        self.$http.post(`${window.api}/member/administration/information/group/edit`, store).then(() => {
                                             self.$loading.finish();
                                             self.$notice.open({
                                                 title: '更新信息分组信息成功！',
@@ -181,8 +180,7 @@
                     order: 'asc',
                     sort: 'order',
                 }).then(response => {
-                    const data = response.data.data;
-                    const pagination = response.data.pagination;
+                    const { data, pagination } = response.data;
                     data.forEach(item => {
                         item.loading = false;
                     });

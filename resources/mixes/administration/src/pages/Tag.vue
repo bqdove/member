@@ -73,10 +73,6 @@
                         label: 'delete',
                         text: '删除',
                     },
-//                    {
-//                        label: 'combine',
-//                        text: '合并到',
-//                    },
                 ],
                 list: [],
                 loading: false,

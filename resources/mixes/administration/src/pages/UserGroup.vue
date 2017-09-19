@@ -10,14 +10,13 @@
                     id: to.params.id,
                     with: 'groups',
                 }),
-            ]).then(injection.http.spread((groups, user) => {
-                const data = groups.data.data;
-                const group = user.data.data.groups;
+            ]).then(injection.http.spread((groupsData, userData) => {
+                const { data, groups } = groupsData.data;
                 next(vm => {
                     data.forEach(item => {
-                        if (group) {
-                            Object.keys(group).map(key => {
-                                const has = group[key];
+                        if (groups) {
+                            Object.keys(groups).map(key => {
+                                const has = groups[key];
                                 if (has.type === 'default') {
                                     vm.form.date = has.end;
                                     vm.form.group = has.id;
@@ -32,7 +31,7 @@
                         item.check = item.check ? item.check : false;
                         item.end = item.end ? item.end : '';
                     });
-                    vm.form.id = user.data.data.id;
+                    vm.form.id = userData.data.data.id;
                     vm.groups = data;
                     injection.loading.finish();
                     injection.sidebar.active('member');
@@ -68,14 +67,14 @@
             submit() {
                 const groups = [];
                 const self = this;
-                const id = self.$route.params.id;
+                const dataId = self.$route.params.id;
                 self.loading = true;
                 self.$refs.form.validate(valid => {
                     if (valid) {
                         groups.push({
                             end: self.form.date,
                             group_id: self.form.group,
-                            member_id: id,
+                            member_id: dataId,
                             next: self.form.next ? self.form.next : 0,
                             reason: self.form.reason,
                             type: 'default',
@@ -85,7 +84,7 @@
                                 groups.push({
                                     end: group.end,
                                     group_id: group.id,
-                                    member_id: id,
+                                    member_id: dataId,
                                     next: 0,
                                     reason: '',
                                     type: 'extend',
@@ -95,7 +94,7 @@
                         });
                         self.$http.post(`${window.api}/member/administration/user/group`, {
                             data: groups,
-                            member_id: id,
+                            member_id: dataId,
                         }).then(response => {
                             self.$notice.open({
                                 title: response.data.message,

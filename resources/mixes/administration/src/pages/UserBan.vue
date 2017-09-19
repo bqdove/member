@@ -10,7 +10,7 @@
                     'ban',
                 ],
             }).then(response => {
-                const data = response.data.data;
+                const { data } = response.data;
                 next(vm => {
                     vm.form.id = data.id;
                     vm.form.name = data.name;

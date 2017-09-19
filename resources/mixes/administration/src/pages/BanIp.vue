@@ -5,13 +5,12 @@
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
             injection.http.post(`${window.api}/member/administration/ban/ip`).then(response => {
-                const list = response.data.data;
-                const pagination = response.data.pagination;
+                const { data, pagination } = response.data;
                 next(vm => {
-                    list.forEach(item => {
+                    data.forEach(item => {
                         item.loading = false;
                     });
-                    vm.list = list;
+                    vm.list = data;
                     vm.pagination = pagination;
                     injection.loading.finish();
                     injection.sidebar.active('member');
@@ -89,13 +88,12 @@
                     title: '正在更新数据',
                 });
                 self.$http.post(`${window.api}/member/administration/ban/ip`).then(response => {
-                    const list = response.data.data;
-                    const pagination = response.data.pagination;
-                    list.forEach(item => {
+                    const { data, pagination } = response.data;
+                    data.forEach(item => {
                         item.loading = false;
                     });
                     self.$loading.finish();
-                    self.list = list;
+                    self.list = data;
                     self.pagination = pagination;
                 }).catch(() => {
                     self.$loading.error();

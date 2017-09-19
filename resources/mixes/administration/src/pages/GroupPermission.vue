@@ -6,12 +6,11 @@
             injection.loading.start();
             injection.http.post(`${window.api}/member/administration/permission/get`).then(response => {
                 window.console.log(response);
-                const data = response.data.data;
                 next(vm => {
-                    vm.groups = data.groups;
-                    vm.modules = data.modules;
-                    vm.permissions = data.permissions;
-                    vm.types = data.types;
+                    vm.groups = response.data.data.groups;
+                    vm.modules = response.data.data.modules;
+                    vm.permissions = response.data.data.permissions;
+                    vm.types = response.data.data.types;
                     injection.loading.finish();
                     injection.sidebar.active('member');
                 });
