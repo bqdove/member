@@ -37,6 +37,6 @@ class CreateSocialiteAuthTable extends Migration
      */
     public function down()
     {
-        $this->schema->drop('socialite_auth_states');
+        $this->schema->drop('socialite_auth');
     }
 }
