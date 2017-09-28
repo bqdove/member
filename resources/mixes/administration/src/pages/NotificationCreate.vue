@@ -15,7 +15,6 @@
                 next(vm => {
                     vm.users = response.data.data;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             }).catch(() => {
                 injection.loading.error();

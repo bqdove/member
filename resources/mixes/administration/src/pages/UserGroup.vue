@@ -34,7 +34,6 @@
                     vm.form.id = userData.data.data.id;
                     vm.groups = data;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             })).catch(() => {
                 injection.loading.error();

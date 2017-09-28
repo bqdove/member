@@ -9,7 +9,6 @@
                     vm.form.informations = response.data.data.informations;
                     vm.groups = response.data.data.extras;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             }).catch(() => {
                 injection.loading.error();

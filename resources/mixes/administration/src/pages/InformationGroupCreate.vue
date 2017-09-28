@@ -11,8 +11,6 @@
                 next(vm => {
                     vm.informations = informations;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
-                    injection.sidebar.active('member');
                 });
             }).catch(() => {
                 injection.loading.error();

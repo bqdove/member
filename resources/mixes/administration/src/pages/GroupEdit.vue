@@ -8,9 +8,8 @@
                 id: to.params.id,
             }).then(response => {
                 next(vm => {
-                    injection.loading.finish();
                     vm.form = response.data.data;
-                    injection.sidebar.active('member');
+                    injection.loading.finish();
                 });
             }).catch(() => {
                 injection.loading.error();

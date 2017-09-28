@@ -23,7 +23,6 @@
                     vm.list = data;
                     vm.pagination = pagination;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             }).catch(() => {
                 injection.loading.error();

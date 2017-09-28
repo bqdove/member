@@ -18,7 +18,6 @@
                     vm.form.from = group.data.data;
                     vm.groups = groups.data.data;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             })).catch(() => {
                 injection.loading.fail();

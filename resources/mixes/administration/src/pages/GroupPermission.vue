@@ -12,7 +12,6 @@
                     vm.permissions = response.data.data.permissions;
                     vm.types = response.data.data.types;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             }).catch(() => {
                 injection.loading.error();

@@ -22,7 +22,6 @@
                     window.console.log(vm.informations);
                     vm.informations = informations;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             }).catch(() => {
                 injection.loading.fail();

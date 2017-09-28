@@ -9,7 +9,6 @@
                 next(vm => {
                     vm.list = response.data.data;
                     injection.loading.finish();
-                    injection.sidebar.active('member');
                 });
             }).catch(() => {
                 injection.loading.error();

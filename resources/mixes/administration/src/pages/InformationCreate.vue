@@ -1,12 +1,10 @@
 <script>
     import fields from '../helpers/fields';
     import fieldPrivacies from '../helpers/privacies';
-    import injection from '../helpers/injection';
 
     export default {
         beforeRouteEnter(to, from, next) {
             next(() => {
-                injection.sidebar.active('member');
             });
         },
         data() {
