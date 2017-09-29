@@ -28,7 +28,8 @@ import UserIntegral from '../pages/UserIntegral.vue';
 import UserTag from '../pages/UserTag.vue';
 
 export default function (injection) {
-    injection.useModuleRoute([
+    injection.routers = [
+        ...injection.routers,
         {
             children: [
                 {
@@ -170,5 +171,5 @@ export default function (injection) {
             component: Layout,
             path: '/member',
         },
-    ]);
+    ];
 }
