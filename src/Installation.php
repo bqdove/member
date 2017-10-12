@@ -2,43 +2,43 @@
 /**
  * This file is part of Notadd.
  *
- * @author TwilRoad <269044570@qq.com>
+ * @author        TwilRoad <heshudong@ibenchu.com>
  * @copyright (c) 2017, notadd.com
- * @datetime 2017-08-24 20:58
+ * @datetime      2017-10-12 15:42
  */
 namespace Notadd\Member;
 
-use Illuminate\Container\Container;
+use Notadd\Foundation\Module\Abstracts\Installation as AbstractInstallation;
+use Notadd\Foundation\Routing\Traits\Helpers;
 use Notadd\Foundation\Setting\Contracts\SettingsRepository;
 use Notadd\Member\Models\MemberGroup;
 use Notadd\Member\Models\MemberGroupRelation;
 
 /**
- * Class Installer.
+ * Class Installation.
  */
-class Installer implements \Notadd\Foundation\Module\Contracts\Installer
+class Installation extends AbstractInstallation
 {
-    /**
-     * @var \Illuminate\Container\Container
-     */
-    protected $container;
+    use Helpers;
 
     /**
-     * Installer constructor.
-     *
-     * @param \Illuminate\Container\Container $container
+     * Pre-handle for install.
      */
-    public function __construct(Container $container)
+    public function preInstall()
     {
-        $this->container = $container;
     }
 
     /**
-     * Handler install.
-     *
-     * @return true
+     * Pre-handle for uninstall.
      */
-    public function install()
+    public function preUninstall()
+    {
+    }
+
+    /**
+     * Post-handle for install.
+     */
+    public function postInstall()
     {
         MemberGroup::query()->create([
             'identification' => 'admin',
@@ -64,7 +64,12 @@ class Installer implements \Notadd\Foundation\Module\Contracts\Installer
             'global::global::global::setting.set'           => ['admin'],
             'global::administration::global::entry'         => ['admin'],
         ]));
+    }
 
-        return true;
+    /**
+     * Post-handle for uninstall
+     */
+    public function postUninstall()
+    {
     }
 }
