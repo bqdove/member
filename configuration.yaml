@@ -16,6 +16,63 @@ assets:
 csrf:
     - 'api/member*'
 installer: Notadd\Member\Installer
+menus:
+    member:
+        icon: ios-person
+        permission:
+        path: '/member'
+        text: 用户中心
+        children:
+            -
+                children:
+                    -
+                        path: /member/user
+                        text: 用户列表
+                    -
+                        path: /member/tag
+                        text: 用户标签
+                icon: plus
+                text: 用户管理
+            -
+                children:
+                    -
+                        path: /member/information
+                        text: 信息列表
+                    -
+                        path: /member/information/group
+                        text: 信息分组
+                icon: plus
+                text: 用户资料
+            -
+                children:
+                    -
+                        path: /member/ban
+                        text: 封禁用户
+                    -
+                        path: /member/ban/ip
+                        text: 封禁IP
+                icon: plus
+                text: 封禁管理
+            -
+                children:
+                    -
+                        path: /member/group
+                        text: 用户组列表
+                    -
+                        path: /member/group/permission
+                        text: 用户组权限
+                icon: plus
+                text: 用户组管理
+            -
+                children:
+                    -
+                        path: /member/notification
+                        text: 消息列表
+                    -
+                        path: /member/notification/create
+                        text: 群发消息
+                icon: plus
+                text: 消息管理
 migrations:
     - databases/migrations
 publishes:
