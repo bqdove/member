@@ -20,7 +20,7 @@ class SocialiteController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Socialite\AuthHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Symfony\Component\HttpFoundation\RedirectResponse|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Symfony\Component\HttpFoundation\RedirectResponse|\Zend\Diactoros\Response
      */
     public function auth(AuthHandler $handler)
     {
@@ -36,7 +36,7 @@ class SocialiteController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Socialite\TokenHandler $handler
      *
-     * @return bool|\Illuminate\Support\Collection|\Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|string|\Zend\Diactoros\Response
+     * @return bool|\Illuminate\Support\Collection|\Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|string|\Zend\Diactoros\Response
      */
     public function token(TokenHandler $handler)
     {

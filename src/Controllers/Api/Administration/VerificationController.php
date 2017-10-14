@@ -20,7 +20,7 @@ class VerificationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Verification\SendHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function send(SendHandler $handler)
     {
@@ -30,7 +30,7 @@ class VerificationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Verification\VerifyHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function verify(VerifyHandler $handler)
     {

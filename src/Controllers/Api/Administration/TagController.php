@@ -25,7 +25,7 @@ class TagController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Tag\CreateHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function create(CreateHandler $handler)
     {
@@ -35,7 +35,7 @@ class TagController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Tag\EditHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function edit(EditHandler $handler)
     {
@@ -45,7 +45,7 @@ class TagController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Tag\ListHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function list(ListHandler $handler)
     {
@@ -55,7 +55,7 @@ class TagController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Tag\PatchHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function patch(PatchHandler $handler)
     {
@@ -65,7 +65,7 @@ class TagController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Tag\RelationHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function relation(RelationHandler $handler)
     {
@@ -75,7 +75,7 @@ class TagController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Tag\TagHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function tag(TagHandler $handler)
     {
@@ -85,7 +85,7 @@ class TagController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Tag\UserHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function user(UserHandler $handler)
     {

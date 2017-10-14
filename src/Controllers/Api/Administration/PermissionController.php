@@ -20,7 +20,7 @@ class PermissionController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Permission\GetHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function get(GetHandler $handler)
     {
@@ -30,7 +30,7 @@ class PermissionController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Permission\SetHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function set(SetHandler $handler)
     {

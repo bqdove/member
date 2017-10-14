@@ -23,7 +23,7 @@ class InformationGroupController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\Group\CreateHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function create(CreateHandler $handler)
     {
@@ -33,7 +33,7 @@ class InformationGroupController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\Group\EditHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function edit(EditHandler $handler)
     {
@@ -43,7 +43,7 @@ class InformationGroupController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\Group\GroupHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function group(GroupHandler $handler)
     {
@@ -53,7 +53,7 @@ class InformationGroupController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\Group\ListHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function list(ListHandler $handler)
     {
@@ -63,7 +63,7 @@ class InformationGroupController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\Group\RemoveHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function remove(RemoveHandler $handler)
     {

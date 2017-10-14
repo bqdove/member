@@ -25,7 +25,7 @@ class InformationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\CreateHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function create(CreateHandler $handler)
     {
@@ -35,7 +35,7 @@ class InformationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\EditHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function edit(EditHandler $handler)
     {
@@ -45,7 +45,7 @@ class InformationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\InformationHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function information(InformationHandler $handler)
     {
@@ -55,7 +55,7 @@ class InformationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\ListHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function list(ListHandler $handler)
     {
@@ -65,7 +65,7 @@ class InformationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\RemoveHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function remove(RemoveHandler $handler)
     {
@@ -75,7 +75,7 @@ class InformationController extends Controller
     /**
      * @param \Notadd\Member\Handlers\Administration\Information\RuleHandler $handler
      *
-     * @return \Notadd\Foundation\Passport\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
+     * @return \Notadd\Foundation\Routing\Responses\ApiResponse|\Psr\Http\Message\ResponseInterface|\Zend\Diactoros\Response
      */
     public function rule(RuleHandler $handler)
     {
