@@ -1,0 +1,7 @@
+administration:
+    notadd/member:
+        permissions: ''
+        scripts:
+            - assets/member/administration/js/module.min.js
+        stylesheets:
+            - assets/member/administration/css/module.min.css
