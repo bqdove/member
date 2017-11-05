@@ -1,9 +1,10 @@
 name: 用户中心
 identification: notadd/member
 description: 'Notadd 用户管理模块'
-author:
-    - Notadd
-    - notadd@ibenchu.com
+authors:
+    -
+        name: Notadd
+        email: notadd@ibenchu.com
 version: 1.0.0
 csrf:
     - 'api/member*'
