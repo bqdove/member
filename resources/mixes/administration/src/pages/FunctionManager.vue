@@ -186,7 +186,11 @@
                             return h('div', [
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/function/manager/look',
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
