@@ -78,7 +78,15 @@
                                 }, '封禁'),
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/user/manager/create',
+                                                query: {
+                                                    type: '1',
+                                                    name: data.row.name,
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -251,7 +259,14 @@
                 <tab-pane label="用户管理" name="name1">
                     <card :bordered="false">
                         <div class="top-btn-action">
-                            <i-button class="btn-action" type="ghost">+新增角色</i-button>
+                            <router-link :to="{
+                                path: '/user/manager/create',
+                                query: {
+                                    type: '0',
+                                },
+                            }">
+                                <i-button class="btn-action" type="ghost">+新增角色</i-button>
+                            </router-link>
                             <i-button class="btn-action" type="ghost">批量删除</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>

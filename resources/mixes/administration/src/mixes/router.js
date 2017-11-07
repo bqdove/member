@@ -28,6 +28,7 @@ import UserIntegral from '../pages/UserIntegral.vue';
 import UserTag from '../pages/UserTag.vue';
 import Organization from '../pages/Organization.vue';
 import UserManager from '../pages/UserManager.vue';
+import UserManagerCreate from '../pages/UserManagerCreate.vue';
 
 export default function (injection) {
     injection.routers = [
@@ -178,6 +179,11 @@ export default function (injection) {
                     beforeEnter: injection.middleware.requireAuth,
                     component: UserManager,
                     path: 'user/manager',
+                },
+                {
+                    beforeEnter: injection.middleware.requireAuth,
+                    component: UserManagerCreate,
+                    path: 'user/manager/create',
                 },
             ],
             component: Layout,
