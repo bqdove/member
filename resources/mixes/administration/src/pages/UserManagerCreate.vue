@@ -20,6 +20,7 @@
                 form: {
                     image: '',
                     name: '',
+                    sex: '1',
                 },
                 loading: false,
                 parent: {
@@ -161,9 +162,57 @@
                     <h5>详细资料</h5>
                     <row>
                         <i-col span="12">
+                            <form-item label="用户昵称" prop="nike_name">
+                                <i-input v-model="form.nike_name"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
+                            <form-item label="真实姓名" prop="real_name">
+                                <i-input v-model="form.real_name"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
+                            <form-item label="性别" prop="sex">
+                                <radio-group v-model="form.sex">
+                                    <radio label="1">男</radio>
+                                    <radio label="0">女</radio>
+                                </radio-group>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
+                            <form-item label="生日" prop="date">
+                                <date-picker type="date" placeholder="选择日期"
+                                             v-model="form.date"></date-picker>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
+                            <form-item label="所属角色" prop="role">
+                                <i-input :disabled="parent.type === '1'"
+                                         v-model="form.role"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
+                            <form-item label="所属部门" prop="department">
+                                <i-input :disabled="parent.type === '1'"
+                                         v-model="form.department"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
                             <form-item>
                                 <i-button :loading="loading" @click.native="submit"
-                                          class="btn-group">
+                                          class="btn-group" type="primary">
                                     <span v-if="!loading">确认提交</span>
                                     <span v-else>正在提交…</span>
                                 </i-button>
