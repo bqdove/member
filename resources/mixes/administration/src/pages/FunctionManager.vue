@@ -7,60 +7,16 @@
         data() {
             const self = this;
             return {
-                columns: [
-                    {
-                        align: 'center',
-                        type: 'selection',
-                        width: 60,
-                    },
-                    {
-                        align: 'center',
-                        key: 'name',
-                        title: '姓名',
-                    },
-                    {
-                        align: 'center',
-                        key: 'user_name',
-                        title: '用户名',
-                    },
+                businessColumns: [
                     {
                         align: 'center',
                         key: 'id',
                         title: 'ID',
+                        width: 160,
                     },
                     {
-                        align: 'center',
-                        key: 'status',
-                        render(h, data) {
-                            if (data.row.status) {
-                                return h('span', [
-                                    h('icon', {
-                                        props: {
-                                            type: 'checkmark-circled',
-                                            color: '#02a845',
-                                        },
-                                    }),
-                                ]);
-                            }
-                            return h('span', [
-                                h('icon', {
-                                    props: {
-                                        type: 'close-circled',
-                                        color: '#ff3300',
-                                        size: '16px',
-                                    },
-                                }),
-                            ]);
-                        },
-                        title: '状态',
-                    },
-                    {
-                        key: 'email',
-                        title: '邮箱',
-                    },
-                    {
-                        key: 'phone',
-                        title: '手机',
+                        key: 'name',
+                        title: '功能名称',
                     },
                     {
                         align: 'center',
@@ -75,18 +31,10 @@
                                         size: 'small',
                                         type: 'ghost',
                                     },
-                                }, '封禁'),
+                                }, '查看'),
                                 h('i-button', {
                                     on: {
-                                        click() {
-                                            self.$router.push({
-                                                path: '/member/user/manager/create',
-                                                query: {
-                                                    type: '1',
-                                                    name: data.row.name,
-                                                },
-                                            });
-                                        },
+                                        click() {},
                                     },
                                     props: {
                                         size: 'small',
@@ -95,7 +43,7 @@
                                     style: {
                                         marginLeft: '10px',
                                     },
-                                }, '编辑'),
+                                }, '设置'),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -117,43 +65,179 @@
                         width: 280,
                     },
                 ],
+                businessData: [
+                    {
+                        id: 1323,
+                        name: 'benchu1',
+                    },
+                    {
+                        id: 5677,
+                        name: 'benchu2',
+                    },
+                    {
+                        id: 8684,
+                        name: 'benchu3',
+                    },
+                ],
                 deleteModal: {
                     name: 'ibenchu',
-                    num: 2,
                 },
-                list: [
+                forumColumns: [
                     {
-                        email: '3265256564@ibenchu.com',
-                        id: 1323,
-                        name: 'benchu',
-                        phone: 3137264,
-                        status: true,
-                        user_name: 'admin',
+                        align: 'center',
+                        key: 'id',
+                        title: 'ID',
+                        width: 160,
                     },
                     {
-                        email: '3265256564@ibenchu.com',
-                        id: 1323,
-                        name: 'benchu',
-                        phone: 3137264,
-                        status: true,
-                        user_name: 'admin',
+                        key: 'name',
+                        title: '功能名称',
                     },
                     {
-                        email: '3265256564@ibenchu.com',
+                        align: 'center',
+                        key: 'action',
+                        render(h, data) {
+                            return h('div', [
+                                h('i-button', {
+                                    on: {
+                                        click() {},
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                }, '查看'),
+                                h('i-button', {
+                                    on: {
+                                        click() {},
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '设置'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.deleteModal.name = data.row.name;
+                                            self.modal1 = true;
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
+                        },
+                        title: '操作',
+                        width: 280,
+                    },
+                ],
+                forumData: [
+                    {
                         id: 1323,
-                        name: 'benchu',
-                        phone: 3137264,
-                        status: false,
-                        user_name: 'admin',
+                        name: 'benchu1',
+                    },
+                    {
+                        id: 5677,
+                        name: 'benchu2',
+                    },
+                    {
+                        id: 8684,
+                        name: 'benchu3',
+                    },
+                ],
+                mallColumns: [
+                    {
+                        align: 'center',
+                        key: 'id',
+                        title: 'ID',
+                        width: 160,
+                    },
+                    {
+                        key: 'name',
+                        title: '功能名称',
+                    },
+                    {
+                        align: 'center',
+                        key: 'action',
+                        render(h, data) {
+                            return h('div', [
+                                h('i-button', {
+                                    on: {
+                                        click() {},
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                }, '查看'),
+                                h('i-button', {
+                                    on: {
+                                        click() {},
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '设置'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.deleteModal.name = data.row.name;
+                                            self.modal1 = true;
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
+                        },
+                        title: '操作',
+                        width: 280,
+                    },
+                ],
+                mallData: [
+                    {
+                        id: 1323,
+                        name: 'benchu1',
+                    },
+                    {
+                        id: 5677,
+                        name: 'benchu2',
+                    },
+                    {
+                        id: 8684,
+                        name: 'benchu3',
                     },
                 ],
                 modal1: false,
-                page: {
+                pagination1: {
                     count: 3,
                     current: 1,
                     paginate: 2,
                 },
-                pagination: {
+                pagination2: {
+                    count: 3,
+                    current: 1,
+                    paginate: 2,
+                },
+                pagination3: {
                     count: 3,
                     current: 1,
                     paginate: 2,
@@ -165,19 +249,9 @@
         methods: {
             changePage1() {},
             changePage2() {},
-            batchDelete() {
-                this.modal2 = true;
-            },
-            batchRemove() {
-                this.modal2 = true;
-            },
-            submitCancel(data) {
-                if (data === 1) {
-                    this.modal1 = false;
-                }
-                if (data === 2) {
-                    this.modal2 = false;
-                }
+            changePage3() {},
+            submitCancel() {
+                this.modal1 = false;
             },
             submitDelete() {},
         },
@@ -193,15 +267,15 @@
                             <i-button class="btn-action" type="ghost">+新增功能</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
-                        <i-table :columns="columns"
-                                 :data="list"
-                                 ref="list"
+                        <i-table :columns="mallColumns"
+                                 :data="mallData"
+                                 ref="mall"
                                  highlight-row>
                         </i-table>
                         <div class="ivu-page-wrap">
-                            <page :current="pagination.current"
-                                  :page-size="pagination.paginate"
-                                  :total="pagination.count"
+                            <page :current="pagination1.current"
+                                  :page-size="pagination1.paginate"
+                                  :total="pagination1.count"
                                   @on-change="changePage1"
                                   show-elevator></page>
                         </div>
@@ -213,16 +287,16 @@
                             <i-button class="btn-action" type="ghost">+新增功能</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
-                        <i-table :columns="columns"
-                                 :data="list"
-                                 ref="list"
+                        <i-table :columns="businessColumns"
+                                 :data="businessData"
+                                 ref="business"
                                  highlight-row>
                         </i-table>
                         <div class="ivu-page-wrap">
-                            <page :current="pagination.current"
-                                  :page-size="pagination.paginate"
-                                  :total="pagination.count"
-                                  @on-change="changePage1"
+                            <page :current="pagination2.current"
+                                  :page-size="pagination2.paginate"
+                                  :total="pagination2.count"
+                                  @on-change="changePage2"
                                   show-elevator></page>
                         </div>
                     </card>
@@ -233,16 +307,16 @@
                             <i-button class="btn-action" type="ghost">+新增功能</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
-                        <i-table :columns="columns"
-                                 :data="list"
-                                 ref="list"
+                        <i-table :columns="forumColumns"
+                                 :data="forumData"
+                                 ref="forum"
                                  highlight-row>
                         </i-table>
                         <div class="ivu-page-wrap">
-                            <page :current="pagination.current"
-                                  :page-size="pagination.paginate"
-                                  :total="pagination.count"
-                                  @on-change="changePage1"
+                            <page :current="pagination3.current"
+                                  :page-size="pagination3.paginate"
+                                  :total="pagination3.count"
+                                  @on-change="changePage3"
                                   show-elevator></page>
                         </div>
                     </card>
@@ -261,7 +335,7 @@
                         <row>
                             <i-col class="btn-group">
                                 <i-button type="ghost" class="cancel-btn"
-                                          @click.native="submitCancel(1)">取消</i-button>
+                                          @click.native="submitCancel">取消</i-button>
                                 <i-button :loading="loading" type="primary" class="cancel-btn"
                                           @click.native="submitDelete">
                                     <span v-if="!loading">确认</span>
