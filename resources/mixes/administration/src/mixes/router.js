@@ -26,6 +26,8 @@ import UserEdit from '../pages/UserEdit.vue';
 import UserGroup from '../pages/UserGroup.vue';
 import UserIntegral from '../pages/UserIntegral.vue';
 import UserTag from '../pages/UserTag.vue';
+import Organization from '../pages/Organization.vue';
+import UserManager from '../pages/UserManager.vue';
 
 export default function (injection) {
     injection.routers = [
@@ -166,6 +168,16 @@ export default function (injection) {
                     beforeEnter: injection.middleware.requireAuth,
                     component: UserTag,
                     path: 'user/:id/tag',
+                },
+                {
+                    beforeEnter: injection.middleware.requireAuth,
+                    component: Organization,
+                    path: 'organization',
+                },
+                {
+                    beforeEnter: injection.middleware.requireAuth,
+                    component: UserManager,
+                    path: 'user/manager',
                 },
             ],
             component: Layout,
