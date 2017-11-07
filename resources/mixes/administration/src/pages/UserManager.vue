@@ -99,7 +99,7 @@
                                 h('i-button', {
                                     on: {
                                         click() {
-                                            self.list.splice(data.index, 1);
+                                            self.modal1 = true;
                                         },
                                     },
                                     props: {
@@ -116,6 +116,10 @@
                         width: 280,
                     },
                 ],
+                deleteModal: {
+                    name: 'ibenchu',
+                    num: 2,
+                },
                 list: [
                     {
                         email: '3265256564@ibenchu.com',
@@ -142,6 +146,8 @@
                         user_name: 'admin',
                     },
                 ],
+                modal1: false,
+                modal2: false,
                 page: {
                     count: 3,
                     current: 1,
@@ -249,6 +255,17 @@
         methods: {
             changePage1() {},
             changePage2() {},
+            batchRemove() {
+                this.modal2 = true;
+            },
+            submitCancel(data) {
+                if (data === 1) {
+                    this.modal1 = false;
+                }
+                if (data === 2) {
+                    this.modal2 = false;
+                }
+            },
         },
     };
 </script>
@@ -267,7 +284,8 @@
                             }">
                                 <i-button class="btn-action" type="ghost">+新增角色</i-button>
                             </router-link>
-                            <i-button class="btn-action" type="ghost">批量删除</i-button>
+                            <i-button class="btn-action" @click.native="batchRemove"
+                                      type="ghost">批量删除</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
                         <i-table :columns="columns"
@@ -308,6 +326,54 @@
                     </card>
                 </tab-pane>
             </tabs>
+            <modal
+                    v-model="modal1"
+                    title="删除" class="setting-modal-delete">
+                <div>
+                    <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
+                        <row>
+                            <i-col class="first-row-title delete-file-tip">
+                                <span>确定要删除用户"{{ deleteModal.name }}"吗？</span>
+                            </i-col>
+                        </row>
+                        <row>
+                            <i-col class="btn-group">
+                                <i-button type="ghost" class="cancel-btn"
+                                          @click.native="submitCancel(1)">取消</i-button>
+                                <i-button :loading="loading" type="primary" class="cancel-btn"
+                                          @click.native="submitDelete">
+                                    <span v-if="!loading">确认</span>
+                                    <span v-else>正在删除…</span>
+                                </i-button>
+                            </i-col>
+                        </row>
+                    </i-form>
+                </div>
+            </modal>
+            <modal
+                    v-model="modal2"
+                    title="删除" class="setting-modal-delete">
+                <div>
+                    <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
+                        <row>
+                            <i-col class="first-row-title delete-file-tip">
+                                <span>确定要删除这{{ deleteModal.num }}个用户吗？</span>
+                            </i-col>
+                        </row>
+                        <row>
+                            <i-col class="btn-group">
+                                <i-button type="ghost" class="cancel-btn"
+                                          @click.native="submitCancel(2)">取消</i-button>
+                                <i-button :loading="loading" type="primary" class="cancel-btn"
+                                          @click.native="batchRemovesure">
+                                    <span v-if="!loading">确认</span>
+                                    <span v-else>正在删除…</span>
+                                </i-button>
+                            </i-col>
+                        </row>
+                    </i-form>
+                </div>
+            </modal>
         </div>
     </div>
 </template>
