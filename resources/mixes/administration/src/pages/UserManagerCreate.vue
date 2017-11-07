@@ -3,6 +3,7 @@
         beforeRouteEnter(to, from, next) {
             if (to.query.type === '1') {
                 next(vm => {
+                    vm.parent.type = to.query.type;
                     vm.parent.name = to.query.name;
                 });
             } else if (to.query.type === '0') {
@@ -22,11 +23,11 @@
                 },
                 loading: false,
                 rules: {
-                    name: [
+                    email: [
                         {
-                            message: '供应商名称不能为空',
-                            required: true,
+                            message: '邮箱格式不正确',
                             trigger: 'blur',
+                            type: 'email',
                         },
                     ],
                 },
@@ -43,7 +44,7 @@
 <template>
     <div class="member-warp">
         <div class="user-manager-create">
-            <div class="edit-link-title">
+            <div class="return-link-title">
                 <i-button type="text" @click.native="goBack">
                     <icon type="chevron-left"></icon>
                 </i-button>
@@ -51,16 +52,40 @@
                 <span v-if="parent.type === '1'">用户管理-编辑"{{ parent.name }}"</span>
             </div>
             <card :bordered="false">
-                <i-form ref="form" :model="form" :rules="rules" :label-width="400">
+                <i-form ref="form" :model="form" :rules="rules" :label-width="200">
                     <row>
-                        <i-col>
-                            <form-item label="供应商名称" prop="name">
+                        <i-col span="12">
+                            <form-item label="用户名" prop="name">
                                 <i-input v-model="form.name"></i-input>
                             </form-item>
                         </i-col>
                     </row>
                     <row>
-                        <i-col>
+                        <i-col span="12">
+                            <form-item label="密码" prop="password">
+                                <i-input type="password" v-model="form.password"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
+                            <form-item label="邮箱" prop="email">
+                                <i-input v-model="form.email"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
+                            <form-item label="状态" prop="status">
+                                <i-switch size="large" v-model="form.status">
+                                    <span slot="open">开启</span>
+                                    <span slot="close">关闭</span>
+                                </i-switch>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="12">
                             <form-item>
                                 <i-button :loading="loading" @click.native="submit"
                                           class="btn-group">

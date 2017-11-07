@@ -80,7 +80,7 @@
                                     on: {
                                         click() {
                                             self.$router.push({
-                                                path: '/user/manager/create',
+                                                path: '/member/user/manager/create',
                                                 query: {
                                                     type: '1',
                                                     name: data.row.name,
@@ -260,7 +260,7 @@
                     <card :bordered="false">
                         <div class="top-btn-action">
                             <router-link :to="{
-                                path: '/user/manager/create',
+                                path: '/member/user/manager/create',
                                 query: {
                                     type: '0',
                                 },
