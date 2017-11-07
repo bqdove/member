@@ -99,6 +99,7 @@
                                 h('i-button', {
                                     on: {
                                         click() {
+                                            self.deleteModal.name = data.row.name;
                                             self.modal1 = true;
                                         },
                                     },
@@ -208,7 +209,8 @@
                                 h('i-button', {
                                     on: {
                                         click() {
-                                            self.recyclingData.splice(data.index, 1);
+                                            self.deleteModal.name = data.row.name;
+                                            self.modal1 = true;
                                         },
                                     },
                                     props: {
@@ -255,6 +257,9 @@
         methods: {
             changePage1() {},
             changePage2() {},
+            batchDelete() {
+                this.modal2 = true;
+            },
             batchRemove() {
                 this.modal2 = true;
             },
@@ -307,7 +312,8 @@
                     <card :bordered="false">
                         <div class="top-btn-action">
                             <i-button class="btn-action" type="ghost">批量还原</i-button>
-                            <i-button class="btn-action" type="ghost">批量删除</i-button>
+                            <i-button class="btn-action" @click.native="batchDelete"
+                                      type="ghost">批量删除</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
                         <i-table :columns="recycling"
