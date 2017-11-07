@@ -1,4 +1,6 @@
 <script>
+    import injection from '../helpers/injection';
+
     export default {
         beforeRouteEnter(to, from, next) {
             if (to.query.type === '1') {
@@ -14,14 +16,16 @@
         },
         data() {
             return {
-                parent: {
-                    type: '',
-                    name: '',
-                },
+                action: `${window.api}/zn/admin/upload`,
                 form: {
+                    image: '',
                     name: '',
                 },
                 loading: false,
+                parent: {
+                    name: '',
+                    type: '',
+                },
                 rules: {
                     email: [
                         {
@@ -38,6 +42,50 @@
                 const self = this;
                 self.$router.go(-1);
             },
+            removeLogo() {
+                this.form.image = '';
+            },
+            submit() {},
+            uploadBefore() {
+                injection.loading.start();
+            },
+            uploadExceeded(file) {
+                const self = this;
+                if (file.size > 4096) {
+                    self.$notice.error({
+                        title: '该文件大小超出2M,请重新选择',
+                    });
+                }
+            },
+            uploadError(error, data) {
+                const self = this;
+                injection.loading.error();
+                if (typeof data.message === 'object') {
+                    for (const p in data.message) {
+                        self.$notice.error({
+                            title: data.message[p],
+                        });
+                    }
+                } else {
+                    self.$notice.error({
+                        title: data.message,
+                    });
+                }
+            },
+            uploadFormatError(file) {
+                this.$notice.warning({
+                    title: '文件格式不正确',
+                    desc: `文件 ${file.name} 格式不正确`,
+                });
+            },
+            uploadSuccess(data) {
+                const self = this;
+                injection.loading.finish();
+                self.$notice.open({
+                    title: data.message,
+                });
+                self.form.image = data.data.image;
+            },
         },
     };
 </script>
@@ -53,6 +101,7 @@
             </div>
             <card :bordered="false">
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
+                    <h5>基本资料</h5>
                     <row>
                         <i-col span="12">
                             <form-item label="用户名" prop="name">
@@ -64,6 +113,31 @@
                         <i-col span="12">
                             <form-item label="密码" prop="password">
                                 <i-input type="password" v-model="form.password"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="24">
+                            <form-item label="头像" prop="image">
+                                <div class="image-preview" v-if="form.image">
+                                    <img :src="form.image">
+                                    <icon type="close" @click.native="removeLogo"></icon>
+                                </div>
+                                <upload :action="action"
+                                        :before-upload="uploadBefore"
+                                        :format="['jpg','jpeg','png']"
+                                        :headers="{
+                                            Authorization: `Bearer ${$store.state.token.access_token}`
+                                        }"
+                                        :max-size="4096"
+                                        :on-exceeded-size="uploadExceeded"
+                                        :on-error="uploadError"
+                                        :on-format-error="uploadFormatError"
+                                        :on-success="uploadSuccess"
+                                        ref="upload"
+                                        :show-upload-list="false"
+                                        v-if="form.image === '' || form.image === null">
+                                </upload>
                             </form-item>
                         </i-col>
                     </row>
@@ -84,6 +158,7 @@
                             </form-item>
                         </i-col>
                     </row>
+                    <h5>详细资料</h5>
                     <row>
                         <i-col span="12">
                             <form-item>
