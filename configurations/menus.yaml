@@ -54,3 +54,30 @@ member:
                     text: 群发消息
             icon: plus
             text: 消息管理
+        -
+            children:
+                -
+                    path: /member/organization
+                    text: 组织部门
+                -
+                    path: /member/organization/user
+                    text: 部门用户
+                -
+                    path: /member/organization/role
+                    text: 角色管理
+            icon: plus
+            text: 组织管理
+        -
+            children:
+                -
+                    path: /member/user/manager
+                    text: 用户管理
+            icon: plus
+            text: 用户管理
+        -
+            children:
+                -
+                    path: /member/function/manager
+                    text: 功能管理
+            icon: plus
+            text: 功能管理
