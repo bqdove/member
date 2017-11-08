@@ -31,6 +31,7 @@ import UserManager from '../pages/UserManager.vue';
 import UserManagerCreate from '../pages/UserManagerCreate.vue';
 import FunctionManager from '../pages/FunctionManager.vue';
 import FunctionManagerSet from '../pages/FunctionManagerSet.vue';
+import FunctionManagerLook from '../pages/FunctionManagerLook.vue';
 
 export default function (injection) {
     injection.routers = [
@@ -196,6 +197,11 @@ export default function (injection) {
                     beforeEnter: injection.middleware.requireAuth,
                     component: FunctionManagerSet,
                     path: 'function/manager/set',
+                },
+                {
+                    beforeEnter: injection.middleware.requireAuth,
+                    component: FunctionManagerLook,
+                    path: 'function/manager/look',
                 },
             ],
             component: Layout,

@@ -25,7 +25,15 @@
                             return h('div', [
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/function/manager/look',
+                                                query: {
+                                                    tab_name: self.tab_name,
+                                                    fun_name: data.row.name,
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -112,7 +120,15 @@
                             return h('div', [
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/function/manager/look',
+                                                query: {
+                                                    tab_name: self.tab_name,
+                                                    fun_name: data.row.name,
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -205,6 +221,10 @@
                                         click() {
                                             self.$router.push({
                                                 path: '/member/function/manager/look',
+                                                query: {
+                                                    tab_name: self.tab_name,
+                                                    fun_name: data.row.name,
+                                                },
                                             });
                                         },
                                     },

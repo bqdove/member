@@ -92,7 +92,7 @@
                 <i-button type="text" @click.native="goBack">
                     <icon type="chevron-left"></icon>
                 </i-button>
-                <span>查看"{{ parent.tab_name}}-{{ parent.fun_name }}"功能</span>
+                <span>设置"{{ parent.tab_name}}-{{ parent.fun_name }}"功能</span>
             </div>
             <card :bordered="false">
                 <div class="function-module" v-for="wrap in functionList">
