@@ -1,6 +1,7 @@
 schemas:
     default:
         mutation:
+            createMember: Notadd\Member\GraphQL\Mutations\CreateMemberMutation
         query:
             members: Notadd\Member\GraphQL\Queries\MemberQuery
 types:
