@@ -3,6 +3,7 @@ schemas:
         mutation:
             createMember: Notadd\Member\GraphQL\Mutations\CreateMemberMutation
             deleteMember: Notadd\Member\GraphQL\Mutations\DeleteMemberMutation
+            updateMember: Notadd\Member\GraphQL\Mutations\UpdateMemberMutation
         query:
             members: Notadd\Member\GraphQL\Queries\MemberQuery
 types:
