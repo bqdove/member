@@ -30,6 +30,7 @@ import Organization from '../pages/Organization.vue';
 import UserManager from '../pages/UserManager.vue';
 import UserManagerCreate from '../pages/UserManagerCreate.vue';
 import FunctionManager from '../pages/FunctionManager.vue';
+import FunctionManagerSet from '../pages/FunctionManagerSet.vue';
 
 export default function (injection) {
     injection.routers = [
@@ -190,6 +191,11 @@ export default function (injection) {
                     beforeEnter: injection.middleware.requireAuth,
                     component: FunctionManager,
                     path: 'function/manager',
+                },
+                {
+                    beforeEnter: injection.middleware.requireAuth,
+                    component: FunctionManagerSet,
+                    path: 'function/manager/set',
                 },
             ],
             component: Layout,

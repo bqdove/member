@@ -34,7 +34,15 @@
                                 }, '查看'),
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/function/manager/set',
+                                                query: {
+                                                    tab_name: self.tab_name,
+                                                    fun_name: data.row.name,
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -113,7 +121,15 @@
                                 }, '查看'),
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/function/manager/set',
+                                                query: {
+                                                    tab_name: self.tab_name,
+                                                    fun_name: data.row.name,
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -199,7 +215,15 @@
                                 }, '查看'),
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/function/manager/set',
+                                                query: {
+                                                    tab_name: self.tab_name,
+                                                    fun_name: data.row.name,
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -233,7 +257,7 @@
                 mallData: [
                     {
                         id: 1323,
-                        name: 'benchu1',
+                        name: '商品管理',
                     },
                     {
                         id: 5677,
@@ -261,6 +285,7 @@
                     current: 1,
                     paginate: 2,
                 },
+                tab_name: '商城',
                 rules: {
                     function_name: [
                         {
@@ -278,6 +303,16 @@
             changePage1() {},
             changePage2() {},
             changePage3() {},
+            changeTab(pro) {
+                const self = this;
+                if (pro === 'name1') {
+                    self.tab_name = '商城';
+                } else if (pro === 'name2') {
+                    self.tab_name = '商家';
+                } else if (pro === 'name3') {
+                    self.tab_name = '论坛';
+                }
+            },
             createFunction() {
                 this.modalCreate = true;
             },
@@ -292,7 +327,7 @@
 <template>
     <div class="member-warp">
         <div class="function-manager">
-            <tabs value="name1">
+            <tabs value="name1" @on-click="changeTab">
                 <tab-pane label="商城" name="name1">
                     <card :bordered="false">
                         <div class="top-btn-action">
@@ -393,7 +428,7 @@
                         </row>
                         <row>
                             <i-col span="14">
-                                <form-item label="功能名称" prop="parent_fun">
+                                <form-item label="父级功能" prop="parent_fun">
                                     <i-select v-model="createModal.parent_fun">
                                         <i-option v-for="item in functionList"
                                                   :value="item.value">{{ item.label }}
