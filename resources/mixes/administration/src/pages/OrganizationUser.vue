@@ -5,6 +5,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 columns: [
                     {
@@ -60,7 +61,8 @@
                                 h('i-button', {
                                     on: {
                                         click() {
-                                            window.console.log(data);
+                                            self.deleteModal.name = data.row.name;
+                                            self.modal1 = true;
                                         },
                                     },
                                     props: {
@@ -77,6 +79,11 @@
                         width: 180,
                     },
                 ],
+                deleteModal: {
+                    name: '',
+                    num: 1,
+                    org_name: '',
+                },
                 departmentList: [
                     {
                         expand: true,
@@ -184,6 +191,9 @@
                         sex: '1',
                     },
                 ],
+                modal1: false,
+                modal2: false,
+                organizationName: '',
                 pagination: {
                     count: 3,
                     current: 1,
@@ -204,8 +214,20 @@
             };
         },
         methods: {
-            batchRemove: {},
+            batchRemove() {
+                const self = this;
+                self.deleteModal.org_name = self.organizationName;
+                self.modal2 = true;
+            },
             createDepartment: {},
+            submitCancel(data) {
+                if (data === 1) {
+                    this.modal1 = false;
+                }
+                if (data === 2) {
+                    this.modal2 = false;
+                }
+            },
         },
     };
 </script>
@@ -258,5 +280,53 @@
                 </tab-pane>
             </tabs>
         </div>
+        <modal
+                v-model="modal1"
+                title="移除" class="setting-modal-delete">
+            <div>
+                <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
+                    <row>
+                        <i-col class="first-row-title delete-file-tip">
+                            <span>确定将"{{ deleteModal.name }}"从部门移除吗？</span>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col class="btn-group">
+                            <i-button type="ghost" class="cancel-btn"
+                                      @click.native="submitCancel(1)">取消</i-button>
+                            <i-button :loading="loading" type="primary" class="cancel-btn"
+                                      @click.native="submitDelete">
+                                <span v-if="!loading">确认</span>
+                                <span v-else>正在删除…</span>
+                            </i-button>
+                        </i-col>
+                    </row>
+                </i-form>
+            </div>
+        </modal>
+        <modal
+                v-model="modal2"
+                title="批量移除" class="setting-modal-delete">
+            <div>
+                <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
+                    <row>
+                        <i-col class="first-row-title delete-file-tip">
+                            <span>确定移除部门"{{ deleteModal.org_name }}下的{{ deleteModal.num }}位用户吗"？</span>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col class="btn-group">
+                            <i-button type="ghost" class="cancel-btn"
+                                      @click.native="submitCancel(2)">取消</i-button>
+                            <i-button :loading="loading" type="primary" class="cancel-btn"
+                                      @click.native="batchRemovesure">
+                                <span v-if="!loading">确认</span>
+                                <span v-else>正在删除…</span>
+                            </i-button>
+                        </i-col>
+                    </row>
+                </i-form>
+            </div>
+        </modal>
     </div>
 </template>
