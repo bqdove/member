@@ -1,6 +1,7 @@
 schemas:
     default:
         mutation:
+            banMember: Notadd\Member\GraphQL\Mutations\BanMemberMutation
             createMember: Notadd\Member\GraphQL\Mutations\CreateMemberMutation
             deleteMember: Notadd\Member\GraphQL\Mutations\DeleteMemberMutation
             restoreMember: Notadd\Member\GraphQL\Mutations\RestoreMemberMutation
