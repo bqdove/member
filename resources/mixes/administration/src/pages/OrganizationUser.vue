@@ -28,10 +28,10 @@
                         render(h, data) {
                             if (data.row.sex === '1') {
                                 data.row.sex = '男';
-                            } else {
+                            } else if (data.row.sex === '0') {
                                 data.row.sex = '女';
                             }
-                            return '';
+                            return data.row.sex;
                         },
                         title: '性别',
                     },
@@ -74,7 +74,7 @@
                             ]);
                         },
                         title: '操作',
-                        width: 280,
+                        width: 180,
                     },
                 ],
                 departmentList: [
@@ -224,8 +224,9 @@
                             </i-col>
                             <i-col span="12">
                                 <div class="top-btn-action">
-                                    <i-button class="btn-action" @click.native="createDepartment"
-                                              type="ghost">+新增部门</i-button>
+                                    <router-link to="/member/organization/user/create">
+                                        <i-button class="btn-action" type="ghost">+添加用户</i-button>
+                                    </router-link>
                                     <i-button class="btn-action" @click.native="batchRemove"
                                               type="ghost">批量删除</i-button>
                                     <div class="goods-body-header-right">

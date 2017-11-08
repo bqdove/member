@@ -48,31 +48,23 @@
                         align: 'center',
                         key: 'action',
                         render(h, data) {
-                            return h('div', [
-                                h('i-button', {
-                                    on: {
-                                        click() {},
-                                    },
-                                    props: {
-                                        size: 'small',
-                                        type: 'ghost',
-                                    },
-                                }, '查看'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            window.console.log(data);
+                            if (data.row.status === true) {
+                                return h('div', [
+                                    h('i-button', {
+                                        on: {
+                                            click() {},
                                         },
-                                    },
-                                    props: {
-                                        size: 'small',
-                                        type: 'ghost',
-                                    },
-                                    style: {
-                                        marginLeft: '10px',
-                                    },
-                                }, '移除'),
-                            ]);
+                                        props: {
+                                            size: 'small',
+                                            type: 'ghost',
+                                        },
+                                    }, '添加'),
+                                ]);
+                            }
+                            if (data.row.status === false) {
+                                return h('div', '已添加');
+                            }
+                            return '';
                         },
                         title: '操作',
                         width: 180,
@@ -86,6 +78,7 @@
                         name: 'gdeyf',
                         phone: '1876534576',
                         sex: '1',
+                        status: false,
                     },
                     {
                         email: '226458751@qq.com',
@@ -93,6 +86,7 @@
                         name: 'gdeyf',
                         phone: '1876534576',
                         sex: '2',
+                        status: true,
                     },
                     {
                         email: '226458751@qq.com',
@@ -100,6 +94,7 @@
                         name: 'gdeyf',
                         phone: '1876534576',
                         sex: '1',
+                        status: true,
                     },
                     {
                         email: '226458751@qq.com',
@@ -107,41 +102,7 @@
                         name: 'gdeyf',
                         phone: '1876534576',
                         sex: '1',
-                    },
-                    {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
-                    },
-                    {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
-                    },
-                    {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
-                    },
-                    {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
-                    },
-                    {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        status: true,
                     },
                 ],
                 pagination: {
@@ -167,6 +128,7 @@
             };
         },
         methods: {
+            batchAdd() {},
             changePage() {},
             goBack() {
                 const self = this;
@@ -185,8 +147,12 @@
                 <span>"{{ parent.org_name }}"添加用户</span>
             </div>
             <card :bordered="false">
+                <div class="top-tip-content">
+                    <p>提示</p>
+                    <p>添加至当前部门的用户会自动继承部门的所有功能权限</p>
+                </div>
                 <div class="top-btn-action">
-                    <i-button class="btn-action" type="ghost">添加用户</i-button>
+                    <i-button class="btn-action" type="ghost" @click.native="batchAdd">添加用户</i-button>
                     <i-button class="btn-action" type="ghost">刷新</i-button>
                     <div class="goods-body-header-right">
                         <i-input v-model="searchValue" placeholder="请输入关键词进行搜索">
