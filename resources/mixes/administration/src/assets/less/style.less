@@ -20,12 +20,35 @@
         height: 44px;
         line-height: 44px;
         margin-bottom: 10px;
+        font-size: 14px;
         .ivu-btn {
             padding-right: 6px;
             padding-left: 18px;
-            font-size: 14px;
             span {
                 font-size: 14px;
+            }
+        }
+    }
+    .tab-pane-title {
+        color: #2d8cf0;
+        padding: 0 20px;
+        span {
+            margin-right: 16px;
+            padding: 8px 16px;
+            position: relative;
+            &:after {
+                content: '';
+                display: block;
+                position: absolute;
+                height: 2px;
+                width: 100%;
+                box-sizing: border-box;
+                background-color: #2d8cf0;
+                left: 0;
+                bottom: -7px;
+                z-index: 1;
+                transition: transform .3s ease-in-out;
+                transform-origin: 0 0;
             }
         }
     }
