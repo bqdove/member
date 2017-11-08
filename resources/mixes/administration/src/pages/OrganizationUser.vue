@@ -216,10 +216,28 @@
         methods: {
             batchRemove() {
                 const self = this;
-                self.deleteModal.org_name = self.organizationName;
-                self.modal2 = true;
+                const deletes = [];
+                self.selection.forEach(item => {
+                    deletes.push(item.id);
+                });
+                if (deletes.length < 1) {
+                    self.$notice.open({
+                        title: '请选择要移除的用户!',
+                    });
+                } else {
+                    self.deleteModal.org_name = self.organizationName;
+                    self.deleteModal.num = deletes.length;
+                    self.modal2 = true;
+                }
             },
-            createDepartment: {},
+            changePage() {},
+            changeTreeSelect(data) {
+                this.organizationName = data[0].title;
+            },
+            selectionChange(selection) {
+                const self = this;
+                self.selection = selection;
+            },
             submitCancel(data) {
                 if (data === 1) {
                     this.modal1 = false;
@@ -228,6 +246,9 @@
                     this.modal2 = false;
                 }
             },
+        },
+        mounted() {
+            this.organizationName = this.departmentList[0].title;
         },
     };
 </script>
@@ -241,7 +262,8 @@
                             <i-col span="12">
                                 <div class="depart-expand-tree">
                                     <h5>部门名称</h5>
-                                    <tree :data="departmentList"></tree>
+                                    <tree :data="departmentList"
+                                          @on-select-change="changeTreeSelect"></tree>
                                 </div>
                             </i-col>
                             <i-col span="12">
@@ -263,7 +285,7 @@
                                 </div>
                                 <i-table :columns="columns"
                                          :data="list"
-                                         @on-selection-change="selection"
+                                         @on-selection-change="selectionChange"
                                          ref="list"
                                          highlight-row>
                                 </i-table>
@@ -271,7 +293,7 @@
                                     <page :current="pagination.current"
                                           :page-size="pagination.paginate"
                                           :total="pagination.count"
-                                          @on-change="changePage1"
+                                          @on-change="changePage"
                                           show-elevator></page>
                                 </div>
                             </i-col>
