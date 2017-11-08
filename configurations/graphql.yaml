@@ -1,0 +1,6 @@
+schemas:
+    default:
+        mutation:
+        query:
+types:
+    - Notadd\Member\GraphQL\Types\MemberType
