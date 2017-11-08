@@ -109,6 +109,42 @@
                 deleteModal: {
                     name: 'ibenchu',
                 },
+                departmentList: [
+                    {
+                        children: [
+                            {
+                                label: '部门1-1',
+                                value: '11',
+                            },
+                            {
+                                label: '部门1-2',
+                                value: '12',
+                            },
+                        ],
+                        label: '部门1',
+                        value: '1',
+                    },
+                    {
+                        children: [
+                            {
+                                children: [
+                                    {
+                                        label: '部门2-1-1',
+                                        value: '211',
+                                    },
+                                ],
+                                label: '部门2-1',
+                                value: '21',
+                            },
+                            {
+                                label: '部门2-2',
+                                value: '22',
+                            },
+                        ],
+                        label: '部门2',
+                        value: '2',
+                    },
+                ],
                 level: 1,
                 list: [
                     {
@@ -153,6 +189,9 @@
             createOrganization() {
                 this.createModal.title = '新增部门';
                 this.modalCreate = true;
+            },
+            filterDepartment(data) {
+                window.console.log(data);
             },
             goBack() {
                 const self = this;
@@ -236,11 +275,10 @@
                     <row>
                         <i-col span="14">
                             <form-item label="上级部门" prop="parent_org">
-                                <i-select v-model="createModal.parent_org">
-                                    <i-option v-for="item in organizationList"
-                                              :value="item.value">{{ item.label }}
-                                    </i-option>
-                                </i-select>
+                                <cascader :data="departmentList"
+                                          change-on-select
+                                          @on-change="filterDepartment"
+                                          v-model="createModal.parent_org"></cascader>
                             </form-item>
                         </i-col>
                     </row>
