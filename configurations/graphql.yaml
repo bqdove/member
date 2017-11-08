@@ -10,3 +10,4 @@ schemas:
             members: Notadd\Member\GraphQL\Queries\MemberQuery
 types:
     - Notadd\Member\GraphQL\Types\MemberType
+    - Notadd\Member\GraphQL\Types\MemberInformationType
