@@ -5,6 +5,7 @@ schemas:
             createMember: Notadd\Member\GraphQL\Mutations\CreateMemberMutation
             createMemberTag: Notadd\Member\GraphQL\Mutations\CreateMemberTagMutation
             deleteMember: Notadd\Member\GraphQL\Mutations\DeleteMemberMutation
+            deleteMemberTag: Notadd\Member\GraphQL\Mutations\DeleteMemberTagMutation
             restoreMember: Notadd\Member\GraphQL\Mutations\RestoreMemberMutation
             updateMember: Notadd\Member\GraphQL\Mutations\UpdateMemberMutation
         query:
