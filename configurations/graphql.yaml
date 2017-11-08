@@ -1,6 +1,19 @@
 schemas:
     default:
         mutation:
+            banMember: Notadd\Member\GraphQL\Mutations\BanMemberMutation
+            createMember: Notadd\Member\GraphQL\Mutations\CreateMemberMutation
+            createMemberTag: Notadd\Member\GraphQL\Mutations\CreateMemberTagMutation
+            deleteMember: Notadd\Member\GraphQL\Mutations\DeleteMemberMutation
+            deleteMemberTag: Notadd\Member\GraphQL\Mutations\DeleteMemberTagMutation
+            restoreMember: Notadd\Member\GraphQL\Mutations\RestoreMemberMutation
+            restoreMemberTag: Notadd\Member\GraphQL\Mutations\RestoreMemberTagMutation
+            updateMember: Notadd\Member\GraphQL\Mutations\UpdateMemberMutation
+            updateMemberTag: Notadd\Member\GraphQL\Mutations\UpdateMemberTagMutation
         query:
+            members: Notadd\Member\GraphQL\Queries\MemberQuery
+            memberTags: Notadd\Member\GraphQL\Queries\MemberTagQuery
 types:
+    - Notadd\Member\GraphQL\Types\MemberInformationType
+    - Notadd\Member\GraphQL\Types\MemberTagType
     - Notadd\Member\GraphQL\Types\MemberType
