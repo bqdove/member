@@ -28,6 +28,7 @@ import UserIntegral from '../pages/UserIntegral.vue';
 import UserTag from '../pages/UserTag.vue';
 import Organization from '../pages/Organization.vue';
 import OrganizationUser from '../pages/OrganizationUser.vue';
+import OrganizationUserCreate from '../pages/OrganizationUserCreate.vue';
 import UserManager from '../pages/UserManager.vue';
 import UserManagerCreate from '../pages/UserManagerCreate.vue';
 import FunctionManager from '../pages/FunctionManager.vue';
@@ -183,6 +184,11 @@ export default function (injection) {
                     beforeEnter: injection.middleware.requireAuth,
                     component: OrganizationUser,
                     path: 'organization/user',
+                },
+                {
+                    beforeEnter: injection.middleware.requireAuth,
+                    component: OrganizationUserCreate,
+                    path: 'organization/user/create',
                 },
                 {
                     beforeEnter: injection.middleware.requireAuth,
