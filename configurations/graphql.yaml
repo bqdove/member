@@ -9,6 +9,7 @@ schemas:
             restoreMember: Notadd\Member\GraphQL\Mutations\RestoreMemberMutation
             restoreMemberTag: Notadd\Member\GraphQL\Mutations\RestoreMemberTagMutation
             updateMember: Notadd\Member\GraphQL\Mutations\UpdateMemberMutation
+            updateMemberTag: Notadd\Member\GraphQL\Mutations\UpdateMemberTagMutation
         query:
             members: Notadd\Member\GraphQL\Queries\MemberQuery
 types:
