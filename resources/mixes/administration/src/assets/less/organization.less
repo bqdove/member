@@ -1,5 +1,54 @@
 .member-warp {
     .organization-user {
-
+        .ivu-col-span-12 {
+            &:first-child {
+                padding-right: 20px;
+            }
+        }
+        .depart-expand-tree {
+            border: solid 1px #e3e8ee;
+            height: 573px;
+            overflow: auto;
+            > h5 {
+                background-color: #f5f7f9;
+                color: #657180;
+                font-weight: bold;
+                height: 40px;
+                line-height: 40px;
+                padding-left: 40px;
+            }
+            .ivu-tree ul li {
+                margin: 0;
+            }
+            .ivu-tree-title {
+                line-height: 48px;
+                border-radius: 0;
+                &:hover {
+                    background-color: #e3e8ee;
+                }
+            }
+            .ivu-tree-title-selected,
+            .ivu-tree-title-selected:hover {
+                background-color: #e3e8ee;
+            }
+            > .ivu-tree {
+                > ul {
+                    > li {
+                        border-bottom: 1px solid #e3e8ee;
+                        .ivu-tree-arrow {
+                            padding-left: 26px;
+                            display: inline-block;
+                            line-height: 48px;
+                        }
+                        > ul {
+                            border-top: 1px solid #e3e8ee;
+                        }
+                        .ivu-icon {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
