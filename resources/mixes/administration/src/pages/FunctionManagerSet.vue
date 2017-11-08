@@ -96,14 +96,16 @@
             </div>
             <card :bordered="false">
                 <div class="function-module" v-for="wrap in functionList">
-                    <checkbox
-                            v-model="wrap.selected"
-                            @on-change="handleCheckAll(wrap)">{{ wrap.title }}</checkbox>
-                   <div>
-                       <checkbox @on-change="checkAllGroupChange(wrap)"
+                    <div>
+                        <checkbox
+                                v-model="wrap.selected"
+                                @on-change="handleCheckAll(wrap)">{{ wrap.title }}</checkbox>
+                    </div>
+                    <div>
+                        <checkbox @on-change="checkAllGroupChange(wrap)"
                                  v-model="item.selected"
                                  v-for="item in wrap.list">{{ item.name }}</checkbox>
-                   </div>
+                    </div>
                 </div>
             </card>
         </div>
