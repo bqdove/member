@@ -3,6 +3,7 @@ schemas:
         mutation:
             banMember: Notadd\Member\GraphQL\Mutations\BanMemberMutation
             createMember: Notadd\Member\GraphQL\Mutations\CreateMemberMutation
+            createMemberTag: Notadd\Member\GraphQL\Mutations\CreateMemberTagMutation
             deleteMember: Notadd\Member\GraphQL\Mutations\DeleteMemberMutation
             restoreMember: Notadd\Member\GraphQL\Mutations\RestoreMemberMutation
             updateMember: Notadd\Member\GraphQL\Mutations\UpdateMemberMutation
