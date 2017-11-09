@@ -154,14 +154,88 @@
                         user_name: 'admin',
                     },
                 ],
+                msgColumns: [
+                    {
+                        align: 'center',
+                        type: 'selection',
+                        width: 60,
+                    },
+                    {
+                        align: 'center',
+                        key: 'sort',
+                        title: '排序',
+                        width: 200,
+                    },
+                    {
+                        align: 'center',
+                        key: 'name',
+                        title: '信息项名称',
+                        width: 200,
+                    },
+                    {
+                        key: 'enabled',
+                        title: '是否必填',
+                    },
+                    {
+                        align: 'center',
+                        key: 'action',
+                        render(h, data) {
+                            return h('div', [
+                                h('i-button', {
+                                    on: {
+                                        click() {},
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                }, '编辑'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.deleteModal.name = data.row.name;
+                                            self.modal1 = true;
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
+                        },
+                        title: '操作',
+                        width: 180,
+                    },
+                ],
+                msgData: [
+                    {
+                        enabled: false,
+                        name: '视频链接',
+                        sort: null,
+                    },
+                    {
+                        enabled: false,
+                        name: '视频链接',
+                        sort: null,
+                    },
+                ],
                 modal1: false,
                 modal2: false,
-                page: {
+                page1: {
                     count: 3,
                     current: 1,
                     paginate: 2,
                 },
-                pagination: {
+                page2: {
+                    count: 3,
+                    current: 1,
+                    paginate: 2,
+                },
+                page3: {
                     count: 3,
                     current: 1,
                     paginate: 2,
@@ -259,6 +333,7 @@
                 ],
                 selection1: [],
                 selection2: [],
+                selection3: [],
             };
         },
         methods: {
@@ -309,9 +384,9 @@
                                  highlight-row>
                         </i-table>
                         <div class="ivu-page-wrap">
-                            <page :current="pagination.current"
-                                  :page-size="pagination.paginate"
-                                  :total="pagination.count"
+                            <page :current="page1.current"
+                                  :page-size="page1.paginate"
+                                  :total="page1.count"
                                   @on-change="changePage1"
                                   show-elevator></page>
                         </div>
@@ -332,10 +407,33 @@
                                  highlight-row>
                         </i-table>
                         <div class="ivu-page-wrap">
-                            <page :current="page.current"
-                                  :page-size="page.paginate"
-                                  :total="page.count"
+                            <page :current="page2.current"
+                                  :page-size="page2.paginate"
+                                  :total="page2.count"
                                   @on-change="changePage2"
+                                  show-elevator></page>
+                        </div>
+                    </card>
+                </tab-pane>
+                <tab-pane label="信息管理" name="name3">
+                    <card :bordered="false">
+                        <div class="top-btn-action">
+                            <i-button class="btn-action" type="ghost">+新增信息</i-button>
+                            <i-button class="btn-action" @click.native="batchRemove"
+                                      type="ghost">批量删除</i-button>
+                            <i-button class="btn-action" type="ghost">刷新</i-button>
+                        </div>
+                        <i-table :columns="msgColumns"
+                                 :data="msgData"
+                                 @on-selection-change="selection3"
+                                 ref="list"
+                                 highlight-row>
+                        </i-table>
+                        <div class="ivu-page-wrap">
+                            <page :current="page3.current"
+                                  :page-size="page3.paginate"
+                                  :total="page3.count"
+                                  @on-change="changePage3"
                                   show-elevator></page>
                         </div>
                     </card>

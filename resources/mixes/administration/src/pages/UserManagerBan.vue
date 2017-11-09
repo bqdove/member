@@ -10,7 +10,7 @@
                 form: {
                     end: '',
                     id: '',
-                    name: '',
+                    name: 'wrwe',
                     now: 0,
                     reason: '',
                     time: 0,
@@ -156,7 +156,7 @@
                                          placeholder="请输入禁止/解禁用户的理由"
                                          type="textarea"
                                          v-model="form.users"></i-input>
-                                <p class="info">请输入操作理由，系统将把理由记录在用户禁止记录中，以供日后查看。</p>
+                                <p class="tip">请输入操作理由，系统将把理由记录在用户禁止记录中，以供日后查看。</p>
                             </form-item>
                         </i-col>
                     </row>
