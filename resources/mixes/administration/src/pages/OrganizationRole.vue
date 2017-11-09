@@ -25,8 +25,7 @@
                 ],
                 deleteModal: {
                     name: '',
-                    num: 1,
-                    org_name: '',
+                    id: '',
                 },
                 departmentList: [
                     {
@@ -129,28 +128,37 @@
                         name: '角色1-1',
                     },
                 ],
-                modal1: false,
-                modal2: false,
-                modalLook: false,
+                modal: false,
+                modalCreate: false,
                 organizationName: '',
                 selection: [],
             };
         },
         methods: {
+            changeCurrent(data) {
+                const self = this;
+                self.deleteModal.name = data.name;
+                self.deleteModal.id = data.id;
+            },
             changeTreeSelect(data) {
                 this.organizationName = data[0].title;
+            },
+            deleteUser() {
+                const self = this;
+                if (self.deleteModal.id === '') {
+                    self.$notice.open({
+                        title: '请选择要删除的角色',
+                    });
+                } else {
+                    self.modal = true;
+                }
             },
             selectionChange(selection) {
                 const self = this;
                 self.selection = selection;
             },
-            submitCancel(data) {
-                if (data === 1) {
-                    this.modal1 = false;
-                }
-                if (data === 2) {
-                    this.modal2 = false;
-                }
+            submitCancel() {
+                this.modal = false;
             },
         },
         mounted() {
@@ -160,7 +168,7 @@
 </script>
 <template>
     <div class="member-warp">
-        <div class="organization-user show-checkbox">
+        <div class="organization-user organization-role">
             <tabs value="name1">
                 <tab-pane label="角色管理" name="name1">
                     <card :bordered="false">
@@ -169,17 +177,21 @@
                                 <i-button class="btn-action" type="ghost">+新增角色</i-button>
                             </router-link>
                             <i-button class="btn-action" type="ghost">编辑</i-button>
-                            <i-button class="btn-action" type="ghost">删除</i-button>
+                            <i-button class="btn-action" type="ghost" @click.native="deleteUser">删除</i-button>
                         </div>
                         <row>
                             <i-col span="12" class="left-col-span">
                                 <i-table :columns="columns"
                                          class="table-list"
                                          :data="list"
+                                         @on-current-change="changeCurrent"
                                          height="518"
                                          ref="list"
                                          highlight-row>
                                 </i-table>
+                                <div class="top-btn-action bottom-btn-action">
+                                    <i-button class="btn-action" type="primary">保存</i-button>
+                                </div>
                             </i-col>
                             <i-col span="12">
                                 <div class="depart-expand-tree">
@@ -195,91 +207,25 @@
             </tabs>
         </div>
         <modal
-                v-model="modal1"
-                title="移除" class="setting-modal-delete">
+                v-model="modal"
+                title="删除" class="setting-modal-delete">
             <div>
-                <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
+                <i-form ref="deleteModal" :model="deleteModal">
                     <row>
                         <i-col class="first-row-title delete-file-tip">
-                            <span>确定将"{{ deleteModal.name }}"从部门移除吗？</span>
+                            <span>确定要删除角色"{{ deleteModal.name }}"吗？
+                                删除后不可恢复并且相关部门用户将失去此角色身份。</span>
                         </i-col>
                     </row>
                     <row>
                         <i-col class="btn-group">
                             <i-button type="ghost" class="cancel-btn"
-                                      @click.native="submitCancel(1)">取消</i-button>
+                                      @click.native="submitCancel">取消</i-button>
                             <i-button :loading="loading" type="primary" class="cancel-btn"
                                       @click.native="submitDelete">
                                 <span v-if="!loading">确认</span>
                                 <span v-else>正在删除…</span>
                             </i-button>
-                        </i-col>
-                    </row>
-                </i-form>
-            </div>
-        </modal>
-        <modal
-                v-model="modal2"
-                title="批量移除" class="setting-modal-delete">
-            <div>
-                <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
-                    <row>
-                        <i-col class="first-row-title delete-file-tip">
-                            <span>确定移除部门"{{ deleteModal.org_name }}下的{{ deleteModal.num }}位用户吗"？</span>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col class="btn-group">
-                            <i-button type="ghost" class="cancel-btn"
-                                      @click.native="submitCancel(2)">取消</i-button>
-                            <i-button :loading="loading" type="primary" class="cancel-btn"
-                                      @click.native="batchRemovesure">
-                                <span v-if="!loading">确认</span>
-                                <span v-else>正在删除…</span>
-                            </i-button>
-                        </i-col>
-                    </row>
-                </i-form>
-            </div>
-        </modal>
-        <modal
-                v-model="modalLook"
-                title="查看详细信息" class="setting-modal-delete user-detail-message">
-            <div>
-                <i-form ref="form" :model="form" :label-width="160">
-                    <row>
-                        <i-col>
-                            <form-item label="用户名">
-                                <span>{{ form.user_name }}</span>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col>
-                            <form-item label="姓名">
-                                <span>{{ form.name }}</span>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col>
-                            <form-item label="个人邮箱">
-                                <span>{{ form.email }}</span>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col>
-                            <form-item label="企业邮箱">
-                                <span>{{ form.e_mail }}</span>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col>
-                            <form-item label="手机">
-                                <span>{{ form.phone }}</span>
-                            </form-item>
                         </i-col>
                     </row>
                 </i-form>
