@@ -57,6 +57,42 @@
                         },
                     ],
                 },
+                timeTypes: [
+                    {
+                        label: '选日期及时间',
+                        value: 0,
+                    },
+                    {
+                        label: '选年月日',
+                        value: 1,
+                    },
+                    {
+                        label: '选年月',
+                        value: 2,
+                    },
+                    {
+                        label: '仅选年',
+                        value: 3,
+                    },
+                    {
+                        label: '仅选时间',
+                        value: 4,
+                    },
+                ],
+                timeTypesArea: [
+                    {
+                        label: '选日期及时间',
+                        value: 0,
+                    },
+                    {
+                        label: '选年月日',
+                        value: 1,
+                    },
+                    {
+                        label: '仅选时间',
+                        value: 2,
+                    },
+                ],
                 types: [
                     {
                         label: '请选择信息类型',
@@ -148,6 +184,37 @@
                                               :disabled="item.value === 0"
                                               :value="item.value"
                                               :key="item">{{ item.label }}</i-option>
+                                </i-select>
+                            </form-item>
+                            <form-item label="字符限定" prop="num"
+                                       v-if="form.type === 1 || form.type === 2">
+                                <i-input number v-model="form.num"></i-input>
+                                <p class="tip">最多可填写的字符数</p>
+                            </form-item>
+                            <form-item label="可选值" prop="check_value"
+                                       v-if="form.type === 3 || form.type === 4 || form.type === 7">
+                                <i-input :autosize="{minRows: 3,maxRows: 5}"
+                                         number
+                                         type="textarea"
+                                         v-model="form.check_value"></i-input>
+                                <p class="tip">每行输入一个可选值，使用回车键换行</p>
+                            </form-item>
+                            <form-item label="可选数量" prop="check_num"
+                                       v-if="form.type === 4">
+                                <i-input number v-model="form.check_num"></i-input>
+                            </form-item>
+                            <form-item label="时间组件类型" prop="check_time" v-if="form.type === 5">
+                                <i-select v-model="form.check_time">
+                                    <i-option v-for="item in timeTypes"
+                                              :value="item.value">
+                                        {{ item.label }}</i-option>
+                                </i-select>
+                            </form-item>
+                            <form-item label="时间组件类型" prop="time_area" v-if="form.type === 6">
+                                <i-select v-model="form.time_area">
+                                    <i-option v-for="item in timeTypesArea"
+                                              :value="item.value">
+                                        {{ item.label }}</i-option>
                                 </i-select>
                             </form-item>
                         </i-col>
