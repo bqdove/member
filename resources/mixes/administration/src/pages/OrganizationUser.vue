@@ -51,7 +51,9 @@
                             return h('div', [
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.modalLook = true;
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -126,6 +128,13 @@
                     },
                 ],
                 filterWord: '1',
+                form: {
+                    email: '532462837@qq.com',
+                    e_mail: '5376@qiye.com',
+                    name: '姓名',
+                    phone: 1352637247,
+                    user_name: 'hsfdius',
+                },
                 list: [
                     {
                         email: '226458751@qq.com',
@@ -193,6 +202,7 @@
                 ],
                 modal1: false,
                 modal2: false,
+                modalLook: false,
                 organizationName: '',
                 pagination: {
                     count: 3,
@@ -345,6 +355,49 @@
                                 <span v-if="!loading">确认</span>
                                 <span v-else>正在删除…</span>
                             </i-button>
+                        </i-col>
+                    </row>
+                </i-form>
+            </div>
+        </modal>
+        <modal
+                v-model="modalLook"
+                title="查看详细信息" class="setting-modal-delete user-detail-message">
+            <div>
+                <i-form ref="form" :model="form" :label-width="160">
+                    <row>
+                        <i-col>
+                            <form-item label="用户名">
+                                <span>{{ form.user_name }}</span>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col>
+                            <form-item label="姓名">
+                                <span>{{ form.name }}</span>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col>
+                            <form-item label="个人邮箱">
+                                <span>{{ form.email }}</span>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col>
+                            <form-item label="企业邮箱">
+                                <span>{{ form.e_mail }}</span>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col>
+                            <form-item label="手机">
+                                <span>{{ form.phone }}</span>
+                            </form-item>
                         </i-col>
                     </row>
                 </i-form>
