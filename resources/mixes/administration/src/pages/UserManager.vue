@@ -69,7 +69,14 @@
                             return h('div', [
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/user/manager/ban',
+                                                query: {
+                                                    id: data.row.id,
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',

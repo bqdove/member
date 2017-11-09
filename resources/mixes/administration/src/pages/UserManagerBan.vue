@@ -1,30 +1,8 @@
 <script>
-    import injection from '../helpers/injection';
-
     export default {
         beforeRouteEnter(to, from, next) {
-            injection.loading.start();
-            injection.http.post(`${window.api}/member/administration/user`, {
-                id: to.params.id,
-                with: [
-                    'ban',
-                ],
-            }).then(response => {
-                const { data } = response.data;
-                next(vm => {
-                    vm.form.id = data.id;
-                    vm.form.name = data.name;
-                    if (data.ban) {
-                        vm.form.end = data.ban.end;
-                        vm.form.now = data.ban.type;
-                        vm.form.reason = data.ban.reason;
-                        vm.form.time = data.ban.time;
-                        vm.form.type = data.ban.type;
-                    }
-                    injection.loading.finish();
-                });
-            }).catch(() => {
-                injection.loading.error();
+            next(vm => {
+                vm.parent.id = to.query.id;
             });
         },
         data() {
@@ -39,6 +17,9 @@
                     type: 0,
                 },
                 loading: false,
+                parent: {
+                    id: '',
+                },
                 rules: {},
                 times: [
                     {
@@ -72,6 +53,10 @@
             dateChange(date) {
                 this.form.end = date;
             },
+            goBack() {
+                const self = this;
+                self.$router.go(-1);
+            },
             submit() {
                 const self = this;
                 self.loading = true;
@@ -83,7 +68,7 @@
                             self.$notice.open({
                                 title: response.data.message,
                             });
-                            self.$router.push('/member/user');
+                            self.$router.push('/member/user/manager');
                         }).catch(() => {
                             self.$loading.error();
                             self.loading = false;
@@ -102,8 +87,13 @@
 <template>
     <div class="member-warp">
         <div class="user-manager-ban">
+            <div class="return-link-title">
+                <i-button type="text" @click.native="goBack">
+                    <icon type="chevron-left"></icon>
+                </i-button>
+                <span>封禁用户</span>
+            </div>
             <card :bordered="false">
-                <p slot="title">封禁用户</p>
                 <i-form :label-width="200" :model="form" ref="form" :rules="rules">
                     <row>
                         <i-col span="12">
