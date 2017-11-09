@@ -23,9 +23,15 @@
                         title: '权限值',
                     },
                 ],
-                deleteModal: {
+                createModal: {
+                    authority: 0,
                     name: '',
+                    title: '',
+                },
+                deleteModal: {
+                    authority: 0,
                     id: '',
+                    name: '',
                 },
                 departmentList: [
                     {
@@ -131,6 +137,15 @@
                 modal: false,
                 modalCreate: false,
                 organizationName: '',
+                rules: {
+                    name: [
+                        {
+                            message: '角色名称不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 selection: [],
             };
         },
@@ -139,9 +154,14 @@
                 const self = this;
                 self.deleteModal.name = data.name;
                 self.deleteModal.id = data.id;
+                self.deleteModal.authority = data.authority;
             },
             changeTreeSelect(data) {
                 this.organizationName = data[0].title;
+            },
+            createUserRole() {
+                this.createModal.title = '新增角色';
+                this.modalCreate = true;
             },
             deleteUser() {
                 const self = this;
@@ -153,6 +173,19 @@
                     self.modal = true;
                 }
             },
+            editUserRole() {
+                const self = this;
+                if (self.deleteModal.id === '') {
+                    self.$notice.open({
+                        title: '请选择要编辑的角色',
+                    });
+                } else {
+                    self.createModal.title = '编辑角色';
+                    self.createModal.name = self.deleteModal.name;
+                    self.createModal.authority = self.deleteModal.authority;
+                    self.modalCreate = true;
+                }
+            },
             selectionChange(selection) {
                 const self = this;
                 self.selection = selection;
@@ -160,6 +193,7 @@
             submitCancel() {
                 this.modal = false;
             },
+            submitCreate() {},
         },
         mounted() {
             this.organizationName = this.departmentList[0].title;
@@ -173,11 +207,12 @@
                 <tab-pane label="角色管理" name="name1">
                     <card :bordered="false">
                         <div class="top-btn-action">
-                            <router-link to="/member/organization/user/create">
-                                <i-button class="btn-action" type="ghost">+新增角色</i-button>
-                            </router-link>
-                            <i-button class="btn-action" type="ghost">编辑</i-button>
-                            <i-button class="btn-action" type="ghost" @click.native="deleteUser">删除</i-button>
+                            <i-button class="btn-action" type="ghost"
+                                      @click.native="createUserRole">+新增角色</i-button>
+                            <i-button class="btn-action" type="ghost"
+                                      @click.native="editUserRole">编辑</i-button>
+                            <i-button class="btn-action" type="ghost"
+                                      @click.native="deleteUser">删除</i-button>
                         </div>
                         <row>
                             <i-col span="12" class="left-col-span">
@@ -226,6 +261,39 @@
                                 <span v-if="!loading">确认</span>
                                 <span v-else>正在删除…</span>
                             </i-button>
+                        </i-col>
+                    </row>
+                </i-form>
+            </div>
+        </modal>
+        <modal
+                v-model="modalCreate"
+                :title="createModal.title" class="setting-modal-delete setting-modal-action">
+            <div>
+                <i-form ref="createModal" :model="createModal" :rules="rules" :label-width="110">
+                    <row>
+                        <i-col span="14">
+                            <form-item label="角色名称" prop="name">
+                                <i-input v-model="createModal.name"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item label="权限值" prop="authority">
+                                <i-input v-model="createModal.authority"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item>
+                                <i-button :loading="loading" @click.native="submitCreate"
+                                          class="btn-group" type="primary">
+                                    <span v-if="!loading">确认提交</span>
+                                    <span v-else>正在提交…</span>
+                                </i-button>
+                            </form-item>
                         </i-col>
                     </row>
                 </i-form>
