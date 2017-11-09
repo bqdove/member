@@ -32,6 +32,7 @@ import OrganizationUserCreate from '../pages/OrganizationUserCreate.vue';
 import OrganizationRole from '../pages/OrganizationRole.vue';
 import UserManager from '../pages/UserManager.vue';
 import UserManagerCreate from '../pages/UserManagerCreate.vue';
+import UserManagerBan from '../pages/UserManagerBan.vue';
 import FunctionManager from '../pages/FunctionManager.vue';
 import FunctionManagerSet from '../pages/FunctionManagerSet.vue';
 import FunctionManagerLook from '../pages/FunctionManagerLook.vue';
@@ -205,6 +206,11 @@ export default function (injection) {
                     beforeEnter: injection.middleware.requireAuth,
                     component: UserManagerCreate,
                     path: 'user/manager/create',
+                },
+                {
+                    beforeEnter: injection.middleware.requireAuth,
+                    component: UserManagerBan,
+                    path: 'user/manager/ban',
                 },
                 {
                     beforeEnter: injection.middleware.requireAuth,
