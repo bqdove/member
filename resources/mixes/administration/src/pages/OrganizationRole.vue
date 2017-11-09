@@ -5,6 +5,14 @@
             });
         },
         data() {
+            const reg = /^[0-9]*$/;
+            const validatorAuthority = (rule, value, callback) => {
+                if (!reg.test(value)) {
+                    callback(new Error('权限值为数字'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 columns: [
                     {
@@ -145,6 +153,12 @@
                             trigger: 'blur',
                         },
                     ],
+                    authority: [
+                        {
+                            trigger: 'blur',
+                            validator: validatorAuthority,
+                        },
+                    ],
                 },
                 selection: [],
             };
@@ -281,7 +295,7 @@
                     <row>
                         <i-col span="14">
                             <form-item label="权限值" prop="authority">
-                                <i-input v-model="createModal.authority"></i-input>
+                                <i-input number v-model="createModal.authority"></i-input>
                             </form-item>
                         </i-col>
                     </row>
