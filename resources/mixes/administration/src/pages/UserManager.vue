@@ -162,7 +162,7 @@
                     },
                     {
                         align: 'center',
-                        key: 'index',
+                        key: 'sort',
                         render(h, data) {
                             const { row } = data.row;
                             return h('tooltip', {
@@ -177,14 +177,14 @@
                                         return h('i-input', {
                                             on: {
                                                 'on-change': event => {
-                                                    row.index = event.target.value;
+                                                    row.sort = event.target.value;
                                                 },
                                                 'on-enter': () => {
                                                     self.update(row);
                                                 },
                                             },
                                             props: {
-                                                value: self.msgData[data.index].index,
+                                                value: self.msgData[data.index].sort,
                                             },
                                             style: {
                                                 width: '84px',
@@ -224,7 +224,14 @@
                             return h('div', [
                                 h('i-button', {
                                     on: {
-                                        click() {},
+                                        click() {
+                                            self.$router.push({
+                                                path: '/member/user/manager/message',
+                                                query: {
+                                                    type: '1',
+                                                },
+                                            });
+                                        },
                                     },
                                     props: {
                                         size: 'small',
@@ -256,12 +263,12 @@
                     {
                         enabled: false,
                         name: '视频链接',
-                        index: null,
+                        sort: null,
                     },
                     {
                         enabled: false,
                         name: '视频链接',
-                        index: null,
+                        sort: null,
                     },
                 ],
                 modal1: false,
@@ -460,7 +467,14 @@
                 <tab-pane label="信息管理" name="name3">
                     <card :bordered="false">
                         <div class="top-btn-action">
-                            <i-button class="btn-action" type="ghost">+新增信息</i-button>
+                            <router-link :to="{
+                                path: '/member/user/manager/message',
+                                query: {
+                                    type: '0',
+                                },
+                            }">
+                                <i-button class="btn-action" type="ghost">+新增信息</i-button>
+                            </router-link>
                             <i-button class="btn-action" @click.native="batchRemove"
                                       type="ghost">批量删除</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
