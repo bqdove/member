@@ -148,7 +148,7 @@
                         id: '5435',
                         name: 'gdeyf',
                         phone: '1876534576',
-                        sex: '2',
+                        sex: '0',
                     },
                     {
                         email: '226458751@qq.com',
@@ -269,14 +269,14 @@
                 <tab-pane label="部门用户" name="name1">
                     <card :bordered="false">
                         <row>
-                            <i-col span="12">
+                            <i-col span="10" class="left-col-span">
                                 <div class="depart-expand-tree">
                                     <h5>部门名称</h5>
                                     <tree :data="departmentList"
                                           @on-select-change="changeTreeSelect"></tree>
                                 </div>
                             </i-col>
-                            <i-col span="12">
+                            <i-col span="14">
                                 <div class="top-btn-action">
                                     <router-link to="/member/organization/user/create">
                                         <i-button class="btn-action" type="ghost">+添加用户</i-button>
@@ -294,6 +294,7 @@
                                     </div>
                                 </div>
                                 <i-table :columns="columns"
+                                         table-list
                                          :data="list"
                                          @on-selection-change="selectionChange"
                                          ref="list"

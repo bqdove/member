@@ -5,19 +5,8 @@
             });
         },
         data() {
-            const self = this;
             return {
                 columns: [
-                    {
-                        align: 'center',
-                        type: 'selection',
-                        width: 60,
-                    },
-                    {
-                        align: 'center',
-                        key: 'name',
-                        title: '用户名',
-                    },
                     {
                         align: 'center',
                         key: 'id',
@@ -25,60 +14,13 @@
                     },
                     {
                         align: 'center',
-                        key: 'sex',
-                        render(h, data) {
-                            if (data.row.sex === '1') {
-                                data.row.sex = '男';
-                            } else if (data.row.sex === '0') {
-                                data.row.sex = '女';
-                            }
-                            return data.row.sex;
-                        },
-                        title: '性别',
-                    },
-                    {
-                        key: 'email',
-                        title: '邮箱',
-                    },
-                    {
-                        key: 'phone',
-                        title: '手机',
+                        key: 'name',
+                        title: '角色名称',
                     },
                     {
                         align: 'center',
-                        key: 'action',
-                        render(h, data) {
-                            return h('div', [
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.modalLook = true;
-                                        },
-                                    },
-                                    props: {
-                                        size: 'small',
-                                        type: 'ghost',
-                                    },
-                                }, '查看'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.deleteModal.name = data.row.name;
-                                            self.modal1 = true;
-                                        },
-                                    },
-                                    props: {
-                                        size: 'small',
-                                        type: 'ghost',
-                                    },
-                                    style: {
-                                        marginLeft: '10px',
-                                    },
-                                }, '移除'),
-                            ]);
-                        },
-                        title: '操作',
-                        width: 180,
+                        key: 'authority',
+                        title: '权限值',
                     },
                 ],
                 deleteModal: {
@@ -89,38 +31,38 @@
                 departmentList: [
                     {
                         expand: true,
-                        title: 'parent 1',
+                        title: '功能1',
                         children: [
                             {
                                 expand: false,
-                                title: 'parent 1-1',
+                                title: '功能 1-1',
                                 children: [
                                     {
                                         expand: false,
-                                        title: 'leaf 1-1-1',
+                                        title: '功能 1-1-1',
                                         children: [
                                             {
-                                                title: 'leaf 1-1-1-1',
+                                                title: '功能 1-1-1-1',
                                             },
                                             {
-                                                title: 'leaf 1-1-1-2',
+                                                title: '功能 1-1-1-2',
                                             },
                                         ],
                                     },
                                     {
-                                        title: 'leaf 1-1-2',
+                                        title: '功能 1-1-2',
                                     },
                                 ],
                             },
                             {
                                 expand: false,
-                                title: 'parent 1-2',
+                                title: '功能 1-2',
                                 children: [
                                     {
-                                        title: 'leaf 1-2-1',
+                                        title: '功能 1-2-1',
                                     },
                                     {
-                                        title: 'leaf 1-2-1',
+                                        title: '功能 1-2-1',
                                     },
                                 ],
                             },
@@ -137,67 +79,54 @@
                 },
                 list: [
                     {
-                        email: '226458751@qq.com',
+                        authority: 111,
                         id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        name: '角色1-1',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '0',
+                        authority: 110,
+                        id: '5436',
+                        name: '角色1-2',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        authority: 119,
+                        id: '5437',
+                        name: '角色1-3',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        authority: 118,
+                        id: '5438',
+                        name: '角色1-4',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        authority: 117,
+                        id: '5439',
+                        name: '角色1-5',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        authority: 116,
+                        id: '5430',
+                        name: '角色1-6',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        authority: 115,
+                        id: '5431',
+                        name: '角色1-7',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        authority: 114,
+                        id: '54351',
+                        name: '角色1-1',
                     },
                     {
-                        email: '226458751@qq.com',
-                        id: '5435',
-                        name: 'gdeyf',
-                        phone: '1876534576',
-                        sex: '1',
+                        authority: 113,
+                        id: '54352',
+                        name: '角色1-1',
+                    },
+                    {
+                        authority: 111,
+                        id: '54353',
+                        name: '角色1-1',
                     },
                 ],
                 modal1: false,
@@ -231,29 +160,32 @@
 </script>
 <template>
     <div class="member-warp">
-        <div class="organization-user organization-role">
+        <div class="organization-user show-checkbox">
             <tabs value="name1">
                 <tab-pane label="角色管理" name="name1">
                     <card :bordered="false">
+                        <div class="top-btn-action">
+                            <router-link to="/member/organization/user/create">
+                                <i-button class="btn-action" type="ghost">+新增角色</i-button>
+                            </router-link>
+                            <i-button class="btn-action" type="ghost">编辑</i-button>
+                            <i-button class="btn-action" type="ghost">删除</i-button>
+                        </div>
                         <row>
-                            <i-col span="12">
-                                <div class="top-btn-action">
-                                    <router-link to="/member/organization/user/create">
-                                        <i-button class="btn-action" type="ghost">+新增角色</i-button>
-                                    </router-link>
-                                    <i-button class="btn-action" type="ghost">编辑</i-button>
-                                    <i-button class="btn-action" type="ghost">删除</i-button>
-                                </div>
+                            <i-col span="12" class="left-col-span">
                                 <i-table :columns="columns"
+                                         class="table-list"
                                          :data="list"
+                                         height="518"
                                          ref="list"
                                          highlight-row>
                                 </i-table>
                             </i-col>
-                            <i-col span="12" class="left-col-span">
+                            <i-col span="12">
                                 <div class="depart-expand-tree">
                                     <h5>权限设置</h5>
                                     <tree :data="departmentList"
+                                          show-checkbox
                                           @on-select-change="changeTreeSelect"></tree>
                                 </div>
                             </i-col>
