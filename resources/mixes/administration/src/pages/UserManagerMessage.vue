@@ -57,6 +57,84 @@
                         },
                     ],
                 },
+                selectValueList: [
+                    {
+                        title: 'parent 1',
+                        expand: true,
+                        render(h, data) {
+                            return h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    width: '100%',
+                                },
+                            }, [
+                                h('span', [
+                                    h('Icon', {
+                                        props: {
+                                            type: 'ios-folder-outline',
+                                        },
+                                        style: {
+                                            marginRight: '8px',
+                                        },
+                                    }),
+                                    h('span', data.title),
+                                ]),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        float: 'right',
+                                        marginRight: '32px',
+                                    },
+                                }, [
+                                    h('Button', {
+                                        props: Object.assign({}, this.buttonProps, {
+                                            icon: 'ios-plus-empty',
+                                            type: 'primary',
+                                        }),
+                                        style: {
+                                            width: '52px',
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.append(data);
+                                            },
+                                        },
+                                    }),
+                                ]),
+                            ]);
+                        },
+                        children: [
+                            {
+                                title: 'child 1-1',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-1-1',
+                                        expand: true,
+                                    },
+                                    {
+                                        title: 'leaf 1-1-2',
+                                        expand: true,
+                                    },
+                                ],
+                            },
+                            {
+                                title: 'child 1-2',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-2-1',
+                                        expand: true,
+                                    },
+                                    {
+                                        title: 'leaf 1-2-1',
+                                        expand: true,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
                 timeTypes: [
                     {
                         label: '选日期及时间',
@@ -131,12 +209,16 @@
                         value: 8,
                     },
                     {
-                        label: '上传图片',
+                        label: '级联下拉菜单',
                         value: 9,
                     },
                     {
-                        label: '上传文件',
+                        label: '上传图片',
                         value: 10,
+                    },
+                    {
+                        label: '上传文件',
+                        value: 11,
                     },
                 ],
             };
@@ -192,7 +274,10 @@
                                 <p class="tip">最多可填写的字符数</p>
                             </form-item>
                             <form-item label="可选值" prop="check_value"
-                                       v-if="form.type === 3 || form.type === 4 || form.type === 7">
+                                       v-if="form.type === 3 ||
+                                           form.type === 4 ||
+                                           form.type === 5 ||
+                                           form.type === 8">
                                 <i-input :autosize="{minRows: 3,maxRows: 5}"
                                          number
                                          type="textarea"
@@ -200,22 +285,48 @@
                                 <p class="tip">每行输入一个可选值，使用回车键换行</p>
                             </form-item>
                             <form-item label="可选数量" prop="check_num"
-                                       v-if="form.type === 4">
+                                       v-if="form.type === 4 || form.type === 5">
                                 <i-input number v-model="form.check_num"></i-input>
                             </form-item>
-                            <form-item label="时间组件类型" prop="check_time" v-if="form.type === 5">
+                            <form-item label="时间组件类型" prop="check_time" v-if="form.type === 6">
                                 <i-select v-model="form.check_time">
                                     <i-option v-for="item in timeTypes"
                                               :value="item.value">
                                         {{ item.label }}</i-option>
                                 </i-select>
                             </form-item>
-                            <form-item label="时间组件类型" prop="time_area" v-if="form.type === 6">
+                            <form-item label="时间组件类型" prop="time_area" v-if="form.type === 7">
                                 <i-select v-model="form.time_area">
                                     <i-option v-for="item in timeTypesArea"
                                               :value="item.value">
                                         {{ item.label }}</i-option>
                                 </i-select>
+                            </form-item>
+                            <form-item label="大小限定" prop="limit_size"
+                                       v-if="form.type === 10 || form.type === 11">
+                                <i-input number v-model="form.limit_size"></i-input>
+                                <p class="tip" v-if="form.type === 10">上传图片大小（单位：KB）</p>
+                                <p class="tip" v-if="form.type === 11">上传文件大小（单位：KB）</p>
+                            </form-item>
+                            <form-item label="图片格式" prop="image_format"
+                                       v-if="form.type === 10">
+                                <checkbox-group v-model="form.image_format">
+                                    <checkbox label="gif"></checkbox>
+                                    <checkbox label="jpg"></checkbox>
+                                    <checkbox label="bmp"></checkbox>
+                                </checkbox-group>
+                            </form-item>
+                            <form-item label="文件格式" prop="file_format"
+                                       v-if="form.type === 11">
+                                <checkbox-group v-model="form.file_format">
+                                    <checkbox label="doc"></checkbox>
+                                    <checkbox label="txt"></checkbox>
+                                    <checkbox label="rp"></checkbox>
+                                </checkbox-group>
+                            </form-item>
+                            <form-item label="可选值" prop="select_value" v-if="form.type === 9">
+                                <i-button type="ghost">添加可选值</i-button>
+                                <tree :data="selectValueList"></tree>
                             </form-item>
                         </i-col>
                     </row>
