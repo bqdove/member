@@ -91,7 +91,7 @@
                 <i-button type="text" @click.native="goBack">
                     <icon type="chevron-left"></icon>
                 </i-button>
-                <span>封禁用户</span>
+                <span>用户管理-封禁</span>
             </div>
             <card :bordered="false">
                 <i-form :label-width="200" :model="form" ref="form" :rules="rules">
@@ -135,7 +135,9 @@
                         <i-col span="8">
                             <form-item label="封禁时间">
                                 <i-select v-model="form.time">
-                                    <i-option v-for="item in times" :value="item.value" :key="item">{{ item.label }}</i-option>
+                                    <i-option v-for="item in times"
+                                              :value="item.value"
+                                              :key="item">{{ item.label }}</i-option>
                                 </i-select>
                                 <date-picker :placeholder="请选择封禁截止时间"
                                              style="margin-top: 20px;"

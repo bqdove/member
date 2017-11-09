@@ -210,7 +210,7 @@ export default function (injection) {
                 {
                     beforeEnter: injection.middleware.requireAuth,
                     component: UserManagerBan,
-                    path: 'user/manager/ban',
+                    path: 'user/manager/forbid',
                 },
                 {
                     beforeEnter: injection.middleware.requireAuth,

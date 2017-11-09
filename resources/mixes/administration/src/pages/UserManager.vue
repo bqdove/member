@@ -71,7 +71,7 @@
                                     on: {
                                         click() {
                                             self.$router.push({
-                                                path: '/member/user/manager/ban',
+                                                path: '/member/user/manager/forbid',
                                                 query: {
                                                     id: data.row.id,
                                                 },
