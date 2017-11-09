@@ -162,9 +162,40 @@
                     },
                     {
                         align: 'center',
-                        key: 'sort',
+                        key: 'index',
+                        render(h, data) {
+                            const { row } = data.row;
+                            return h('tooltip', {
+                                props: {
+                                    placement: 'right-end',
+                                },
+                                scopedSlots: {
+                                    content() {
+                                        return '回车更新数据';
+                                    },
+                                    default() {
+                                        return h('i-input', {
+                                            on: {
+                                                'on-change': event => {
+                                                    row.index = event.target.value;
+                                                },
+                                                'on-enter': () => {
+                                                    self.update(row);
+                                                },
+                                            },
+                                            props: {
+                                                value: self.msgData[data.index].index,
+                                            },
+                                            style: {
+                                                width: '84px',
+                                            },
+                                        });
+                                    },
+                                },
+                            });
+                        },
                         title: '排序',
-                        width: 200,
+                        width: 160,
                     },
                     {
                         align: 'center',
@@ -174,6 +205,16 @@
                     },
                     {
                         key: 'enabled',
+                        render(h, data) {
+                            const { row } = data.row;
+                            return h('checkbox', {
+                                on: {
+                                    'on-change': value => {
+                                        row.enabled = value;
+                                    },
+                                },
+                            });
+                        },
                         title: '是否必填',
                     },
                     {
@@ -215,12 +256,12 @@
                     {
                         enabled: false,
                         name: '视频链接',
-                        sort: null,
+                        index: null,
                     },
                     {
                         enabled: false,
                         name: '视频链接',
-                        sort: null,
+                        index: null,
                     },
                 ],
                 modal1: false,
@@ -355,6 +396,7 @@
             },
             submitDelete() {},
             batchRemovesure() {},
+            update() {},
         },
     };
 </script>
