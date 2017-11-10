@@ -13,6 +13,7 @@
             }
         },
         data() {
+            const self = this;
             const reg = /^[0-9]*$/;
             const validatorSort = (rule, value, callback) => {
                 if (!reg.test(value)) {
@@ -23,6 +24,16 @@
             };
             return {
                 action: `${window.api}/zn/admin/upload`,
+                createModal: {
+                    authority: 0,
+                    name: '',
+                    title: '',
+                },
+                deleteModal: {
+                    authority: 0,
+                    id: '',
+                    name: '',
+                },
                 form: {
                     intro: '',
                     name: '',
@@ -31,6 +42,8 @@
                     type: 0,
                 },
                 loading: false,
+                modal: false,
+                modalCreate: false,
                 parent: {
                     name: '',
                     type: '',
@@ -57,9 +70,22 @@
                         },
                     ],
                 },
+                rulesModal: {
+                    name: [
+                        {
+                            message: '可选值名称不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
+                buttonProps: {
+                    type: 'ghost',
+                    size: 'small',
+                },
                 selectValueList: [
                     {
-                        title: 'parent 1',
+                        title: '父级parent 1',
                         expand: true,
                         render(h, { root, node, data }) {
                             return h('span', {
@@ -69,7 +95,7 @@
                                 },
                             }, [
                                 h('span', [
-                                    h('Icon', {
+                                    h('icon', {
                                         props: {
                                             type: 'ios-folder-outline',
                                         },
@@ -86,8 +112,8 @@
                                         marginRight: '32px',
                                     },
                                 }, [
-                                    h('Button', {
-                                        props: Object.assign({}, this.buttonProps, {
+                                    h('i-button', {
+                                        props: Object.assign({}, self.buttonProps, {
                                             icon: 'ios-plus-empty',
                                             type: 'primary',
                                         }),
@@ -98,7 +124,7 @@
                                             click() {
                                                 window.console.log(root);
                                                 window.console.log(node);
-                                                this.append(data);
+                                                self.append(data);
                                             },
                                         },
                                     }),
@@ -135,10 +161,6 @@
                                 ],
                             },
                         ],
-                        buttonProps: {
-                            type: 'ghost',
-                            size: 'small',
-                        },
                     },
                 ],
                 timeTypes: [
@@ -243,7 +265,7 @@
                     },
                 }, [
                     h('span', [
-                        h('Icon', {
+                        h('icon', {
                             props: {
                                 type: 'ios-paper-outline',
                             },
@@ -260,7 +282,7 @@
                             marginRight: '32px',
                         },
                     }, [
-                        h('Button', {
+                        h('i-button', {
                             props: Object.assign({}, this.buttonProps, {
                                 icon: 'ios-plus-empty',
                             }),
@@ -273,7 +295,7 @@
                                 },
                             },
                         }),
-                        h('Button', {
+                        h('i-button', {
                             props: Object.assign({}, this.buttonProps, {
                                 icon: 'ios-minus-empty',
                             }),
@@ -397,7 +419,7 @@
                             </form-item>
                             <form-item label="可选值" prop="select_value" v-if="form.type === 9">
                                 <i-button type="ghost">添加可选值</i-button>
-                                <tree :data="selectValueList"></tree>
+                                <tree :data="selectValueList" :render="renderContent"></tree>
                             </form-item>
                         </i-col>
                     </row>
@@ -432,5 +454,63 @@
                 </i-form>
             </card>
         </div>
+        <modal
+                v-model="modal"
+                title="删除" class="setting-modal-delete">
+            <div>
+                <i-form ref="deleteModal" :model="deleteModal">
+                    <row>
+                        <i-col class="first-row-title delete-file-tip">
+                            <span>确定要删除角色"{{ deleteModal.name }}"吗？
+                                删除后不可恢复并且相关部门用户将失去此角色身份。</span>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col class="btn-group">
+                            <i-button type="ghost" class="cancel-btn"
+                                      @click.native="submitCancel">取消</i-button>
+                            <i-button :loading="loading" type="primary" class="cancel-btn"
+                                      @click.native="submitDelete">
+                                <span v-if="!loading">确认</span>
+                                <span v-else>正在删除…</span>
+                            </i-button>
+                        </i-col>
+                    </row>
+                </i-form>
+            </div>
+        </modal>
+        <modal
+                v-model="modalCreate"
+                :title="createModal.title" class="setting-modal-delete setting-modal-action">
+            <div>
+                <i-form ref="createModal" :model="createModal" :rules="rulesModal" :label-width="110">
+                    <row>
+                        <i-col span="14">
+                            <form-item label="角色名称" prop="name">
+                                <i-input v-model="createModal.name"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item label="权限值" prop="authority">
+                                <i-input number v-model="createModal.authority"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item>
+                                <i-button :loading="loading" @click.native="submitCreate"
+                                          class="btn-group" type="primary">
+                                    <span v-if="!loading">确认提交</span>
+                                    <span v-else>正在提交…</span>
+                                </i-button>
+                            </form-item>
+                        </i-col>
+                    </row>
+                </i-form>
+            </div>
+        </modal>
     </div>
 </template>
