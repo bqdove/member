@@ -25,7 +25,7 @@
             return {
                 action: `${window.api}/zn/admin/upload`,
                 createModal: {
-                    authority: 0,
+                    last_name: [],
                     name: '',
                     title: '',
                 },
@@ -48,6 +48,42 @@
                     name: '',
                     type: '',
                 },
+                parentList: [
+                    {
+                        children: [
+                            {
+                                label: '部门1-1',
+                                value: '11',
+                            },
+                            {
+                                label: '部门1-2',
+                                value: '12',
+                            },
+                        ],
+                        label: '部门1',
+                        value: '1',
+                    },
+                    {
+                        children: [
+                            {
+                                children: [
+                                    {
+                                        label: '部门2-1-1',
+                                        value: '211',
+                                    },
+                                ],
+                                label: '部门2-1',
+                                value: '21',
+                            },
+                            {
+                                label: '部门2-2',
+                                value: '22',
+                            },
+                        ],
+                        label: '部门2',
+                        value: '2',
+                    },
+                ],
                 rules: {
                     name: [
                         {
@@ -256,6 +292,7 @@
                 const self = this;
                 self.$router.go(-1);
             },
+            filterDepartment() {},
             submit() {},
             renderContent(h, { root, node, data }) {
                 return h('span', {
@@ -461,8 +498,7 @@
                 <i-form ref="deleteModal" :model="deleteModal">
                     <row>
                         <i-col class="first-row-title delete-file-tip">
-                            <span>确定要删除角色"{{ deleteModal.name }}"吗？
-                                删除后不可恢复并且相关部门用户将失去此角色身份。</span>
+                            <span>确定要删除可选值"{{ deleteModal.name }}"吗？</span>
                         </i-col>
                     </row>
                     <row>
@@ -486,15 +522,18 @@
                 <i-form ref="createModal" :model="createModal" :rules="rulesModal" :label-width="110">
                     <row>
                         <i-col span="14">
-                            <form-item label="角色名称" prop="name">
+                            <form-item label="可选值名称" prop="name">
                                 <i-input v-model="createModal.name"></i-input>
                             </form-item>
                         </i-col>
                     </row>
-                    <row>
+                    <row v-if="createModal.title === '新增'">
                         <i-col span="14">
-                            <form-item label="权限值" prop="authority">
-                                <i-input number v-model="createModal.authority"></i-input>
+                            <form-item label="父级可选值" prop="last_name">
+                                <cascader :data="parentList"
+                                          change-on-select
+                                          @on-change="filterDepartment"
+                                          v-model="createModal.last_name"></cascader>
                             </form-item>
                         </i-col>
                     </row>
