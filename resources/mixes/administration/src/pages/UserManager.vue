@@ -394,10 +394,22 @@
             changePage2() {},
             batchRemove(pre) {
                 const self = this;
+                const deletes = [];
+                if (pre === 1) {
+                    self.selection1.forEach(item => {
+                        deletes.push(item.id);
+                    });
+                }
+                if (deletes.length < 1) {
+                    self.$notice.open({
+                        title: '请选择要删除的用户!',
+                    });
+                } else {
+                    self.modal2 = true;
+                }
                 if (pre === 3) {
                     self.deleteModal.mode = 1;
                 }
-                this.modal2 = true;
             },
             submitCancel(data) {
                 if (data === 1) {

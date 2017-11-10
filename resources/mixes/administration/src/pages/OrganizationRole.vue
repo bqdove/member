@@ -176,6 +176,8 @@
             },
             createUserRole() {
                 this.createModal.title = '新增角色';
+                this.createModal.name = '';
+                this.createModal.authority = null;
                 this.modalCreate = true;
             },
             deleteUser() {
@@ -207,8 +209,6 @@
             },
             submitCancel() {
                 this.modal = false;
-                this.createModal.name = '';
-                this.createModal.authority = null;
             },
             submitCreate() {},
         },
