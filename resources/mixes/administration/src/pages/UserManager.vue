@@ -107,6 +107,7 @@
                                     on: {
                                         click() {
                                             self.deleteModal.name = data.row.name;
+                                            self.deleteModal.type = 0;
                                             self.modal1 = true;
                                         },
                                     },
@@ -127,6 +128,8 @@
                 deleteModal: {
                     name: 'ibenchu',
                     num: 2,
+                    mode: 0,
+                    type: 0,
                 },
                 list: [
                     {
@@ -242,6 +245,7 @@
                                     on: {
                                         click() {
                                             self.deleteModal.name = data.row.name;
+                                            self.deleteModal.type = 1;
                                             self.modal1 = true;
                                         },
                                     },
@@ -339,6 +343,7 @@
                                     on: {
                                         click() {
                                             self.deleteModal.name = data.row.name;
+                                            self.deleteModal.type = 0;
                                             self.modal1 = true;
                                         },
                                     },
@@ -387,10 +392,11 @@
         methods: {
             changePage1() {},
             changePage2() {},
-            batchDelete() {
-                this.modal2 = true;
-            },
-            batchRemove() {
+            batchRemove(pre) {
+                const self = this;
+                if (pre === 3) {
+                    self.deleteModal.mode = 1;
+                }
                 this.modal2 = true;
             },
             submitCancel(data) {
@@ -422,7 +428,7 @@
                             }">
                                 <i-button class="btn-action" type="ghost">+新增角色</i-button>
                             </router-link>
-                            <i-button class="btn-action" @click.native="batchRemove"
+                            <i-button class="btn-action" @click.native="batchRemove(1)"
                                       type="ghost">批量删除</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
@@ -445,7 +451,7 @@
                     <card :bordered="false">
                         <div class="top-btn-action">
                             <i-button class="btn-action" type="ghost">批量还原</i-button>
-                            <i-button class="btn-action" @click.native="batchDelete"
+                            <i-button class="btn-action" @click.native="batchRemove(2)"
                                       type="ghost">批量删除</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
@@ -475,7 +481,7 @@
                             }">
                                 <i-button class="btn-action" type="ghost">+新增信息</i-button>
                             </router-link>
-                            <i-button class="btn-action" @click.native="batchRemove"
+                            <i-button class="btn-action" @click.native="batchRemove(3)"
                                       type="ghost">批量删除</i-button>
                             <i-button class="btn-action" type="ghost">刷新</i-button>
                         </div>
@@ -502,7 +508,10 @@
                     <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
                         <row>
                             <i-col class="first-row-title delete-file-tip">
-                                <span>确定要删除用户"{{ deleteModal.name }}"吗？</span>
+                                <span v-if="deleteModal.type !== 1">
+                                    确定要删除用户"{{ deleteModal.name }}"吗？</span>
+                                <span v-if="deleteModal.type === 1">
+                                    确定要删除信息项"{{ deleteModal.name }}"吗？</span>
                             </i-col>
                         </row>
                         <row>
@@ -526,7 +535,12 @@
                     <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
                         <row>
                             <i-col class="first-row-title delete-file-tip">
-                                <span>确定要删除这{{ deleteModal.num }}个用户吗？</span>
+                                <span v-if="deleteModal.mode !== 1">
+                                    确定要删除这{{ deleteModal.num }}个用户吗？
+                                </span>
+                                <span v-if="deleteModal.mode === 1">
+                                    确定要删除这{{ deleteModal.num }}项信息吗？
+                                </span>
                             </i-col>
                         </row>
                         <row>
