@@ -288,6 +288,10 @@
             };
         },
         methods: {
+            addSelectValue() {
+                this.createModal.title = '新增';
+                this.modalCreate = true;
+            },
             goBack() {
                 const self = this;
                 self.$router.go(-1);
@@ -455,7 +459,7 @@
                                 </checkbox-group>
                             </form-item>
                             <form-item label="可选值" prop="select_value" v-if="form.type === 9">
-                                <i-button type="ghost">添加可选值</i-button>
+                                <i-button type="ghost" @click.native="addSelectValue">添加可选值</i-button>
                                 <tree :data="selectValueList" :render="renderContent"></tree>
                             </form-item>
                         </i-col>
