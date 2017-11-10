@@ -13,7 +13,6 @@
             }
         },
         data() {
-            const self = this;
             const reg = /^[0-9]*$/;
             const validatorSort = (rule, value, callback) => {
                 if (!reg.test(value)) {
@@ -149,7 +148,7 @@
                                     },
                                 }, [
                                     h('i-button', {
-                                        props: Object.assign({}, self.buttonProps, {
+                                        props: Object.assign({}, this.buttonProps, {
                                             icon: 'ios-plus-empty',
                                             type: 'primary',
                                         }),
@@ -160,7 +159,7 @@
                                             click() {
                                                 window.console.log(root);
                                                 window.console.log(node);
-                                                self.append(data);
+                                                this.append(data);
                                             },
                                         },
                                     }),
