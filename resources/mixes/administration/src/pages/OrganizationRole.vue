@@ -32,12 +32,12 @@
                     },
                 ],
                 createModal: {
-                    authority: 0,
+                    authority: null,
                     name: '',
                     title: '',
                 },
                 deleteModal: {
-                    authority: 0,
+                    authority: null,
                     id: '',
                     name: '',
                 },
@@ -182,7 +182,7 @@
                 const self = this;
                 if (self.deleteModal.id === '') {
                     self.$notice.open({
-                        title: '请选择要删除的角色',
+                        title: '请先选中要删除的角色',
                     });
                 } else {
                     self.modal = true;
@@ -192,7 +192,7 @@
                 const self = this;
                 if (self.deleteModal.id === '') {
                     self.$notice.open({
-                        title: '请选择要编辑的角色',
+                        title: '请先选中要编辑的角色',
                     });
                 } else {
                     self.createModal.title = '编辑角色';
@@ -207,6 +207,8 @@
             },
             submitCancel() {
                 this.modal = false;
+                this.createModal.name = '';
+                this.createModal.authority = null;
             },
             submitCreate() {},
         },

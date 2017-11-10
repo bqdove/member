@@ -133,6 +133,9 @@
                 const self = this;
                 self.$router.go(-1);
             },
+            submitCancel() {
+                this.modal = false;
+            },
         },
     };
 </script>
