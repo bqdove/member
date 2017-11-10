@@ -59,27 +59,7 @@
             },
             submit() {
                 const self = this;
-                self.loading = true;
-                self.$refs.form.validate(valid => {
-                    if (valid) {
-                        self.$loading.start();
-                        self.$http.post(`${window.api}/member/administration/user/ban`, self.form).then(response => {
-                            self.$loading.finish();
-                            self.$notice.open({
-                                title: response.data.message,
-                            });
-                            self.$router.push('/member/user/manager');
-                        }).catch(() => {
-                            self.$loading.error();
-                            self.loading = false;
-                        });
-                    } else {
-                        self.loading = false;
-                        self.$notice.error({
-                            title: '请正确填写设置信息！',
-                        });
-                    }
-                });
+                self.$router.push('/member/user/manager');
             },
         },
     };
