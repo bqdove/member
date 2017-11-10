@@ -105,6 +105,7 @@
                         status: true,
                     },
                 ],
+                loading: false,
                 pagination: {
                     count: 3,
                     current: 1,

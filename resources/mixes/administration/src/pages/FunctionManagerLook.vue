@@ -104,6 +104,7 @@
                         name: 'benchu3',
                     },
                 ],
+                loading: false,
                 modal: false,
                 modalCreate: false,
                 pagination: {

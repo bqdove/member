@@ -200,6 +200,7 @@
                         value: '2',
                     },
                 ],
+                loading: false,
                 mallColumns: [
                     {
                         align: 'center',

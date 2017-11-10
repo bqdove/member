@@ -163,6 +163,7 @@
                         role: '管理员',
                     },
                 ],
+                loading: false,
                 modal: false,
                 modalCreate: false,
                 pagination: {

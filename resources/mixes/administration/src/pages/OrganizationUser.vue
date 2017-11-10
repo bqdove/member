@@ -200,6 +200,7 @@
                         sex: '1',
                     },
                 ],
+                loading: false,
                 modal1: false,
                 modal2: false,
                 modalLook: false,

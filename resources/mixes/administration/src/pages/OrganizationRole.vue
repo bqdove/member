@@ -142,6 +142,7 @@
                         name: '角色1-1',
                     },
                 ],
+                loading: false,
                 modal: false,
                 modalCreate: false,
                 organizationName: '',
