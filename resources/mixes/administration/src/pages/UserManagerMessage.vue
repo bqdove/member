@@ -177,12 +177,14 @@
                             },
                         ],
                         render(h) {
-                            return h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    width: '100%',
-                                },
-                            }, 'uuuu');
+                            return h('span', [
+                                h('icon', {
+                                    props: {
+                                        type: 'checkmark-circled',
+                                        color: '#02a845',
+                                    },
+                                }),
+                            ]);
                         },
                     },
                 ],
