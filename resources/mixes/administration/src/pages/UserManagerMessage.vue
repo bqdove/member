@@ -34,10 +34,13 @@
                     name: '',
                 },
                 form: {
+                    check_time: '',
+                    check_value: '',
                     intro: '',
                     name: '',
                     sort: null,
                     status: true,
+                    time_area: '',
                     type: 0,
                 },
                 loading: false,
@@ -84,9 +87,30 @@
                     },
                 ],
                 rules: {
+                    check_time: [
+                        {
+                            message: '时间组件类型不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                    check_value: [
+                        {
+                            message: '可选值不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
                     name: [
                         {
                             message: '名称不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                    time_area: [
+                        {
+                            message: '时间组件类型不能为空',
                             required: true,
                             trigger: 'blur',
                         },
@@ -122,6 +146,36 @@
                     {
                         title: '父级parent 1',
                         expand: true,
+                        children: [
+                            {
+                                title: 'child 1-1',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-1-1',
+                                        expand: true,
+                                    },
+                                    {
+                                        title: 'leaf 1-1-2',
+                                        expand: true,
+                                    },
+                                ],
+                            },
+                            {
+                                title: 'child 1-2',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-2-1',
+                                        expand: true,
+                                    },
+                                    {
+                                        title: 'leaf 1-2-1',
+                                        expand: true,
+                                    },
+                                ],
+                            },
+                        ],
                         render(h, { root, node, data }) {
                             return h('span', {
                                 style: {
@@ -166,36 +220,6 @@
                                 ]),
                             ]);
                         },
-                        children: [
-                            {
-                                title: 'child 1-1',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-1-1',
-                                        expand: true,
-                                    },
-                                    {
-                                        title: 'leaf 1-1-2',
-                                        expand: true,
-                                    },
-                                ],
-                            },
-                            {
-                                title: 'child 1-2',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-2-1',
-                                        expand: true,
-                                    },
-                                    {
-                                        title: 'leaf 1-2-1',
-                                        expand: true,
-                                    },
-                                ],
-                            },
-                        ],
                     },
                 ],
                 timeTypes: [
@@ -412,7 +436,6 @@
                                            form.type === 5 ||
                                            form.type === 8">
                                 <i-input :autosize="{minRows: 3,maxRows: 5}"
-                                         number
                                          type="textarea"
                                          v-model="form.check_value"></i-input>
                                 <p class="tip">每行输入一个可选值，使用回车键换行</p>
