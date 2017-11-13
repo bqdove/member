@@ -13,6 +13,7 @@
             }
         },
         data() {
+            const self = this;
             const reg = /^[0-9]*$/;
             const validatorSort = (rule, value, callback) => {
                 if (!reg.test(value)) {
@@ -146,6 +147,50 @@
                     {
                         title: '父级parent 1',
                         expand: true,
+                        render(h, { root, node, data }) {
+                            return h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    width: '100%',
+                                },
+                            }, [
+                                h('span', [
+                                    h('icon', {
+                                        props: {
+                                            type: 'ios-folder-outline',
+                                        },
+                                        style: {
+                                            marginRight: '8px',
+                                        },
+                                    }),
+                                    h('span', data.title),
+                                ]),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        float: 'right',
+                                        marginRight: '32px',
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: Object.assign({}, self.buttonProps, {
+                                            icon: 'ios-plus-empty',
+                                            type: 'primary',
+                                        }),
+                                        style: {
+                                            width: '52px',
+                                        },
+                                        on: {
+                                            click() {
+                                                window.console.log(root);
+                                                window.console.log(node);
+                                                self.append(data);
+                                            },
+                                        },
+                                    }),
+                                ]),
+                            ]);
+                        },
                         children: [
                             {
                                 title: 'child 1-1',
@@ -176,16 +221,6 @@
                                 ],
                             },
                         ],
-                        render(h) {
-                            return h('span', [
-                                h('icon', {
-                                    props: {
-                                        type: 'checkmark-circled',
-                                        color: '#02a845',
-                                    },
-                                }),
-                            ]);
-                        },
                     },
                 ],
                 timeTypes: [
@@ -272,6 +307,23 @@
                     {
                         label: '上传文件',
                         value: 11,
+                    },
+                ],
+                columns: [
+                    {
+                        type: 'selection',
+                        width: '50',
+                    },
+                    {
+                        title: '编码',
+                        key: 'code',
+                        sortable: true,
+                        width: '150',
+                    },
+                ],
+                data: [
+                    {
+                        code: '111',
                     },
                 ],
             };
@@ -366,13 +418,7 @@
                 <span v-if="parent.type === '1'">信息管理-编辑"{{ parent.name }}"</span>
             </div>
             <card :bordered="false">
-                <tree-grid
-                        :items='data'
-                        :columns='columns'
-                        @on-row-click='rowClick'
-                        @on-selection-change='selectionClick'
-                        @on-sort-change='sortClick'
-                ></tree-grid>
+                <tree :data="selectValueList" :render="renderContent"></tree>
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
                     <row>
                         <i-col span="12">
@@ -455,7 +501,7 @@
                             </form-item>
                             <form-item label="可选值" prop="select_value" v-if="form.type === 9">
                                 <i-button type="ghost" @click.native="addSelectValue">添加可选值</i-button>
-                                <tree :data="selectValueList" :render="renderContent"></tree>
+                                <!--<tree :data="selectValueList" :render="renderContent"></tree>-->
                             </form-item>
                         </i-col>
                     </row>
