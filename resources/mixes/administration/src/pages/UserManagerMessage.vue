@@ -176,49 +176,13 @@
                                 ],
                             },
                         ],
-                        render(h, { root, node, data }) {
+                        render(h) {
                             return h('span', {
                                 style: {
                                     display: 'inline-block',
                                     width: '100%',
                                 },
-                            }, [
-                                h('span', [
-                                    h('icon', {
-                                        props: {
-                                            type: 'ios-folder-outline',
-                                        },
-                                        style: {
-                                            marginRight: '8px',
-                                        },
-                                    }),
-                                    h('span', data.title),
-                                ]),
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        float: 'right',
-                                        marginRight: '32px',
-                                    },
-                                }, [
-                                    h('i-button', {
-                                        props: Object.assign({}, this.buttonProps, {
-                                            icon: 'ios-plus-empty',
-                                            type: 'primary',
-                                        }),
-                                        style: {
-                                            width: '52px',
-                                        },
-                                        on: {
-                                            click() {
-                                                window.console.log(root);
-                                                window.console.log(node);
-                                                this.append(data);
-                                            },
-                                        },
-                                    }),
-                                ]),
-                            ]);
+                            }, 'uuuu');
                         },
                     },
                 ],
@@ -400,6 +364,13 @@
                 <span v-if="parent.type === '1'">信息管理-编辑"{{ parent.name }}"</span>
             </div>
             <card :bordered="false">
+                <tree-grid
+                        :items='data'
+                        :columns='columns'
+                        @on-row-click='rowClick'
+                        @on-selection-change='selectionClick'
+                        @on-sort-change='sortClick'
+                ></tree-grid>
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
                     <row>
                         <i-col span="12">
