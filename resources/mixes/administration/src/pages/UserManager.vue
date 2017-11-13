@@ -400,16 +400,7 @@
                         deletes.push(item.id);
                     });
                 }
-                if (pre === 2) {
-                    self.selection2.forEach(item => {
-                        deletes.push(item.id);
-                    });
-                }
-                if (pre === 3) {
-                    self.selection3.forEach(item => {
-                        deletes.push(item.id);
-                    });
-                }
+                window.console.log(self.selection1);
                 window.console.log(deletes);
                 if (deletes.length < 1) {
                     self.$notice.open({
@@ -431,6 +422,18 @@
                 }
             },
             submitDelete() {},
+            selectionChange1(selection) {
+                const self = this;
+                self.selection1 = selection;
+            },
+            selectionChange2(selection) {
+                const self = this;
+                self.selection2 = selection;
+            },
+            selectionChange3(selection) {
+                const self = this;
+                self.selection3 = selection;
+            },
             batchRemovesure() {},
             update() {},
         },
@@ -457,7 +460,7 @@
                         </div>
                         <i-table :columns="columns"
                                  :data="list"
-                                 @on-selection-change="selection1"
+                                 @on-selection-change="selectionChange1"
                                  ref="list"
                                  highlight-row>
                         </i-table>
@@ -480,7 +483,7 @@
                         </div>
                         <i-table :columns="recycling"
                                  :data="recyclingData"
-                                 @on-selection-change="selection2"
+                                 @on-selection-change="selectionChange2"
                                  ref="recycling"
                                  highlight-row>
                         </i-table>
@@ -510,7 +513,7 @@
                         </div>
                         <i-table :columns="msgColumns"
                                  :data="msgData"
-                                 @on-selection-change="selection3"
+                                 @on-selection-change="selectionChange3"
                                  ref="list"
                                  highlight-row>
                         </i-table>
