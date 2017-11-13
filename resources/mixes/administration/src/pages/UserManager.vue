@@ -397,36 +397,49 @@
             batchRemove(pre) {
                 const self = this;
                 const deletes = [];
+                const deletesRet = [];
                 const deletesMeg = [];
                 if (pre === 1) {
+                    self.deleteModal.mode = -1;
                     self.selection1.forEach(item => {
                         deletes.push(item.id);
                     });
+                    self.deleteModal.num = deletes.length;
+                    if (deletes.length < 1) {
+                        self.$notice.open({
+                            title: '请选择要删除的用户!',
+                        });
+                    } else {
+                        self.modal2 = true;
+                    }
                 }
                 if (pre === 2) {
+                    self.deleteModal.mode = -2;
                     self.selection2.forEach(item => {
-                        deletes.push(item.id);
+                        deletesRet.push(item.id);
                     });
+                    self.deleteModal.num = deletesRet.length;
+                    if (deletesRet.length < 1) {
+                        self.$notice.open({
+                            title: '请选择要删除的用户!',
+                        });
+                    } else {
+                        self.modal2 = true;
+                    }
                 }
                 if (pre === 3) {
                     self.deleteModal.mode = 1;
                     self.selection3.forEach(item => {
                         deletesMeg.push(item.id);
                     });
-                }
-                if (deletes.length < 1) {
-                    self.$notice.open({
-                        title: '请选择要删除的用户!',
-                    });
-                } else {
-                    self.modal2 = true;
-                }
-                if (deletesMeg.length < 1) {
-                    self.$notice.open({
-                        title: '请选择要删除的信息!',
-                    });
-                } else {
-                    self.modal2 = true;
+                    self.deleteModal.num = deletesMeg.length;
+                    if (deletesMeg.length < 1) {
+                        self.$notice.open({
+                            title: '请选择要删除的信息!',
+                        });
+                    } else {
+                        self.modal2 = true;
+                    }
                 }
             },
             submitCancel(data) {
@@ -577,7 +590,7 @@
                     <i-form ref="deleteModal" :model="deleteModal" :label-width="120">
                         <row>
                             <i-col class="first-row-title delete-file-tip">
-                                <span v-if="deleteModal.mode !== 1">
+                                <span v-if="deleteModal.mode === -1 || deleteModal.mode === -2">
                                     确定要删除这{{ deleteModal.num }}个用户吗？
                                 </span>
                                 <span v-if="deleteModal.mode === 1">
