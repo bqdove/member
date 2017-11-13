@@ -266,11 +266,13 @@
                 msgData: [
                     {
                         enabled: false,
+                        id: 123,
                         name: '视频链接',
                         sort: null,
                     },
                     {
                         enabled: false,
+                        id: 124,
                         name: '视频链接',
                         sort: null,
                     },
@@ -395,13 +397,23 @@
             batchRemove(pre) {
                 const self = this;
                 const deletes = [];
+                const deletesMeg = [];
                 if (pre === 1) {
                     self.selection1.forEach(item => {
                         deletes.push(item.id);
                     });
                 }
-                window.console.log(self.selection1);
-                window.console.log(deletes);
+                if (pre === 2) {
+                    self.selection2.forEach(item => {
+                        deletes.push(item.id);
+                    });
+                }
+                if (pre === 3) {
+                    self.deleteModal.mode = 1;
+                    self.selection3.forEach(item => {
+                        deletesMeg.push(item.id);
+                    });
+                }
                 if (deletes.length < 1) {
                     self.$notice.open({
                         title: '请选择要删除的用户!',
@@ -409,8 +421,12 @@
                 } else {
                     self.modal2 = true;
                 }
-                if (pre === 3) {
-                    self.deleteModal.mode = 1;
+                if (deletesMeg.length < 1) {
+                    self.$notice.open({
+                        title: '请选择要删除的信息!',
+                    });
+                } else {
+                    self.modal2 = true;
                 }
             },
             submitCancel(data) {
