@@ -400,6 +400,17 @@
                         deletes.push(item.id);
                     });
                 }
+                if (pre === 2) {
+                    self.selection2.forEach(item => {
+                        deletes.push(item.id);
+                    });
+                }
+                if (pre === 3) {
+                    self.selection3.forEach(item => {
+                        deletes.push(item.id);
+                    });
+                }
+                window.console.log(deletes);
                 if (deletes.length < 1) {
                     self.$notice.open({
                         title: '请选择要删除的用户!',
