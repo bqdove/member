@@ -13,6 +13,7 @@
             }
         },
         data() {
+            const self = this;
             const reg = /^[0-9]*$/;
             const validatorSort = (rule, value, callback) => {
                 if (!reg.test(value)) {
@@ -197,6 +198,9 @@
                                         },
                                         on: {
                                             click() {
+                                                self.createModal.title = '编辑';
+                                                self.createModal.name = data.title;
+                                                self.modalCreate = true;
                                                 window.console.log(root);
                                                 window.console.log(node);
                                             },
@@ -208,7 +212,9 @@
                                             type: 'ghost',
                                         },
                                         on: {
-                                            click() {},
+                                            click() {
+                                                self.remove(root, node, data);
+                                            },
                                         },
                                     }, '删除'),
                                 ]),
@@ -383,6 +389,8 @@
                             },
                             on: {
                                 click() {
+                                    window.console.log(this.editModalShow);
+                                    this.editModalShow(data);
                                     window.console.log(root);
                                     window.console.log(node);
                                 },
@@ -394,11 +402,19 @@
                                 type: 'ghost',
                             },
                             on: {
-                                click() {},
+                                click() {
+                                    this.remove(root, node, data);
+                                },
                             },
                         }, '删除'),
                     ]),
                 ]);
+            },
+            editModalShow(data) {
+                const self = this;
+                self.createModal.title = '编辑';
+                self.createModal.name = data.title;
+                self.modalCreate = true;
             },
             append(data) {
                 const children = data.children || [];
