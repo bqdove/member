@@ -13,7 +13,6 @@
             }
         },
         data() {
-            const self = this;
             const reg = /^[0-9]*$/;
             const validatorSort = (rule, value, callback) => {
                 if (!reg.test(value)) {
@@ -24,6 +23,19 @@
             };
             return {
                 action: `${window.api}/zn/admin/upload`,
+                columns: [
+                    {
+                        key: 'name',
+                        title: '可选值名称',
+                    },
+                    {
+                        align: 'center',
+                        key: 'action',
+                        title: '操作',
+                        width: 172,
+                    },
+                ],
+                list: [],
                 createModal: {
                     last_name: [],
                     name: '',
@@ -178,7 +190,7 @@
                                     h('i-button', {
                                         props: {
                                             size: 'small',
-                                            type: 'primary',
+                                            type: 'ghost',
                                         },
                                         style: {
                                             marginRight: '8px',
@@ -193,7 +205,7 @@
                                     h('i-button', {
                                         props: {
                                             size: 'small',
-                                            type: 'primary',
+                                            type: 'ghost',
                                         },
                                         on: {
                                             click() {},
@@ -364,7 +376,7 @@
                         h('i-button', {
                             props: {
                                 size: 'small',
-                                type: 'primary',
+                                type: 'ghost',
                             },
                             style: {
                                 marginRight: '8px',
@@ -379,7 +391,7 @@
                         h('i-button', {
                             props: {
                                 size: 'small',
-                                type: 'primary',
+                                type: 'ghost',
                             },
                             on: {
                                 click() {},
@@ -407,7 +419,7 @@
 </script>
 <template>
     <div class="member-warp">
-        <div class="user-manager-create">
+        <div class="user-manager-message user-manager-create">
             <div class="return-link-title">
                 <i-button type="text" @click.native="goBack">
                     <icon type="chevron-left"></icon>
@@ -496,9 +508,26 @@
                                     <checkbox label="rp"></checkbox>
                                 </checkbox-group>
                             </form-item>
-                            <form-item label="可选值" prop="select_value" v-if="form.type === 9">
-                                <i-button type="ghost" @click.native="addSelectValue">添加可选值</i-button>
-                                <tree :data="selectValueList" :render="renderContent"></tree>
+                        </i-col>
+                    </row>
+                    <row v-if="form.type === 9">
+                        <i-col span="18">
+                            <form-item label="可选值" prop="select_value">
+                                <i-button type="ghost" class="btn-action"
+                                          @click.native="addSelectValue">添加可选值</i-button>
+                                <i-table :columns="columns"
+                                         :data="list"
+                                         v-if="selectValueList.length === 0"
+                                         highlight-row>
+                                </i-table>
+                                <div class="tree-module" v-if="selectValueList.length > 0">
+                                    <div class="tree-title">
+                                        <span>可选值名称</span>
+                                        <span>操作</span>
+                                    </div>
+                                    <tree :data="selectValueList"
+                                          :render="renderContent"></tree>
+                                </div>
                             </form-item>
                         </i-col>
                     </row>
