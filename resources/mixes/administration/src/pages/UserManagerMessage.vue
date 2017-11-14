@@ -155,15 +155,18 @@
                                 },
                             }, [
                                 h('span', [
-                                    h('icon', {
+                                    h('span', data.title),
+                                    h('i-button', {
                                         props: {
-                                            type: 'ios-folder-outline',
+                                            size: 'small',
                                         },
                                         style: {
-                                            marginRight: '8px',
+                                            marginLeft: '10px',
                                         },
-                                    }),
-                                    h('span', data.title),
+                                        on: {
+                                            click() {},
+                                        },
+                                    }, '新增下级'),
                                 ]),
                                 h('span', {
                                     style: {
@@ -173,21 +176,29 @@
                                     },
                                 }, [
                                     h('i-button', {
-                                        props: Object.assign({}, self.buttonProps, {
-                                            icon: 'ios-plus-empty',
+                                        props: {
+                                            size: 'small',
                                             type: 'primary',
-                                        }),
+                                        },
                                         style: {
-                                            width: '52px',
+                                            marginRight: '8px',
                                         },
                                         on: {
                                             click() {
                                                 window.console.log(root);
                                                 window.console.log(node);
-                                                self.append(data);
                                             },
                                         },
-                                    }),
+                                    }, '编辑'),
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'primary',
+                                        },
+                                        on: {
+                                            click() {},
+                                        },
+                                    }, '删除'),
                                 ]),
                             ]);
                         },
@@ -330,15 +341,18 @@
                     },
                 }, [
                     h('span', [
-                        h('icon', {
+                        h('span', data.title),
+                        h('i-button', {
                             props: {
-                                type: 'ios-paper-outline',
+                                size: 'small',
                             },
                             style: {
-                                marginRight: '8px',
+                                marginLeft: '10px',
                             },
-                        }),
-                        h('span', data.title),
+                            on: {
+                                click() {},
+                            },
+                        }, '新增下级'),
                     ]),
                     h('span', {
                         style: {
@@ -348,28 +362,29 @@
                         },
                     }, [
                         h('i-button', {
-                            props: Object.assign({}, this.buttonProps, {
-                                icon: 'ios-plus-empty',
-                            }),
+                            props: {
+                                size: 'small',
+                                type: 'primary',
+                            },
                             style: {
                                 marginRight: '8px',
                             },
                             on: {
                                 click() {
-                                    this.append(data);
+                                    window.console.log(root);
+                                    window.console.log(node);
                                 },
                             },
-                        }),
+                        }, '编辑'),
                         h('i-button', {
-                            props: Object.assign({}, this.buttonProps, {
-                                icon: 'ios-minus-empty',
-                            }),
-                            on: {
-                                click() {
-                                    this.remove(root, node, data);
-                                },
+                            props: {
+                                size: 'small',
+                                type: 'primary',
                             },
-                        }),
+                            on: {
+                                click() {},
+                            },
+                        }, '删除'),
                     ]),
                 ]);
             },
