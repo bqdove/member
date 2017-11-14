@@ -309,23 +309,6 @@
                         value: 11,
                     },
                 ],
-                columns: [
-                    {
-                        type: 'selection',
-                        width: '50',
-                    },
-                    {
-                        title: '编码',
-                        key: 'code',
-                        sortable: true,
-                        width: '150',
-                    },
-                ],
-                data: [
-                    {
-                        code: '111',
-                    },
-                ],
             };
         },
         methods: {
@@ -418,7 +401,6 @@
                 <span v-if="parent.type === '1'">信息管理-编辑"{{ parent.name }}"</span>
             </div>
             <card :bordered="false">
-                <tree :data="selectValueList" :render="renderContent"></tree>
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
                     <row>
                         <i-col span="12">
@@ -501,7 +483,7 @@
                             </form-item>
                             <form-item label="可选值" prop="select_value" v-if="form.type === 9">
                                 <i-button type="ghost" @click.native="addSelectValue">添加可选值</i-button>
-                                <!--<tree :data="selectValueList" :render="renderContent"></tree>-->
+                                <tree :data="selectValueList" :render="renderContent"></tree>
                             </form-item>
                         </i-col>
                     </row>
