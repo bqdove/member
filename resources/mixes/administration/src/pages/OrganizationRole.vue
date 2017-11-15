@@ -162,6 +162,9 @@
                     ],
                 },
                 selection: [],
+                myBarOption: {
+                    barColor: 'red',
+                },
             };
         },
         methods: {

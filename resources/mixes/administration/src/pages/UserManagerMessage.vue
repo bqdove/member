@@ -389,8 +389,9 @@
                             },
                             on: {
                                 click() {
-                                    window.console.log(this.editModalShow);
-                                    this.editModalShow(data);
+                                    const self = this;
+                                    window.console.log(self.createModal);
+                                    window.console.log(data);
                                     window.console.log(root);
                                     window.console.log(node);
                                 },
