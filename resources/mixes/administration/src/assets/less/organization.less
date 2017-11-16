@@ -6,7 +6,6 @@
         .depart-expand-tree {
             border: solid 1px #e3e8ee;
             height: 518px;
-            overflow: auto;
             > h5 {
                 background-color: #f5f7f9;
                 color: #657180;
@@ -29,12 +28,13 @@
             .ivu-tree-title-selected:hover {
                 background-color: #e3e8ee;
             }
-            > .ivu-tree {
+            .ivu-tree {
                 > ul {
                     > li {
                         border-bottom: 1px solid #e3e8ee;
                         .ivu-tree-arrow {
                             padding-left: 26px;
+                            padding-right: 6px;
                             display: inline-block;
                             line-height: 48px;
                         }
@@ -72,7 +72,7 @@
                         line-height: 48px;
                         margin-right: 0;
                     }
-                    > .ivu-tree {
+                    .ivu-tree {
                         > ul {
                             > li {
                                 .ivu-tree-arrow {
