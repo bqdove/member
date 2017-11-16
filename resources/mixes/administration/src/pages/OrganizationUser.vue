@@ -1,8 +1,13 @@
 <script>
+    import VueScrollbar from 'vue2-scrollbar';
+
     export default {
         beforeRouteEnter(to, from, next) {
             next(() => {
             });
+        },
+        components: {
+            VueScrollbar,
         },
         data() {
             const self = this;
@@ -109,6 +114,18 @@
                                     },
                                     {
                                         title: 'leaf 1-1-2',
+                                    },
+                                ],
+                            },
+                            {
+                                expand: false,
+                                title: 'parent 1-2',
+                                children: [
+                                    {
+                                        title: 'leaf 1-2-1',
+                                    },
+                                    {
+                                        title: 'leaf 1-2-1',
                                     },
                                 ],
                             },
@@ -273,8 +290,12 @@
                             <i-col span="10" class="left-col-span">
                                 <div class="depart-expand-tree">
                                     <h5>部门名称</h5>
-                                    <tree :data="departmentList"
-                                          @on-select-change="changeTreeSelect"></tree>
+                                    <vue-scrollbar classes="my-scrollbar" ref="Scrollbar">
+                                        <div class="scroll-me">
+                                            <tree :data="departmentList"
+                                                  @on-select-change="changeTreeSelect"></tree>
+                                        </div>
+                                    </vue-scrollbar>
                                 </div>
                             </i-col>
                             <i-col span="14">
