@@ -253,14 +253,19 @@
                         </div>
                         <row>
                             <i-col span="12" class="left-col-span">
-                                <i-table :columns="columns"
-                                         class="table-list"
-                                         :data="list"
-                                         @on-current-change="changeCurrent"
-                                         height="518"
-                                         ref="list"
-                                         highlight-row>
-                                </i-table>
+                                <div>
+                                    <vue-scrollbar classes="my-scrollbar" ref="Scrollbar">
+                                        <div class="scroll-me">
+                                            <i-table :columns="columns"
+                                                     class="table-list"
+                                                     :data="list"
+                                                     @on-current-change="changeCurrent"
+                                                     ref="list"
+                                                     highlight-row>
+                                            </i-table>
+                                        </div>
+                                    </vue-scrollbar>
+                                </div>
                                 <div class="top-btn-action bottom-btn-action">
                                     <i-button class="btn-action" type="primary">保存</i-button>
                                 </div>

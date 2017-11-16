@@ -51,8 +51,26 @@
         .ivu-card {
             .ivu-card-body {
                 .table-list {
-                    border: 1px solid #e3e8ee;
                     border-bottom: 0;
+                    .ivu-table-header {
+                        position: fixed;
+                        top: 62px;
+                        z-index: 2;
+                        border-top: 1px solid #e3e8ee;
+                    }
+                    .ivu-table-body {
+                        overflow: inherit;
+                        position: relative;
+                        top: 38px;
+                        margin-bottom: 38px;
+                        tbody {
+                            tr:last-child {
+                                td {
+                                    border-bottom: 0;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -60,6 +78,18 @@
     .organization-role {
         .ivu-card {
             .ivu-card-body {
+                .left-col-span {
+                    > div:first-child {
+                        border: solid 1px #e3e8ee;
+                        height: 518px;
+                        .vue-scrollbar__scrollbar-vertical {
+                            right: 2px;
+                        }
+                        .my-scrollbar {
+                            max-height: 516px;
+                        }
+                    }
+                }
                 .bottom-btn-action {
                     margin-top: 20px;
                     margin-bottom: 60px;
