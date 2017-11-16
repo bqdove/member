@@ -1,8 +1,13 @@
 <script>
+    import VueScrollbar from 'vue2-scrollbar';
+
     export default {
         beforeRouteEnter(to, from, next) {
             next(() => {
             });
+        },
+        components: {
+            VueScrollbar,
         },
         data() {
             const reg = /^[0-9]*$/;
@@ -64,6 +69,18 @@
                                     },
                                     {
                                         title: '功能 1-1-2',
+                                    },
+                                ],
+                            },
+                            {
+                                expand: false,
+                                title: '功能 1-2',
+                                children: [
+                                    {
+                                        title: '功能 1-2-1',
+                                    },
+                                    {
+                                        title: '功能 1-2-1',
                                     },
                                 ],
                             },
@@ -251,9 +268,13 @@
                             <i-col span="12">
                                 <div class="depart-expand-tree">
                                     <h5>权限设置</h5>
-                                    <tree :data="departmentList"
-                                          show-checkbox
-                                          @on-select-change="changeTreeSelect"></tree>
+                                    <vue-scrollbar classes="my-scrollbar" ref="Scrollbar">
+                                        <div class="scroll-me">
+                                            <tree :data="departmentList"
+                                                  show-checkbox
+                                                  @on-select-change="changeTreeSelect"></tree>
+                                        </div>
+                                    </vue-scrollbar>
                                 </div>
                             </i-col>
                         </row>
