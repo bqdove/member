@@ -11,7 +11,7 @@
                     'groups',
                 ],
             }).then(response => {
-                const { data, pagination } = response.data.data;
+                const { data, pagination } = response.data;
                 next(vm => {
                     data.forEach(item => {
                         if (item.ban) {
