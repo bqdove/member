@@ -177,7 +177,7 @@
                             ]);
                         },
                         title: injection.trans('member.user.table.handle'),
-                        width: 450,
+                        width: 360,
                     },
                 ],
                 groups: [],
