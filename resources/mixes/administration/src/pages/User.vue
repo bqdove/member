@@ -11,17 +11,16 @@
                     'groups',
                 ],
             }).then(response => {
-                const { data, pagination } = response.data.data;
                 next(vm => {
-                    data.forEach(item => {
+                    response.data.data.forEach(item => {
                         if (item.ban) {
                             item.ban = item.ban.type;
                         } else {
                             item.ban = 0;
                         }
                     });
-                    vm.list = data;
-                    vm.pagination = pagination;
+                    vm.list = response.data.data;
+                    vm.pagination = response.data.pagination;
                     injection.loading.finish();
                 });
             }).catch(() => {
@@ -178,7 +177,7 @@
                             ]);
                         },
                         title: injection.trans('member.user.table.handle'),
-                        width: 360,
+                        width: 450,
                     },
                 ],
                 groups: [],
